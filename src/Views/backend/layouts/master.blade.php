@@ -8,8 +8,12 @@
     <title>@yield('page_title','Gallery Manager')</title>
 
     <!-- global stylesheets -->
-
+    <link href="{{asset('vendor/laravel_gallery_system/fonts/IranSans/style.min.css')}}" rel="stylesheet" type="text/css">
+    <link href="{{ asset('vendor/laravel_gallery_system/css/build/init_core.min.css') }}" rel="stylesheet" rel="stylesheet">
+    <link href="{{ asset('vendor/laravel_gallery_system/css/customBackend.css') }}" rel="stylesheet" rel="stylesheet">
     @yield('custom_plugin_style')
+    <script type="text/javascript" src="{{asset('vendor/laravel_gallery_system/js/build/init_core.min.js')}}"></script>
+    <script type="text/javascript" src="{{asset('vendor/laravel_gallery_system/js/build/init_function.min.js')}}"></script>
     @yield('custom_plugin_js')
 <!-- /theme JS files -->
     @yield('inline_style')
@@ -17,7 +21,7 @@
 
 <body>
 <!-- Page container -->
-<div class="page-container">
+<div class="container-fluid">
     <!-- Page content -->
     <!-- Content area -->
     <div class="content">
@@ -28,5 +32,8 @@
     </div>
 <!-- /content area -->
 </div>
+<div id="all_modals"></div>
+@yield('inline_js')
+</body>
 </body>
 </html>

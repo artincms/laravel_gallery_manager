@@ -3,7 +3,7 @@ if (!function_exists('enCodeId'))
 {
     function enCodeId($var)
     {
-        $hashids = new Hashids\Hashids('SadeghiGallery');
+        $hashids = new Hashids\Hashids(md5('sadeghi'));
         return $hashids->encode($var);
     }
 }
@@ -13,7 +13,7 @@ if (!function_exists('deCodeId'))
     {
         try
         {
-            $hashids = new Hashids\Hashids('SadeghiGallery');
+            $hashids = new Hashids\Hashids(md5('sadeghi'));
             return $hashids->decode($var);
         } catch (Illuminate\Contracts\Encryption\DecryptException $e)
         {

@@ -12,4 +12,5 @@ return [
     'api-key' => env('SMSIR-API-KEY','Your api key'),
     // ======================================================================
     //allow user to upload private file in filemanager
+    'userModel'=>'App\User',
 ];
