@@ -5,7 +5,9 @@ namespace ArtinCMS\LGS\Controllers;
 
 use App\Http\Controllers\Controller;
 use ArtinCMS\LGS\Model\Gallery;
+use ArtinCMS\LGS\Model\GalleryItem;
 use DataTables;
+use Illuminate\Http\Exceptions\HttpResponseException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -37,8 +39,24 @@ class GalleryController extends Controller
     {
         $gallery = new Gallery;
         $gallery->title = $request->title;
-        $gallery->order = $request->order;
-        $gallery->status = $request->status;
+        $gallery->description = $request->description;
+        if ($request->order)
+        {
+            $gallery->order = $request->order;
+        }
+        else
+        {
+            $gallery->order = 0;
+        }
+        if ($request->status == -1)
+        {
+            $gallery->status = '0';
+        }
+        else
+        {
+            $gallery->status = $request->status;
+
+        }
         $gallery->parent_id = $request->parent_id;
         if (Auth::user())
         {
@@ -54,9 +72,123 @@ class GalleryController extends Controller
                 'status' => "1",
                 'status_type' => "success",
                 'title' => "ثبت گالری",
+                'section' => 'defaultImg',
                 'message' => 'گالری با موفقیت ثبت شد.'
             ];
         return $res;
+    }
+
+    public function getEditGalleryForm(Request $request)
+    {
+        $option_default_img = ['size_file' => 2000, 'max_file_number' => 1, 'true_file_extension' => ['png', 'jpg']];
+        $gallery = Gallery::find(deCodeId($request->item_id))->first();
+        $gallery->encode_id = enCodeId($gallery->id);
+        $parrents = Gallery::all();
+        $default_img = LFM_CreateModalFileManager('defaultImg', $option_default_img, 'insert', 'showDefaultImg', 'gallery_edit_tab', false
+            , 'button_edit_gallery', 'انتخاب تصویر');
+        $load_default_img = LFM_loadSingleFile($gallery, 'default_img', 'defaultImg');
+        $gallery_form = view('laravel_gallery_system::backend.gallery.edit', compact('gallery', 'parrents', 'default_img', 'load_default_img'))->render();
+        $res =
+            [
+                'status' => "1",
+                'status_type' => "success",
+                'gallery_edit_view' => $gallery_form
+            ];
+        throw new HttpResponseException(
+            response()
+                ->json($res, 200)
+                ->withHeaders(['Content-Type' => 'text/plain', 'charset' => 'utf-8'])
+        );
+    }
+
+    public function editGallery(Request $request)
+    {
+        $gallery = Gallery::find(deCodeId($request->item_id)[0])->first();
+        $gallery->title = $request->title;
+        if ($request->order)
+        {
+            $gallery->order = $request->order;
+        }
+        else
+        {
+            $gallery->order = 0;
+        }
+        if ($request->status == -1)
+        {
+            $gallery->status = '0';
+        }
+        else
+        {
+            $gallery->status = $request->status;
+
+        }
+        $gallery->parent_id = $request->parent_id;
+        if (Auth::user())
+        {
+            if (isset(Auth::user()->id))
+            {
+                $gallery->created_by = Auth::user()->id;
+            }
+        }
+        $gallery->save();
+        $res['file'] = LFM_SaveSingleFile($gallery, 'default_img', 'defaultImg', 'options');
+        $res =
+            [
+                'status' => "1",
+                'status_type' => "success",
+                'title' => "ثبت گالری",
+                'section' => 'defaultImg',
+                'message' => 'گالری با موفقیت ثبت شد.'
+            ];
+        return $res;
+    }
+
+    public function trashGallery(Request $request)
+    {
+        $gallery = Gallery::find(deCodeId($request->item_id)[0])->first();
+        $gallery->delete();
+
+        $res =
+            [
+                'status' => "1",
+                'title' => "حذف گالری",
+                'message' => 'گالری با موفقیت حذف شد.'
+            ];
+
+        throw new HttpResponseException(
+            response()
+                ->json($res, 200)
+                ->withHeaders(['Content-Type' => 'text/plain', 'charset' => 'utf-8'])
+        );
+    }
+
+    public function setGalleryStatus(Request $request)
+    {
+        $gallery = Gallery::find(deCodeId($request->data_id)[0]);
+        if ($request->status == "true")
+        {
+            $gallery->status = "1";
+            $res['message'] = ' تایید شد';
+        }
+        else
+        {
+            $gallery->status = "0";
+            $res['message'] = 'تایید نشد';
+        }
+        $gallery->save();
+        $res['success'] = true;
+        $res['title'] = 'وضعیت کاربر تغییر پیدا کرد .';
+        return $res;
+    }
+
+    public function getGalleryItem(Request $request)
+    {
+        $item = GalleryItem::with('gallery')->where('gallery_id',deCodeId($request->item_id)[0]);
+        return DataTables::eloquent($item)
+            ->editColumn('id', function ($data) {
+                return enCodeId($data->id);
+            })
+            ->make(true);
     }
 
 }

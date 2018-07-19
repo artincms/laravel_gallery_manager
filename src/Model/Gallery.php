@@ -25,4 +25,9 @@ class Gallery extends Model
         return $this->belongsTo(config('laravel_gallery_system.userModel'), 'created_by');
     }
 
+    public function items()
+    {
+        return $this->hasMany('ArtinCMS\LGS\Model\GalleryItem', 'gallery_id');
+    }
+
 }

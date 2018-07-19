@@ -256,7 +256,9 @@
     margin: 12px 0;
     margin: 32px 0 31px;
 }
-
+.hidden{
+    display: none;
+}
 [class*="vspace-32"] {
     max-height: 1px;
     min-height: 1px;
@@ -387,6 +389,14 @@
 }
 p.help-block.error {
     color: red;
+}
+button.close.closeTab {
+    position: relative;
+    left: 0px;
+    top: -41px;
+}
+.pointer {
+    cursor: pointer;
 }
 /*____________________________________Add Loader css_______________________________________________*/
 .total_loader {

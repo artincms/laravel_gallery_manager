@@ -8,12 +8,26 @@
             <div class="card-header text-center">نگارخانه</div>
             <div class="card-body">
                 <div class="tabbable">
-                    <ul class="nav nav-tabs nav-tabs-bottom" id="gallery_tab"  role="tablist">
+                    <ul class="nav nav-tabs nav-tabs-bottom" id="gallery_tab" role="tablist">
                         <li class="nav-item"><a class="nav-link active" href="#manage_tab" data-toggle="tab"><i class="fas fa-th-list"></i><span class="margin_right_5">مدیریت گالری</span></a></li>
-                        <li class="nav-item add_gallery_tab"><a class="nav-link" href="#add_gallery" data-toggle="tab">اضافه کردن گالری</a></li>
-                       {{-- <li class="nav-item edit_gallery_tab hide">
-                            <a href="#edit_gallery" class="nav-link" data-toggle="tab">Edit Gallery Manager</a>
-                        </li>--}}
+                        <li class="nav-item add_gallery_tab">
+                            <a class="nav-link" href="#add_gallery" data-toggle="tab">
+                                <i class="far fa-plus-square"></i>
+                                <span>اضافه کردن گالری</span>
+                            </a>
+                        </li>
+                        <li class="nav-item edit_gallery_tab hidden">
+                            <a href="#edit_gallery" class="nav-link" data-toggle="tab">
+                                <span class="span_edit_gallery_tab">ویرایش</span>
+                            </a>
+                            <button class="close closeTab cancel_edit_gallery" type="button">×</button>
+                        </li>
+                        <li class="nav-item manage_gallery_item_tab hidden">
+                            <a href="#manage_tab_item" class="nav-link" data-toggle="tab">
+                                <span class="span_manage_gallery_item_tab">مدیریت تصاویر</span>
+                            </a>
+                            <button class="close closeTab cancel_edit_gallery" type="button">×</button>
+                        </li>
                     </ul>
                     <div class="tab-content">
                         <div class="tab-pane active" id="manage_tab">
@@ -67,7 +81,7 @@
                                     <label class="col-lg-2 col-sm-12 col-md-3 control-label col-form-label label_post" for="description">گالری پدر</label>
                                     <div class="col-6">
                                         <select name="parent_id" id="gallery_parrent" class="form-control">
-                                            <option>انتخاب گالری پدر</option>
+                                            <option value="0">بدون والد</option>
                                             @foreach($parrents as $parrent)
                                                 <option value="{{$parrent->id}}">{{$parrent->title}}</option>
                                             @endforeach
@@ -90,6 +104,33 @@
                             </form>
                         </div>
                         <div class="tab-pane" id="edit_gallery"></div>
+                        <div class="tab-pane" id="manage_tab_item">
+                            <div class="space-20"></div>
+                            <div class="col-xs-12">
+                                <div class="tabbable">
+                                    <ul class="nav nav-tabs nav-tabs-bottom" id="gallery_tab" role="tablist">
+                                        <li class="nav-item">
+                                            <a class="nav-link active" href="#manage_tab_gallery_item" data-toggle="tab">
+                                                <i class="fas fa-th-list"></i>
+                                                <span class="margin_right_5">مدیریت تصاویر گالری</span>
+                                            </a>
+                                        </li>
+                                        <li class="nav-item add_gallery_picture_tab">
+                                            <a class="nav-link" href="#add_gallery_picture" data-toggle="tab">
+                                                <i class="far fa-plus-square"></i>
+                                                <span>اضافه کردن تصویر</span>
+                                            </a>
+                                        </li>
+                                    </ul>
+                                    <div class="tab-content">
+                                        <div class="tab-pane" id="manage_tab_gallery_item"></div>
+                                        <div class="tab-pane" id="add_gallery_picture">
+                                            ddd
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
