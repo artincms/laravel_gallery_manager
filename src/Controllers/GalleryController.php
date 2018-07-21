@@ -18,7 +18,8 @@ class GalleryController extends Controller
     {
         $option_default_img = ['size_file' => 2000, 'max_file_number' => 1, 'true_file_extension' => ['png', 'jpg']];
         $default_img = LFM_CreateModalFileManager('defaultImg', $option_default_img, 'insert', 'showDefaultImg');
-        $parrents = Gallery::all();
+        $parrents = Gallery::with('parent')->get();
+        //dd($parrents);
         return view('laravel_gallery_system::backend.gallery.index', compact('default_img', 'parrents'));
     }
 
@@ -84,10 +85,10 @@ class GalleryController extends Controller
         $gallery = Gallery::find(deCodeId($request->item_id))->first();
         $gallery->encode_id = enCodeId($gallery->id);
         $parrents = Gallery::all();
-        $default_img = LFM_CreateModalFileManager('defaultImg', $option_default_img, 'insert', 'showDefaultImg', 'gallery_edit_tab', false
+        $default_img = LFM_CreateModalFileManager('LoadDefaultImg', $option_default_img, 'insert', 'showDefaultImg', 'gallery_edit_tab', false
             , 'button_edit_gallery', 'انتخاب تصویر');
-        $load_default_img = LFM_loadSingleFile($gallery, 'default_img', 'defaultImg');
-        $gallery_form = view('laravel_gallery_system::backend.gallery.edit', compact('gallery', 'parrents', 'default_img', 'load_default_img'))->render();
+        $load_default_img = LFM_loadSingleFile($gallery, 'default_img', 'LoadDefaultImg');
+        $gallery_form = view('laravel_gallery_system::backend.gallery.view.edit', compact('gallery', 'parrents', 'default_img', 'load_default_img'))->render();
         $res =
             [
                 'status' => "1",
@@ -101,10 +102,30 @@ class GalleryController extends Controller
         );
     }
 
+    public function getAddGalleryItemForm(Request $request)
+    {
+        $option_item_file = ['size_file' => 2000, 'max_file_number' => 1, 'true_file_extension' => ['png', 'jpg']];
+        $itmeFile = LFM_CreateModalFileManager('itemFile', $option_item_file, 'insert', 'showitemFile');
+        $gallery_id = $request->item_id ;
+        $gallery_form = view('laravel_gallery_system::backend.gallery.view.add_item', compact('gallery_id', 'itmeFile'))->render();
+        $res =
+            [
+                'status' => "1",
+                'status_type' => "success",
+                'gallery_add_item' => $gallery_form
+            ];
+        throw new HttpResponseException(
+            response()
+                ->json($res, 200)
+                ->withHeaders(['Content-Type' => 'text/plain', 'charset' => 'utf-8'])
+        );
+    }
+
     public function editGallery(Request $request)
     {
         $gallery = Gallery::find(deCodeId($request->item_id)[0])->first();
         $gallery->title = $request->title;
+        $gallery->description = $request->description;
         if ($request->order)
         {
             $gallery->order = $request->order;
@@ -131,7 +152,7 @@ class GalleryController extends Controller
             }
         }
         $gallery->save();
-        $res['file'] = LFM_SaveSingleFile($gallery, 'default_img', 'defaultImg', 'options');
+        $res['file'] = LFM_SaveSingleFile($gallery, 'default_img', 'LoadDefaultImg', 'options');
         $res =
             [
                 'status' => "1",
@@ -164,20 +185,20 @@ class GalleryController extends Controller
 
     public function setGalleryStatus(Request $request)
     {
-        $gallery = Gallery::find(deCodeId($request->data_id)[0]);
+        $gallery = Gallery::find(deCodeId($request->item_id)[0]);
         if ($request->status == "true")
         {
             $gallery->status = "1";
-            $res['message'] = ' تایید شد';
+            $res['message'] = ' گالری فعال گردید';
         }
         else
         {
             $gallery->status = "0";
-            $res['message'] = 'تایید نشد';
+            $res['message'] = 'گالری غیر فعال شد';
         }
         $gallery->save();
         $res['success'] = true;
-        $res['title'] = 'وضعیت کاربر تغییر پیدا کرد .';
+        $res['title'] = 'وضعیت گالری تغییر پیدا کرد .';
         return $res;
     }
 

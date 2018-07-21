@@ -134,6 +134,14 @@
     margin-top: 50px;
 }
 
+.margin_left_8 {
+    margin-left: 8px;
+}
+
+.color_white {
+    color: white;
+}
+
 .hr {
     display: block;
     height: 0;

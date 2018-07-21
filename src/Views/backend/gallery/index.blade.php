@@ -26,7 +26,7 @@
                             <a href="#manage_tab_item" class="nav-link" data-toggle="tab">
                                 <span class="span_manage_gallery_item_tab">مدیریت تصاویر</span>
                             </a>
-                            <button class="close closeTab cancel_edit_gallery" type="button">×</button>
+                            <button class="close closeTab cancel_manage_gallery_item" type="button">×</button>
                         </li>
                     </ul>
                     <div class="tab-content">
@@ -98,15 +98,14 @@
                                 </div>
                                 <div class="clearfixed"></div>
                                 <div class="col-12">
-                                    <button type="submit" class="float-right btn bg-teal-400"><b><i class="fa fa-save"></i></b>ذخیره</button>
-                                    <button type="button" class="float-right btn btn-defaul cancel_add_close_btn"><b><i class="fa fa-times"></i></b>لغو</button>
+                                    <button type="submit" class="float-right btn btn-primary "><i class="fa fa-save margin_left_8"></i>ذخیره</button>
+                                    <button type="button" class="float-right btn bg-secondary cancel_add_close_btn color_white"><i class="fa fa-times margin_left_8"></i>انصراف</button>
                                 </div>
                             </form>
                         </div>
                         <div class="tab-pane" id="edit_gallery"></div>
                         <div class="tab-pane" id="manage_tab_item">
                             <div class="space-20"></div>
-                            <div class="col-xs-12">
                                 <div class="tabbable">
                                     <ul class="nav nav-tabs nav-tabs-bottom" id="gallery_tab" role="tablist">
                                         <li class="nav-item">
@@ -115,21 +114,19 @@
                                                 <span class="margin_right_5">مدیریت تصاویر گالری</span>
                                             </a>
                                         </li>
-                                        <li class="nav-item add_gallery_picture_tab">
-                                            <a class="nav-link" href="#add_gallery_picture" data-toggle="tab">
+                                        <li class="nav-item" id="add_gallery_item_tab">
+                                            <a class="nav-link" href="#add_gallery_item" data-toggle="tab">
                                                 <i class="far fa-plus-square"></i>
                                                 <span>اضافه کردن تصویر</span>
                                             </a>
                                         </li>
                                     </ul>
                                     <div class="tab-content">
-                                        <div class="tab-pane" id="manage_tab_gallery_item"></div>
-                                        <div class="tab-pane" id="add_gallery_picture">
-                                            ddd
+                                        <div class="tab-pane active" id="manage_tab_gallery_item"></div>
+                                        <div class="tab-pane" id="add_gallery_item">
                                         </div>
                                     </div>
                                 </div>
-                            </div>
                         </div>
                     </div>
                 </div>

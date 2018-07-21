@@ -39,9 +39,6 @@ class LGSServiceProvider extends ServiceProvider
 	    $this->publishes([
 		    __DIR__ . '/Config/LGS.php' => config_path('laravel_gallery_system.php'),
 	    ]);
-        $this->publishes([
-            __DIR__ . '/Components' => resource_path('assets/js'),
-        ]);
     }
 
     /**

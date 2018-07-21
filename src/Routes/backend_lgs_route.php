@@ -7,5 +7,9 @@ Route::group(['prefix' => config('laravel_gallery_system.backend_lgs_route_prefi
     Route::post('editGallery', ['as' => 'LGS.editGallery', 'uses' => 'GalleryController@editGallery']);
     Route::post('trashGallery', ['as' => 'LGS.trashGallery', 'uses' => 'GalleryController@trashGallery']);
     Route::post('setGalleryStatus', ['as' => 'LGS.setGalleryStatus', 'uses' => 'GalleryController@setGalleryStatus']);
+
+    //----------------------------------items route------------------------------------------------------
     Route::post('getGalleryItem', ['as' => 'LGS.getGalleryItem', 'uses' => 'GalleryController@getGalleryItem']);
+    Route::post('getAddGalleryItemForm', ['as' => 'LGS.getAddGalleryItemForm', 'uses' => 'GalleryController@getAddGalleryItemForm']);
+
 });
