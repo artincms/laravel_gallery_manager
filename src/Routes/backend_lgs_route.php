@@ -11,5 +11,8 @@ Route::group(['prefix' => config('laravel_gallery_system.backend_lgs_route_prefi
     //----------------------------------items route------------------------------------------------------
     Route::post('getGalleryItem', ['as' => 'LGS.getGalleryItem', 'uses' => 'GalleryController@getGalleryItem']);
     Route::post('getAddGalleryItemForm', ['as' => 'LGS.getAddGalleryItemForm', 'uses' => 'GalleryController@getAddGalleryItemForm']);
+    Route::post('createGalleryItem', ['as' => 'LGS.createGalleryItem', 'uses' => 'GalleryController@createGalleryItem']);
+    Route::post('setItemStatus', ['as' => 'LGS.setItemStatus', 'uses' => 'GalleryController@setItemStatus']);
+    Route::post('getEditGalleryItemForm', ['as' => 'LGS.getEditGalleryItemForm', 'uses' => 'GalleryController@getEditGalleryItemForm']);
 
 });

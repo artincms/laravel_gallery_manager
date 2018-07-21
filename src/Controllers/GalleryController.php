@@ -102,25 +102,6 @@ class GalleryController extends Controller
         );
     }
 
-    public function getAddGalleryItemForm(Request $request)
-    {
-        $option_item_file = ['size_file' => 2000, 'max_file_number' => 1, 'true_file_extension' => ['png', 'jpg']];
-        $itmeFile = LFM_CreateModalFileManager('itemFile', $option_item_file, 'insert', 'showitemFile');
-        $gallery_id = $request->item_id ;
-        $gallery_form = view('laravel_gallery_system::backend.gallery.view.add_item', compact('gallery_id', 'itmeFile'))->render();
-        $res =
-            [
-                'status' => "1",
-                'status_type' => "success",
-                'gallery_add_item' => $gallery_form
-            ];
-        throw new HttpResponseException(
-            response()
-                ->json($res, 200)
-                ->withHeaders(['Content-Type' => 'text/plain', 'charset' => 'utf-8'])
-        );
-    }
-
     public function editGallery(Request $request)
     {
         $gallery = Gallery::find(deCodeId($request->item_id)[0])->first();
@@ -202,14 +183,122 @@ class GalleryController extends Controller
         return $res;
     }
 
+    //--------------------------------------------------ITem function --------------------------------
     public function getGalleryItem(Request $request)
     {
-        $item = GalleryItem::with('gallery')->where('gallery_id',deCodeId($request->item_id)[0]);
+        $item = GalleryItem::with('gallery')->where('gallery_id', deCodeId($request->item_id)[0]);
         return DataTables::eloquent($item)
             ->editColumn('id', function ($data) {
                 return enCodeId($data->id);
             })
+            ->editColumn('file_id', function ($data) {
+                return enCodeId($data->file_id);
+            })
             ->make(true);
     }
+
+    public function getAddGalleryItemForm(Request $request)
+    {
+        $option_item_file = ['size_file' => 2000, 'max_file_number' => 1, 'true_file_extension' => ['png', 'jpg']];
+        $itmeFile = LFM_CreateModalFileManager('itemFile', $option_item_file, 'insert', 'showitemFile');
+        $gallery_id = $request->item_id;
+        $gallery_form = view('laravel_gallery_system::backend.gallery.view.add_item', compact('gallery_id', 'itmeFile'))->render();
+        $res =
+            [
+                'status' => "1",
+                'status_type' => "success",
+                'gallery_add_item' => $gallery_form
+            ];
+        throw new HttpResponseException(
+            response()
+                ->json($res, 200)
+                ->withHeaders(['Content-Type' => 'text/plain', 'charset' => 'utf-8'])
+        );
+    }
+
+    public function createGalleryItem(Request $request)
+    {
+        $gallery = new GalleryItem;
+        $gallery->gallery_id = deCodeId($request->gallery_id)[0];
+        $gallery->title = $request->title;
+        $gallery->description = $request->description;
+        if ($request->order)
+        {
+            $gallery->order = $request->order;
+        }
+        else
+        {
+            $gallery->order = 0;
+        }
+        if ($request->status == -1)
+        {
+            $gallery->status = '0';
+        }
+        else
+        {
+            $gallery->status = $request->status;
+
+        }
+        if (Auth::user())
+        {
+            if (isset(Auth::user()->id))
+            {
+                $gallery->created_by = Auth::user()->id;
+            }
+        }
+        $gallery->save();
+        $res['file'] = LFM_SaveSingleFile($gallery, 'file_id', 'itemFile', 'options');
+        $res =
+            [
+                'status' => "1",
+                'status_type' => "success",
+                'title' => "ثبت فایل",
+                'section' => 'defaultImg',
+                'message' => 'فایل با موفقیت به گالری اضافه شد.'
+            ];
+        return $res;
+    }
+
+    public function setItemStatus(Request $request)
+    {
+        $item = GalleryItem::find(deCodeId($request->item_id)[0]);
+        if ($request->status == "true")
+        {
+            $item->status = "1";
+            $res['message'] = ' آیتم فعال گردید';
+        }
+        else
+        {
+            $item->status = "0";
+            $res['message'] = 'آیتم غیر فعال شد';
+        }
+        $item->save();
+        $res['success'] = true;
+        $res['title'] = 'وضعیت آیتم تغییر پیدا کرد .';
+        return $res;
+    }
+
+    public function getEditGalleryItemForm(Request $request)
+    {
+        $option_edit_item = ['size_file' => 2000, 'max_file_number' => 1, 'true_file_extension' => ['png', 'jpg']];
+        $item = GalleryItem::find(deCodeId($request->item_id))->first();
+        $item->encode_id = enCodeId($item->id);
+        $default_img = LFM_CreateModalFileManager('LoadDefaultImg', $option_edit_item, 'insert', 'showDefaultImg', 'gallery_edit_tab', false
+            , 'button_edit_gallery', 'انتخاب تصویر');
+        $load_default_img = LFM_loadSingleFile($gallery, 'default_img', 'LoadDefaultImg');
+        $gallery_form = view('laravel_gallery_system::backend.gallery.view.edit', compact('gallery', 'parrents', 'default_img', 'load_default_img'))->render();
+        $res =
+            [
+                'status' => "1",
+                'status_type' => "success",
+                'gallery_edit_view' => $gallery_form
+            ];
+        throw new HttpResponseException(
+            response()
+                ->json($res, 200)
+                ->withHeaders(['Content-Type' => 'text/plain', 'charset' => 'utf-8'])
+        );
+    }
+
 
 }

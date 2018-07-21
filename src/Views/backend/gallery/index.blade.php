@@ -120,11 +120,17 @@
                                                 <span>اضافه کردن تصویر</span>
                                             </a>
                                         </li>
+                                        <li class="nav-item edit_gallery_item_tab hidden">
+                                            <a href="#edit_gallery_item" class="nav-link" data-toggle="tab">
+                                                <span class="span_edit_gallery_item_tab">ویرایش</span>
+                                            </a>
+                                            <button class="close closeTab cancel_edit_gallery_item_tab" type="button">×</button>
+                                        </li>
                                     </ul>
                                     <div class="tab-content">
                                         <div class="tab-pane active" id="manage_tab_gallery_item"></div>
-                                        <div class="tab-pane" id="add_gallery_item">
-                                        </div>
+                                        <div class="tab-pane" id="add_gallery_item"></div>
+                                        <div class="tab-pane" id="edit_gallery_item"></div>
                                     </div>
                                 </div>
                         </div>
@@ -136,4 +142,5 @@
 @endsection
 @section('inline_js')
     @include('laravel_gallery_system::backend.gallery.helper.index.inline_js')
+    @include('laravel_gallery_system::backend.gallery.helper.index.item_inline_js')
 @stop

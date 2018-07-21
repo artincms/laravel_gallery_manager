@@ -15,8 +15,8 @@ class LGSServiceProvider extends ServiceProvider
     public function boot()
     {
     	// the main router
-	    include_once __DIR__.'/Routes/backend_lgs_route.php';
-	    include_once __DIR__.'/Routes/frontend_lgs_route.php';
+        $this->loadRoutesFrom( __DIR__.'/Routes/backend_lgs_route.php');
+        $this->loadRoutesFrom( __DIR__.'/Routes/frontend_lgs_route.php');
 
 	    $this->publishes([
 		    __DIR__ . '/Database/Migrations/' => database_path('migrations')

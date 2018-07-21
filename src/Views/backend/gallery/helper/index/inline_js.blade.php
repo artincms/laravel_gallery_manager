@@ -103,69 +103,6 @@
             }
         }
     ];
-    window['gallery_item_columns'] = [
-        {
-            width: '5%',
-            data: 'id',
-            title: 'ردیف',
-            searchable: false,
-            sortable: false,
-            render: function (data, type, row, meta) {
-                return meta.row + meta.settings._iDisplayStart + 1;
-            }
-        },
-        {
-            data: 'id',
-            name: 'id',
-            title: 'آی دی',
-            visible:false
-        },
-        {
-            data: 'file_id',
-            name: 'file_id',
-            title: 'فایل',
-        },
-        {
-            data: 'title',
-            name: 'title',
-            title: 'عنوان',
-        },
-        {
-            data: 'description',
-            name: 'description',
-            title: 'توضیحات',
-        },
-        {
-            width: '5%',
-            data: 'status',
-            name: 'status',
-            title: 'وضعیت',
-            mRender: function (data, type, full) {
-                var ch = '';
-                if (parseInt(full.status))
-                    ch = 'checked';
-                else
-                    ch = '';
-                return '<input class="styled " id="'+full.id+'" type="checkbox" name="special" data-item_id="' + full.id + '"  onchange="change_status_gallery(this)"' + ch + '>'
-            }
-        },
-        {
-            width: '5%',
-            searchable: false,
-            sortable: false,
-            title: 'عملیات',
-            mRender: function (data, type, full) {
-                return '' +
-                    '<a class="btn_edit_gallery_item pointer" data-item_id="' + full.id + '" data-title="' + full.title + '">' +
-                    '   <i class="fa fa-edit"></i>' +
-                    '</a>' +
-                    '<a class="btn_trash_gallery_item pointer" style="color: red" data-item_id="' + full.id + '" data-title="' + full.title +'">' +
-                    '   <i class="fa fa-trash"></i>' +
-                    '</a>'
-            }
-        }
-    ];
-
     $(document).ready(function () {
         var getGalleryRoute = '{{ route('LGS.getGallery') }}';
         var fixedColumn =  {
@@ -321,51 +258,7 @@
             }
         });
     }
-    /*___________________________________________________Show Gallery_____________________________________________________________________*/
-    $(document).off("click", ".show_gallery_item");
-    $(document).on("click", ".show_gallery_item", function () {
-        var item_id = $(this).data('item_id');
-        var title = $(this).data('title');
-        $('a[href="#manage_tab_item"]').click();
-        $('.manage_gallery_item_tab').removeClass('hidden');
-        var html = '' +
-            '<div class="space-20"></div>' +
-            '<table id="GalleryItemGridData" class="table" width="100%"></table>' ;
-        $('.span_manage_gallery_item_tab').html('گالری تصاویر : ' + title);
-        $('#manage_tab_gallery_item').html(html);
-        dataTablesGrid('#GalleryItemGridData', 'GalleryItemGridData', '{{ route('LGS.getGalleryItem') }}', gallery_item_columns, {item_id: item_id}, null, true, null, null, 1, 'desc');
 
-        //--------------------------------------------get add gallery form--------------------------------------------------------
-        $(document).off("click", "#add_gallery_item_tab");
-        $(document).on("click", "#add_gallery_item_tab", function () {
-            get_gallery_item(item_id) ;
-        });
-
-        function get_gallery_item(item_id) {
-            $('#add_gallery_picture').append(generate_loader_html('لطفا منتظر بمانید...'));
-            $.ajax({
-                type: "POST",
-                url: '{{ route('LGS.getAddGalleryItemForm')}}',
-                dataType: "json",
-                data: {
-                    item_id: item_id
-                },
-                success: function (result) {
-                    $('#edit_gallery .total_loader').remove();
-                    if (result.status == true) {
-                        $('#edit_gallery').append(result.gallery_edit_view);
-                        $('.edit_gallery_tab').removeClass('hidden');
-                        $('a[href="#edit_gallery"]').click();
-
-                        var edit_gallery_form_id = document.querySelector("#frm_edit_gallery");
-                        init_validatejs(edit_gallery_form_id, create_gallery_constraints, ajax_func_edit_gallery);
-                    }
-                    else {}
-                }
-            });
-        }
-
-    });
     /*___________________________________________________Change Status_____________________________________________________________________*/
     function change_status_gallery(input) {
         var checked = input.checked ;
@@ -400,14 +293,7 @@
             $this.prop('checked', true);
         }
     }
-    /*___________________________________________________Gallery Items_____________________________________________________________________*/
 
-    $(document).off("click", ".cancel_manage_gallery_item");
-    $(document).on("click", ".cancel_manage_gallery_item", function () {
-        $('a[href="#manage_tab"]').click();
-        $('.manage_gallery_item_tab').addClass('hidden');
-        //$('#edit_gallery').html('');
-    });
 
 
 </script>

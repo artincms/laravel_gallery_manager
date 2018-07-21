@@ -1,3 +1,4 @@
+<div class="space-20"></div>
 <form id="frm_create_gallery_item" class="form-horizontal" name="frm_create_gallery">
     <input type="hidden" value="{{$gallery_id}}" name="gallery_id">
     <div class="form-group row fg_title">
@@ -32,17 +33,17 @@
         </div>
     </div>
     <div class="form-group row">
+        <label class="col-lg-2 col-sm-12 col-md-3 control-label col-form-label label_post" for="description">توضیحات</label>
+        <div class="col-6">
+            <textarea class="form-control" name="description" id="gallery_description" rows="3"></textarea>
+        </div>
+    </div>
+    <div class="form-group row">
         <label class="col-lg-2 col-sm-12 col-md-3 control-label col-form-label label_post" for="description">انتخاب فایل</label>
         <div class="col-6">
             {!! $itmeFile['button'] !!}
             {!! $itmeFile['modal_content'] !!}
             <div id="show_area_medium_item_file"></div>
-        </div>
-    </div>
-    <div class="form-group row">
-        <label class="col-lg-2 col-sm-12 col-md-3 control-label col-form-label label_post" for="description">توضیحات</label>
-        <div class="col-6">
-            <textarea class="form-control" name="description" id="gallery_description" rows="3"></textarea>
         </div>
     </div>
     <div class="clearfixed"></div>
@@ -51,3 +52,4 @@
         <button type="button" class="float-right btn bg-secondary cancel_add_close_btn color_white"><i class="fa fa-times margin_left_8"></i>انصراف</button>
     </div>
 </form>
+
