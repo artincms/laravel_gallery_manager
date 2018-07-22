@@ -104,7 +104,7 @@ class GalleryController extends Controller
 
     public function editGallery(Request $request)
     {
-        $gallery = Gallery::find(deCodeId($request->item_id)[0])->first();
+        $gallery = Gallery::find(deCodeId($request->item_id)[0]);
         $gallery->title = $request->title;
         $gallery->description = $request->description;
         if ($request->order)
@@ -199,10 +199,30 @@ class GalleryController extends Controller
 
     public function getAddGalleryItemForm(Request $request)
     {
+        //image options
         $option_item_file = ['size_file' => 2000, 'max_file_number' => 1, 'true_file_extension' => ['png', 'jpg']];
+        //video options
+        $option_video_mp4_file = ['size_file' => 2000, 'max_file_number' => 1, 'true_file_extension' => ['mp4']];
+        $option_video_webm_file = ['size_file' => 2000, 'max_file_number' => 1, 'true_file_extension' => ['webm']];
+        $option_video_ogg_file = ['size_file' => 2000, 'max_file_number' => 1, 'true_file_extension' => ['ogv']];
+        //audio options
+        $option_audio_ogg_file = ['size_file' => 2000, 'max_file_number' => 1, 'true_file_extension' => ['oga','ogg']];
+        $option_audio_mp3_file = ['size_file' => 2000, 'max_file_number' => 1, 'true_file_extension' => ['mpga','mp3']];
+        $option_audio_wav_file = ['size_file' => 2000, 'max_file_number' => 1, 'true_file_extension' => ['wav']];
+
         $itmeFile = LFM_CreateModalFileManager('itemFile', $option_item_file, 'insert', 'showitemFile');
+
+        $itmeVideoMp4File = LFM_CreateModalFileManager('videoMp4itemFile', $option_video_mp4_file, 'insert', 'showVideoMp4File');
+        $itmeVideoWebmFile = LFM_CreateModalFileManager('videoWebmFile', $option_video_webm_file, 'insert', 'showVideoWebmFile');
+        $itmeVideoOggFile = LFM_CreateModalFileManager('videoOggFile', $option_video_ogg_file, 'insert', 'showVideoOggFile');
+
+        $itmeAudioOggFile = LFM_CreateModalFileManager('audioOggFile', $option_audio_ogg_file, 'insert', 'showAudioOggFile');
+        $itmeAudioMp3File = LFM_CreateModalFileManager('audioMp3File', $option_audio_mp3_file, 'insert', 'showAudioMp3File');
+        $itmeAudioWavFile = LFM_CreateModalFileManager('audioWavFile', $option_audio_wav_file, 'insert', 'showAudioWavFile');
+
         $gallery_id = $request->item_id;
-        $gallery_form = view('laravel_gallery_system::backend.gallery.view.add_item', compact('gallery_id', 'itmeFile'))->render();
+        $gallery_form = view('laravel_gallery_system::backend.gallery.view.add_item', compact('gallery_id', 'itmeFile','itmeVideoMp4File'
+            ,'itmeVideoWebmFile','itmeVideoOggFile','itmeAudioOggFile','itmeAudioMp3File','itmeAudioWavFile'))->render();
         $res =
             [
                 'status' => "1",
@@ -283,16 +303,78 @@ class GalleryController extends Controller
         $option_edit_item = ['size_file' => 2000, 'max_file_number' => 1, 'true_file_extension' => ['png', 'jpg']];
         $item = GalleryItem::find(deCodeId($request->item_id))->first();
         $item->encode_id = enCodeId($item->id);
-        $default_img = LFM_CreateModalFileManager('LoadDefaultImg', $option_edit_item, 'insert', 'showDefaultImg', 'gallery_edit_tab', false
-            , 'button_edit_gallery', 'انتخاب تصویر');
-        $load_default_img = LFM_loadSingleFile($gallery, 'default_img', 'LoadDefaultImg');
-        $gallery_form = view('laravel_gallery_system::backend.gallery.view.edit', compact('gallery', 'parrents', 'default_img', 'load_default_img'))->render();
+        $item->gallery_encode_id = enCodeId($item->gallery_id);
+        $itmeFile = LFM_CreateModalFileManager('LoadImageItem', $option_edit_item, 'insert', 'show_item_image', 'gallery_item_edit_tab', false
+            , 'button_edit_gallery_item', 'انتخاب تصویر');
+        $load_gallery_item = LFM_loadSingleFile($item, 'file_id', 'LoadImageItem');
+        $item_form = view('laravel_gallery_system::backend.gallery.view.edit_item', compact('item', 'itmeFile', 'load_gallery_item'))->render();
         $res =
             [
                 'status' => "1",
                 'status_type' => "success",
-                'gallery_edit_view' => $gallery_form
+                'gallery_item_edit_view' => $item_form
             ];
+        throw new HttpResponseException(
+            response()
+                ->json($res, 200)
+                ->withHeaders(['Content-Type' => 'text/plain', 'charset' => 'utf-8'])
+        );
+    }
+
+    public function editGalleryItem(Request $request)
+    {
+        $item = GalleryItem::find(deCodeId($request->item_id)[0]);
+        $item->title = $request->title;
+        $item->description = $request->description;
+        if ($request->order)
+        {
+            $item->order = $request->order;
+        }
+        else
+        {
+            $item->order = 0;
+        }
+        if ($request->status == -1)
+        {
+            $item->status = '0';
+        }
+        else
+        {
+            $item->status = $request->status;
+
+        }
+        if (Auth::user())
+        {
+            if (isset(Auth::user()->id))
+            {
+                $item->created_by = Auth::user()->id;
+            }
+        }
+        $item->save();
+        $res['file'] = LFM_SaveSingleFile($item, 'file_id', 'LoadImageItem', 'options');
+        $res =
+            [
+                'status' => "1",
+                'status_type' => "success",
+                'title' => "ثبت آیتم",
+                'section' => 'defaultImg',
+                'message' => 'آیتم با موفقیت ثبت شد.'
+            ];
+        return $res;
+    }
+
+    public function trashGalleryItem(Request $request)
+    {
+        $item = GalleryItem::find(deCodeId($request->item_id)[0]);
+        $item->delete();
+
+        $res =
+            [
+                'status' => "1",
+                'title' => "حذف آیتم",
+                'message' => 'آیتم با موفقیت حذف شد.'
+            ];
+
         throw new HttpResponseException(
             response()
                 ->json($res, 200)

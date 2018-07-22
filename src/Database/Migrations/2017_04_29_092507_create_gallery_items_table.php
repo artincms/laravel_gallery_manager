@@ -21,6 +21,7 @@ class CreateGalleryItemsTable extends Migration
             $table->string('description', 1000)->nullable()->default(null);
             $table->integer('visit')->unsigned()->default(0);
             $table->enum('status', array('0','1'))->default('0');
+            $table->enum('type', array('0','1','2'))->default('0');
             $table->integer('order')->default(0);
             $table->integer('created_by')->unsigned()->default(0);
             $table->timestamps();

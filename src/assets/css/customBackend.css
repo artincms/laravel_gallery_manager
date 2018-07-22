@@ -399,12 +399,47 @@ p.help-block.error {
     color: red;
 }
 button.close.closeTab {
-    position: relative;
-    left: 0px;
-    top: -41px;
+    position: absolute;
+    left: 7px;
+    top: 4px;
 }
 .pointer {
     cursor: pointer;
+}
+.icons-list>li>a>i {
+    top: 0;
+}
+[class*=" icon-"], [class^=icon-] {
+    font-family: icomoon;
+    speak: none;
+    font-style: normal;
+    font-weight: 400;
+    font-variant: normal;
+    text-transform: none;
+    line-height: 1;
+    min-width: 1em;
+    display: inline-block;
+    text-align: center;
+    font-size: 16px;
+    vertical-align: middle;
+    position: relative;
+    top: -1px;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+.paddin_left_30 {
+    padding-left:30px
+}
+li.nav-item {
+    position: relative;
+}
+.span_image_container{
+    width: 30px;
+    height: 30px;
+    border: 1px solid #e4dede;
+    padding: 0px;
+    box-shadow: 1px 1px #888888;
+    margin-left: 10px;
 }
 /*____________________________________Add Loader css_______________________________________________*/
 .total_loader {

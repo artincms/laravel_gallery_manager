@@ -17,13 +17,13 @@
                             </a>
                         </li>
                         <li class="nav-item edit_gallery_tab hidden">
-                            <a href="#edit_gallery" class="nav-link" data-toggle="tab">
+                            <a href="#edit_gallery" class="nav-link paddin_left_30" data-toggle="tab">
                                 <span class="span_edit_gallery_tab">ویرایش</span>
                             </a>
                             <button class="close closeTab cancel_edit_gallery" type="button">×</button>
                         </li>
                         <li class="nav-item manage_gallery_item_tab hidden">
-                            <a href="#manage_tab_item" class="nav-link" data-toggle="tab">
+                            <a href="#manage_tab_item" class="nav-link paddin_left_30" data-toggle="tab">
                                 <span class="span_manage_gallery_item_tab">مدیریت تصاویر</span>
                             </a>
                             <button class="close closeTab cancel_manage_gallery_item" type="button">×</button>
@@ -111,17 +111,17 @@
                                         <li class="nav-item">
                                             <a class="nav-link active" href="#manage_tab_gallery_item" data-toggle="tab">
                                                 <i class="fas fa-th-list"></i>
-                                                <span class="margin_right_5">مدیریت تصاویر گالری</span>
+                                                <span class="margin_right_5">مدیریت آیتم ها</span>
                                             </a>
                                         </li>
                                         <li class="nav-item" id="add_gallery_item_tab">
                                             <a class="nav-link" href="#add_gallery_item" data-toggle="tab">
                                                 <i class="far fa-plus-square"></i>
-                                                <span>اضافه کردن تصویر</span>
+                                                <span>افزودن آیتم</span>
                                             </a>
                                         </li>
                                         <li class="nav-item edit_gallery_item_tab hidden">
-                                            <a href="#edit_gallery_item" class="nav-link" data-toggle="tab">
+                                            <a href="#edit_gallery_item" class="nav-link paddin_left_30" data-toggle="tab">
                                                 <span class="span_edit_gallery_item_tab">ویرایش</span>
                                             </a>
                                             <button class="close closeTab cancel_edit_gallery_item_tab" type="button">×</button>

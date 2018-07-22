@@ -14,7 +14,7 @@
             data: 'id',
             name: 'id',
             title: 'آی دی',
-            visible:false
+            visible: false
         },
         {
             data: 'file_id',
@@ -51,7 +51,7 @@
                     ch = 'checked';
                 else
                     ch = '';
-                return '<input class="styled " id="change_item_status_'+full.id+'" type="checkbox" name="special" data-item_id="' + full.id + '"  onchange="change_status_item(this)"' + ch + '>'
+                return '<input class="styled " id="change_item_status_' + full.id + '" type="checkbox" name="special" data-item_id="' + full.id + '"  onchange="change_status_item(this)"' + ch + '>'
             }
         },
         {
@@ -64,7 +64,7 @@
                     '<a class="btn_edit_gallery_item pointer" data-item_id="' + full.id + '" data-title="' + full.title + '">' +
                     '   <i class="fa fa-edit"></i>' +
                     '</a>' +
-                    '<a class="btn_trash_gallery_item pointer" style="color: red" data-item_id="' + full.id + '" data-title="' + full.title +'">' +
+                    '<a class="btn_trash_gallery_item pointer" style="color: red" data-item_id="' + full.id + '" data-title="' + full.title + '">' +
                     '   <i class="fa fa-trash"></i>' +
                     '</a>'
             }
@@ -83,14 +83,14 @@
         $('.manage_gallery_item_tab').removeClass('hidden');
         var html = '' +
             '<div class="space-20"></div>' +
-            '<table id="GalleryItemGridData" class="table" width="100%"></table>' ;
-        $('.span_manage_gallery_item_tab').html('گالری تصاویر : ' + title);
+            '<table id="GalleryItemGridData" class="table" width="100%"></table>';
+        $('.span_manage_gallery_item_tab').html('گالری : ' + title);
         $('#manage_tab_gallery_item').html(html);
         dataTablesGrid('#GalleryItemGridData', 'GalleryItemGridData', '{{ route('LGS.getGalleryItem') }}', gallery_item_columns, {item_id: item_id}, null, true, null, null, 1, 'desc');
 
         $(document).off("click", "#add_gallery_item_tab");
         $(document).on("click", "#add_gallery_item_tab", function () {
-            get_gallery_item(item_id) ;
+            get_gallery_item(item_id);
         });
 
         function get_gallery_item(item_id) {
@@ -151,12 +151,13 @@
     /*___________________________________________________change status_____________________________________________________________________*/
     function change_status_item(input) {
         console.log();
-        var checked = input.checked ;
-        var id = input.id ;
-        var item_id = $(input).data('item_id') ;
-        var parameters = { status: checked,item_id:item_id};
-        yesNoAlert('تغییر وضعیت کاربر', 'از تغییر وضعیت کاربر مطمئن هستید ؟', 'warning', 'بله، وضعیت کاربر را تغییر بده!', 'لغو', set_item_status, parameters,remove_checked_item,parameters);
+        var checked = input.checked;
+        var id = input.id;
+        var item_id = $(input).data('item_id');
+        var parameters = {status: checked, item_id: item_id};
+        yesNoAlert('تغییر وضعیت کاربر', 'از تغییر وضعیت کاربر مطمئن هستید ؟', 'warning', 'بله، وضعیت کاربر را تغییر بده!', 'لغو', set_item_status, parameters, remove_checked_item, parameters);
     }
+
     function set_item_status(params) {
         $.ajax({
             type: 'POST',
@@ -167,20 +168,19 @@
                 if (result.success) {
                     menotify('success', result.title, result.message);
                 }
-                else{
+                else {
 
                 }
             }
         });
     }
-    function remove_checked_item (params) {
-        var $this =$('#change_item_status_'+params.item_id) ;
-        if(params.status)
-        {
+
+    function remove_checked_item(params) {
+        var $this = $('#change_item_status_' + params.item_id);
+        if (params.status) {
             $this.prop('checked', false);
         }
-        else
-        {
+        else {
             $this.prop('checked', true);
         }
     }
@@ -188,17 +188,35 @@
     /*___________________________________________________add item_____________________________________________________________________*/
 
     function showitemFile(res) {
-        $('#show_area_medium_item_file').html(res.itemFile.view.medium) ;
+        $('#show_area_medium_item_file').html(res.itemFile.view.medium);
     }
-
+    function showVideoMp4File(res) {
+        $('#show_area_medium_video_mp4_file').html(res.videoMp4itemFile.view.medium);
+    }
+    function showVideoWebmFile(res) {
+        $('#show_area_medium_video_webm_file').html(res.videoWebmFile.view.medium);
+    }
+    function showVideoOggFile(res) {
+        $('#show_area_medium_video_ogg_file').html(res.videoOggFile.view.medium);
+    }
+    function showAudioOggFile(res) {
+        $('#show_area_medium_audio_ogg_file').html(res.audioOggFile.view.medium);
+    }
+    function showAudioMp3File(res) {
+        $('#show_area_medium_audio_mp3_file').html(res.audioMp3File.view.medium);
+    }
+    function showAudioWavFile(res) {
+        $('#show_area_medium_audio_mp3_file').html(res.audioWavFile.view.medium);
+    }
     /*___________________________________________________Edit Gallery Item_____________________________________________________________________*/
     $(document).off("click", ".btn_edit_gallery_item ");
     $(document).on("click", ".btn_edit_gallery_item ", function () {
         var item_id = $(this).data('item_id');
         var title = $(this).data('title');
         $('.span_edit_gallery_item_tab').html('ویرایش آیتم: ' + title);
-        get_edit_gallery_item_form(item_id) ;
+        get_edit_gallery_item_form(item_id);
     });
+
     function get_edit_gallery_item_form(item_id) {
         $('#edit_gallery_item').children().remove();
         $('#edit_gallery_item').append(generate_loader_html('لطفا منتظر بمانید...'));
@@ -216,11 +234,72 @@
                     $('.edit_gallery_item_tab').removeClass('hidden');
                     $('a[href="#edit_gallery_item"]').click();
 
-                    var edit_gallery_form_id = document.querySelector("#frm_edit_gallery_item");
-                    //init_validatejs(edit_gallery_form_id, create_gallery_item_constraints, ajax_func_edit_gallery_item);
+                    var edit_gallery_item_form_id = document.querySelector("#frm_create_gallery_item");
+                    init_validatejs(edit_gallery_item_form_id, create_gallery_item_constraints, ajax_func_edit_gallery_item);
                 }
                 else {
 
+                }
+            }
+        });
+    }
+
+    function ajax_func_edit_gallery_item(formElement) {
+        var formData = new FormData(formElement);
+        $.ajax({
+            type: "POST",
+            url: '{{ route('LGS.editGalleryItem')}}',
+            dataType: "json",
+            data: formData,
+            processData: false,
+            contentType: false,
+            success: function (data) {
+                $('#frm_edit_gallery .total_loader').remove();
+                if (data.status == -1) {
+                    showMessages(data.message, 'form_message_box', 'error', formElement);
+                    showErrors(formElement, data.errors);
+                }
+                else {
+                    menotify('success', data.title, data.message);
+                    GalleryItemGridData.ajax.reload(null, false);
+                    $('a[href="#manage_tab_gallery_item"]').click();
+                    $('.edit_gallery_item_tab').addClass('hidden');
+                    $('#edit_gallery_item').html('');
+                }
+            }
+        });
+    }
+
+    /*___________________________________________________cancel edit gallery item button_____________________________________________________________________*/
+    $(document).off("click", ".cancel_edit_gallery_item_tab");
+    $(document).on("click", ".cancel_edit_gallery_item_tab", function () {
+        $('a[href="#manage_tab_gallery_item"]').click();
+        $('.edit_gallery_item_tab').addClass('hidden');
+        $('#edit_gallery_item').html('');
+    });
+
+    /*___________________________________________________Trash Gallery Item_____________________________________________________________________*/
+    $(document).off("click", ".btn_trash_gallery_item");
+    $(document).on("click", ".btn_trash_gallery_item", function () {
+        var item_id = $(this).data('item_id');
+        var parameters = {item_id:item_id};
+        yesNoAlert('حذف گالری', 'از حذف گالری مطمئن هستید ؟', 'warning', 'بله، گالری را حذف کن!', 'لغو', trash_gallery_item, parameters);
+    });
+
+    function trash_gallery_item(params) {
+        $.ajax({
+            type: 'POST',
+            dataType: 'json',
+            url: '{!!  route('LGS.trashGalleryItem') !!}',
+            data: params,
+            success: function (data) {
+                if (data.status == -1) {
+                    showMessages(data.message, 'form_message_box', 'error', formElement);
+                    showErrors(formElement, data.errors);
+                }
+                else {
+                    menotify('success', data.title, data.message);
+                    GalleryItemGridData.ajax.reload(null,false);
                 }
             }
         });

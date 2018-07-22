@@ -19,26 +19,18 @@
         },
         {
             width: '20%',
-            data: 'default_img',
-            name: 'default_img',
-            title: 'پیش نمایش',
-            mRender: function (data, type, full) {
-                var img = full.default_img;
-                if (typeof img === 'undefined' || img === null || img === '') {
-                    return "";
-                }
-                else {
-                    return '<img width="112" height="70" src="{{ route('LFM.DownloadFile',['ID',''])}}/' + img + '/small/404.png/100/112/70?0" alt="" class="img-rounded img-preview">';
-                }
-            }
-        },
-        {
-            width: '20%',
             data: 'title',
             name: 'title',
             title: 'عنوان',
             mRender: function (data, type, full) {
-                return '<a class="show_gallery_item pointer" data-title="' + full.title + '"  data-item_id="' + full.id + '">' + full.title + '</a>';
+                var img = full.default_img;
+                if (typeof img === 'undefined' || img === null || img === '') {
+                    var img_item = '<img id="LGS_showThumbImage" src="{{ route('LFM.DownloadFile',['ID',''])}}/' + 0 + '/small/404.png/100/30/30?0"  class="img-rounded img-preview">';
+                }
+                else {
+                    var img_item = '<img id="LGS_showThumbImage" src="{{ route('LFM.DownloadFile',['ID',''])}}/' + img + '/small/404.png/100/30/30?0"  class="img-rounded img-preview">';
+                }
+                return '<div><span class="span_image_container">'+img_item+'</span><a class="show_gallery_item pointer" data-title="' + full.title + '"  data-item_id="' + full.id + '">' + full.title + '</a></div>';
             }
         },
         {
@@ -51,7 +43,7 @@
             width: '15%',
             data: 'parent_id',
             name: 'parent_id',
-            title: 'گالری پدر',
+            title: 'گالری والد',
             mRender: function (data, type, full) {
                 $('#gallery_parrent_id').val(full.parent_id);
                 if (full.parent != null)
@@ -294,6 +286,10 @@
         }
     }
 
-
+    $('#LGS_showThumbImage').tooltip({
+        animated: 'fade',
+        placement: 'bottom',
+        html: true
+    });
 
 </script>
