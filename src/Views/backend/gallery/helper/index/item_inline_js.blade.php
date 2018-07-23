@@ -17,16 +17,17 @@
             visible: false
         },
         {
-            data: 'file_id',
-            name: 'file_id',
-            title: 'فایل',
+            data: 'type',
+            name: 'type',
+            title: 'نوع',
             mRender: function (data, type, full) {
-                var img = full.file_id;
-                if (typeof img === 'undefined' || img === null || img === '') {
-                    return "";
-                }
-                else {
-                    return '<img width="112" height="70" src="{{ route('LFM.DownloadFile',['ID',''])}}/' + img + '/small/404.png/100/112/70?0" alt="" class="img-rounded img-preview">';
+                if (full.type == 0) {
+                    return 'تصویر' ;
+
+                } else if (full.type == 1) {
+                    return 'صوت' ;
+                } else {
+                    return 'ویدئو' ;
                 }
             }
         },
@@ -73,6 +74,12 @@
     var create_gallery_item_constraints = {
         title: {
             presence: {message: '^<strong>عنوان فرم ضروریست.</strong>'}
+        },
+        order: {
+            numericality: {
+                onlyInteger: true,
+                message: '^<strong>ترتیب نامعتبر است .</strong>'
+            }
         }
     };
     $(document).off("click", ".show_gallery_item");
@@ -190,24 +197,31 @@
     function showitemFile(res) {
         $('#show_area_medium_item_file').html(res.itemFile.view.medium);
     }
+
     function showVideoMp4File(res) {
         $('#show_area_medium_video_mp4_file').html(res.videoMp4itemFile.view.medium);
     }
+
     function showVideoWebmFile(res) {
         $('#show_area_medium_video_webm_file').html(res.videoWebmFile.view.medium);
     }
+
     function showVideoOggFile(res) {
         $('#show_area_medium_video_ogg_file').html(res.videoOggFile.view.medium);
     }
+
     function showAudioOggFile(res) {
         $('#show_area_medium_audio_ogg_file').html(res.audioOggFile.view.medium);
     }
+
     function showAudioMp3File(res) {
         $('#show_area_medium_audio_mp3_file').html(res.audioMp3File.view.medium);
     }
+
     function showAudioWavFile(res) {
-        $('#show_area_medium_audio_mp3_file').html(res.audioWavFile.view.medium);
+        $('#show_area_medium_audio_wav_file').html(res.audioWavFile.view.medium);
     }
+
     /*___________________________________________________Edit Gallery Item_____________________________________________________________________*/
     $(document).off("click", ".btn_edit_gallery_item ");
     $(document).on("click", ".btn_edit_gallery_item ", function () {
@@ -282,7 +296,7 @@
     $(document).off("click", ".btn_trash_gallery_item");
     $(document).on("click", ".btn_trash_gallery_item", function () {
         var item_id = $(this).data('item_id');
-        var parameters = {item_id:item_id};
+        var parameters = {item_id: item_id};
         yesNoAlert('حذف گالری', 'از حذف گالری مطمئن هستید ؟', 'warning', 'بله، گالری را حذف کن!', 'لغو', trash_gallery_item, parameters);
     });
 
@@ -299,10 +313,50 @@
                 }
                 else {
                     menotify('success', data.title, data.message);
-                    GalleryItemGridData.ajax.reload(null,false);
+                    GalleryItemGridData.ajax.reload(null, false);
                 }
             }
         });
+    }
+
+    /*___________________________________________________change type_____________________________________________________________________*/
+    $(document).off("change", "#gallery_type");
+    $(document).on("change", "#gallery_type", function () {
+        show_input_file(this.value);
+    });
+
+    function show_input_file(value) {
+        if (value == 2) {
+            $('#form_group_video_mp4').removeClass('hidden');
+            $('#form_group_video_webm').removeClass('hidden');
+            $('#form_group_video_ogg').removeClass('hidden');
+
+            $('#form_group_audio_ogg').addClass('hidden');
+            $('#form_group_audio_mp3').addClass('hidden');
+            $('#form_group_audio_wav').addClass('hidden');
+            $('#form_group_picture').addClass('hidden');
+
+        }
+        else if (value == 1) {
+            $('#form_group_audio_ogg').removeClass('hidden');
+            $('#form_group_audio_mp3').removeClass('hidden');
+            $('#form_group_audio_wav').removeClass('hidden');
+
+            $('#form_group_video_mp4').addClass('hidden');
+            $('#form_group_video_webm').addClass('hidden');
+            $('#form_group_video_ogg').addClass('hidden');
+            $('#form_group_picture').addClass('hidden');
+        }
+        else {
+            $('#form_group_picture').removeClass('hidden');
+
+            $('#form_group_video_mp4').addClass('hidden');
+            $('#form_group_video_webm').addClass('hidden');
+            $('#form_group_video_ogg').addClass('hidden');
+            $('#form_group_audio_ogg').addClass('hidden');
+            $('#form_group_audio_mp3').addClass('hidden');
+            $('#form_group_audio_wav').addClass('hidden');
+        }
     }
 
 </script>

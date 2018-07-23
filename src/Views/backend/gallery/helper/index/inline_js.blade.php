@@ -119,6 +119,12 @@
     var create_gallery_constraints = {
         title: {
             presence: {message: '^<strong>عنوان فرم ضروریست.</strong>'}
+        },
+        order : {
+            numericality: {
+                onlyInteger: true,
+                message: '^<strong>ترتیب نامعتبر است .</strong>'
+            }
         }
     };
     var create_gallery_form_id = document.querySelector("#frm_create_gallery");

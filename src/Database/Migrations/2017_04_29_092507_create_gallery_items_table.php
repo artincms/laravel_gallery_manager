@@ -20,8 +20,8 @@ class CreateGalleryItemsTable extends Migration
             $table->string('title', 255);
             $table->string('description', 1000)->nullable()->default(null);
             $table->integer('visit')->unsigned()->default(0);
-            $table->enum('status', array('0','1'))->default('0');
-            $table->enum('type', array('0','1','2'))->default('0');
+            $table->enum('status',['0','1'])->default('0');
+            $table->enum('type', ['0','1','2'])->default('0')->comment('0 is picture 1 is Audio and 2 is video');
             $table->integer('order')->default(0);
             $table->integer('created_by')->unsigned()->default(0);
             $table->timestamps();

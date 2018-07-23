@@ -35,11 +35,10 @@
     <div class="form-group row">
         <label class="col-lg-2 col-sm-12 col-md-3 control-label col-form-label label_post" for="description">نوع فایل</label>
         <div class="col-6">
-            <select id="gallery_status" name="status" class="form-control">
-                <option value="-1">نوع فایل را انتخاب نمایید</option>
-                <option value="0">picture</option>
-                <option value="1">auidio</option>
-                <option value="2">video</option>
+            <select id="gallery_type" name="type" class="form-control">
+                <option value="0">تصویر</option>
+                <option value="1">صوت</option>
+                <option value="2">ویدئو</option>
             </select>
         </div>
     </div>
@@ -49,7 +48,7 @@
             <textarea class="form-control" name="description" id="gallery_description" rows="3"></textarea>
         </div>
     </div>
-    <div class="form-group row">
+    <div class="form-group row" id="form_group_picture">
         <label class="col-lg-2 col-sm-12 col-md-3 control-label col-form-label label_post" for="description">انتخاب تصویر</label>
         <div class="col-6">
             {!! $itmeFile['button'] !!}
@@ -57,58 +56,64 @@
             <div id="show_area_medium_item_file"></div>
         </div>
     </div>
-    <div class="form-group row">
+    <div class="form-group row hidden" id="form_group_video_mp4">
         <label class="col-lg-2 col-sm-12 col-md-3 control-label col-form-label label_post" for="description">انتخاب ویدئو(mp4)</label>
         <div class="col-6">
             {!! $itmeVideoMp4File['button'] !!}
             {!! $itmeVideoMp4File['modal_content'] !!}
-            <div id="show_area_medium_video_mp4_file"></div>
         </div>
     </div>
-    <div class="form-group row">
+    <div class="form-group row hidden" id="form_group_video_webm">
         <label class="col-lg-2 col-sm-12 col-md-3 control-label col-form-label label_post" for="description">انتخاب ویدئو(webm)</label>
         <div class="col-6">
             {!! $itmeVideoWebmFile['button'] !!}
             {!! $itmeVideoWebmFile['modal_content'] !!}
-            <div id="show_area_medium_video_webm_file"></div>
         </div>
     </div>
-    <div class="form-group row">
+    <div class="form-group row hidden" id="form_group_video_ogg">
         <label class="col-lg-2 col-sm-12 col-md-3 control-label col-form-label label_post" for="description">انتخاب ویدئو(ogg)</label>
         <div class="col-6">
             {!! $itmeVideoOggFile['button'] !!}
             {!! $itmeVideoOggFile['modal_content'] !!}
-            <div id="show_area_medium_video_ogg_file"></div>
         </div>
     </div>
-    <div class="form-group row">
+    <div class="form-group row hidden" id="form_group_audio_ogg">
         <label class="col-lg-2 col-sm-12 col-md-3 control-label col-form-label label_post" for="description">انتخاب فایل صوتی(ogg)</label>
         <div class="col-6">
             {!! $itmeAudioOggFile['button'] !!}
             {!! $itmeAudioOggFile['modal_content'] !!}
-            <div id="show_area_medium_audio_ogg_file"></div>
         </div>
     </div>
-    <div class="form-group row">
-        <label class="col-lg-2 col-sm-12 col-md-3 control-label col-form-label label_post" for="description">انتخاب فایل صوتی(mp3/mpeg)</label>
+    <div class="form-group row hidden" id="form_group_audio_mp3">
+        <label class="col-lg-2 col-sm-12 col-md-3 control-label col-form-label label_post" for="description">انتخاب فایل صوتی(mp3)</label>
         <div class="col-6">
             {!! $itmeAudioMp3File['button'] !!}
             {!! $itmeAudioMp3File['modal_content'] !!}
-            <div id="show_area_medium_audio_mp3_file"></div>
         </div>
     </div>
-    <div class="form-group row">
+    <div class="form-group row hidden" id="form_group_audio_wav">
         <label class="col-lg-2 col-sm-12 col-md-3 control-label col-form-label label_post" for="description">انتخاب فایل صوتی(wav)</label>
         <div class="col-6">
             {!! $itmeAudioWavFile['button'] !!}
             {!! $itmeAudioWavFile['modal_content'] !!}
-            <div id="show_area_medium_audio_wav_file"></div>
         </div>
+    </div>
+    <div class="clearfixed"></div>
+    <div class="audio_area">
+        <div id="show_area_medium_audio_ogg_file"></div>
+        <div id="show_area_medium_audio_mp3_file"></div>
+        <div id="show_area_medium_audio_wav_file"></div>
+    </div>
+    <div class="video_area">
+        <div id="show_area_medium_video_mp4_file"></div>
+        <div id="show_area_medium_video_webm_file"></div>
+        <div id="show_area_medium_video_ogg_file"></div>
     </div>
     <div class="clearfixed"></div>
     <div class="col-12">
         <button type="submit" class="float-right btn btn-primary "><i class="fa fa-save margin_left_8"></i>ذخیره</button>
         <button type="button" class="float-right btn bg-secondary cancel_add_close_btn color_white"><i class="fa fa-times margin_left_8"></i>انصراف</button>
     </div>
+
 </form>
 

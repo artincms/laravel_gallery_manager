@@ -82,7 +82,7 @@ class GalleryController extends Controller
     public function getEditGalleryForm(Request $request)
     {
         $option_default_img = ['size_file' => 2000, 'max_file_number' => 1, 'true_file_extension' => ['png', 'jpg']];
-        $gallery = Gallery::find(deCodeId($request->item_id))->first();
+        $gallery = Gallery::find(deCodeId($request->item_id)[0]);
         $gallery->encode_id = enCodeId($gallery->id);
         $parrents = Gallery::all();
         $default_img = LFM_CreateModalFileManager('LoadDefaultImg', $option_default_img, 'insert', 'showDefaultImg', 'gallery_edit_tab', false
@@ -206,8 +206,8 @@ class GalleryController extends Controller
         $option_video_webm_file = ['size_file' => 2000, 'max_file_number' => 1, 'true_file_extension' => ['webm']];
         $option_video_ogg_file = ['size_file' => 2000, 'max_file_number' => 1, 'true_file_extension' => ['ogv']];
         //audio options
-        $option_audio_ogg_file = ['size_file' => 2000, 'max_file_number' => 1, 'true_file_extension' => ['oga','ogg']];
-        $option_audio_mp3_file = ['size_file' => 2000, 'max_file_number' => 1, 'true_file_extension' => ['mpga','mp3']];
+        $option_audio_ogg_file = ['size_file' => 2000, 'max_file_number' => 1, 'true_file_extension' => ['oga', 'ogg']];
+        $option_audio_mp3_file = ['size_file' => 2000, 'max_file_number' => 1, 'true_file_extension' => ['mpga', 'mp3']];
         $option_audio_wav_file = ['size_file' => 2000, 'max_file_number' => 1, 'true_file_extension' => ['wav']];
 
         $itmeFile = LFM_CreateModalFileManager('itemFile', $option_item_file, 'insert', 'showitemFile');
@@ -221,8 +221,8 @@ class GalleryController extends Controller
         $itmeAudioWavFile = LFM_CreateModalFileManager('audioWavFile', $option_audio_wav_file, 'insert', 'showAudioWavFile');
 
         $gallery_id = $request->item_id;
-        $gallery_form = view('laravel_gallery_system::backend.gallery.view.add_item', compact('gallery_id', 'itmeFile','itmeVideoMp4File'
-            ,'itmeVideoWebmFile','itmeVideoOggFile','itmeAudioOggFile','itmeAudioMp3File','itmeAudioWavFile'))->render();
+        $gallery_form = view('laravel_gallery_system::backend.gallery.view.add_item', compact('gallery_id', 'itmeFile', 'itmeVideoMp4File'
+            , 'itmeVideoWebmFile', 'itmeVideoOggFile', 'itmeAudioOggFile', 'itmeAudioMp3File', 'itmeAudioWavFile'))->render();
         $res =
             [
                 'status' => "1",
@@ -238,25 +238,26 @@ class GalleryController extends Controller
 
     public function createGalleryItem(Request $request)
     {
-        $gallery = new GalleryItem;
-        $gallery->gallery_id = deCodeId($request->gallery_id)[0];
-        $gallery->title = $request->title;
-        $gallery->description = $request->description;
+        $item = new GalleryItem;
+        $item->gallery_id = deCodeId($request->gallery_id)[0];
+        $item->title = $request->title;
+        $item->description = $request->description;
+        $item->type = $request->type;
         if ($request->order)
         {
-            $gallery->order = $request->order;
+            $item->order = $request->order;
         }
         else
         {
-            $gallery->order = 0;
+            $item->order = 0;
         }
         if ($request->status == -1)
         {
-            $gallery->status = '0';
+            $item->status = '0';
         }
         else
         {
-            $gallery->status = $request->status;
+            $item->status = $request->status;
 
         }
         if (Auth::user())
@@ -266,15 +267,22 @@ class GalleryController extends Controller
                 $gallery->created_by = Auth::user()->id;
             }
         }
-        $gallery->save();
-        $res['file'] = LFM_SaveSingleFile($gallery, 'file_id', 'itemFile', 'options');
+        $item->save();
+        $itemFile = LFM_SaveSingleFile($item, 'file_id', 'itemFile', 'options');
+        $audioOggFile = LFM_SaveMultiFile($item, 'audioOggFile', 'audio/ogg', 'files');
+        $itmeAudioMp3File = LFM_SaveMultiFile($item, 'audioMp3File', 'audio/mpeg', 'files');
+        $itmeAudioWavFile = LFM_SaveMultiFile($item, 'audioWavFile', 'audio/x-wav', 'files');
+        $itmeVideoMp4File = LFM_SaveMultiFile($item, 'videoMp4itemFile', 'video/mp4', 'files');
+        $itmeVideoWebmFile = LFM_SaveMultiFile($item, 'videoWebmFile', '	video/webm', 'files');
+        $itmeVideoOggFile = LFM_SaveMultiFile($item, 'videoOggFile', 'video/ogg', 'files');
         $res =
             [
                 'status' => "1",
                 'status_type' => "success",
                 'title' => "ثبت فایل",
-                'section' => 'defaultImg',
-                'message' => 'فایل با موفقیت به گالری اضافه شد.'
+                'section' => 'itemFile',
+                'message' => 'فایل با موفقیت به گالری اضافه شد.',
+                'saveFile' => [$itemFile, $audioOggFile, $itmeAudioMp3File, $itmeAudioWavFile, $itmeVideoMp4File, $itmeVideoWebmFile, $itmeVideoOggFile]
             ];
         return $res;
     }
@@ -300,14 +308,43 @@ class GalleryController extends Controller
 
     public function getEditGalleryItemForm(Request $request)
     {
-        $option_edit_item = ['size_file' => 2000, 'max_file_number' => 1, 'true_file_extension' => ['png', 'jpg']];
-        $item = GalleryItem::find(deCodeId($request->item_id))->first();
-        $item->encode_id = enCodeId($item->id);
-        $item->gallery_encode_id = enCodeId($item->gallery_id);
-        $itmeFile = LFM_CreateModalFileManager('LoadImageItem', $option_edit_item, 'insert', 'show_item_image', 'gallery_item_edit_tab', false
-            , 'button_edit_gallery_item', 'انتخاب تصویر');
-        $load_gallery_item = LFM_loadSingleFile($item, 'file_id', 'LoadImageItem');
-        $item_form = view('laravel_gallery_system::backend.gallery.view.edit_item', compact('item', 'itmeFile', 'load_gallery_item'))->render();
+        $item = GalleryItem::find(deCodeId($request->item_id)[0]);
+
+        //image options
+        $option_item_file = ['size_file' => 2000, 'max_file_number' => 1, 'true_file_extension' => ['png', 'jpg']];
+        //video options
+        $option_video_mp4_file = ['size_file' => 2000, 'max_file_number' => 1, 'true_file_extension' => ['mp4']];
+        $option_video_webm_file = ['size_file' => 2000, 'max_file_number' => 1, 'true_file_extension' => ['webm']];
+        $option_video_ogg_file = ['size_file' => 2000, 'max_file_number' => 1, 'true_file_extension' => ['ogv']];
+        //audio options
+        $option_audio_ogg_file = ['size_file' => 2000, 'max_file_number' => 1, 'true_file_extension' => ['oga', 'ogg']];
+        $option_audio_mp3_file = ['size_file' => 2000, 'max_file_number' => 1, 'true_file_extension' => ['mpga', 'mp3']];
+        $option_audio_wav_file = ['size_file' => 2000, 'max_file_number' => 1, 'true_file_extension' => ['wav']];
+
+        $itmeFile = LFM_CreateModalFileManager('editItemFile', $option_item_file, 'insert', 'showEdititemFile');
+
+        $itmeVideoMp4File = LFM_CreateModalFileManager('editVideoMp4itemFile', $option_video_mp4_file, 'insert', 'showEditVideoMp4File');
+        $itmeVideoWebmFile = LFM_CreateModalFileManager('editVideoWebmFile', $option_video_webm_file, 'insert', 'showEditVideoWebmFile');
+        $itmeVideoOggFile = LFM_CreateModalFileManager('editVideoOggFile', $option_video_ogg_file, 'insert', 'showEditVideoOggFile');
+
+        $itmeAudioOggFile = LFM_CreateModalFileManager('editAudioOggFile', $option_audio_ogg_file, 'insert', 'showEditAudioOggFile');
+        $itmeAudioMp3File = LFM_CreateModalFileManager('editAudioMp3File', $option_audio_mp3_file, 'insert', 'showEditAudioMp3File');
+        $itmeAudioWavFile = LFM_CreateModalFileManager('editAudioWavFile', $option_audio_wav_file, 'insert', 'showEditAudioWavFile');
+
+        //load files
+        $itmeFileLoad = LFM_loadSingleFile($item, 'file_id', 'editItemFile');
+
+        $itmeVideoMp4FileLoad = LFM_LoadMultiFile($item, 'editVideoMp4itemFile', 'video/mp4');
+        $itmeVideoWebmFileLoad = LFM_LoadMultiFile($item, 'editVideoWebmFile', 'video/webm');
+        $itmeVideoOggFileLoad = LFM_LoadMultiFile($item, 'editVideoOggFile', 'video/ogg');
+
+        $itmeAudioOggFileLoad = LFM_LoadMultiFile($item, 'editAudioOggFile', 'audio/ogg');
+        $itmeAudioMp3FileLoad = LFM_LoadMultiFile($item, 'editAudioMp3File', 'audio/mpeg');
+        $itmeAudioWavFileLoad = LFM_LoadMultiFile($item, 'editAudioWavFile', 'audio/x-wav');
+
+        $item_form = view('laravel_gallery_system::backend.gallery.view.edit_item', compact('item', 'itmeFile', 'itmeVideoMp4File'
+            , 'itmeVideoWebmFile', 'itmeVideoOggFile', 'itmeAudioOggFile', 'itmeAudioMp3File', 'itmeAudioWavFile', 'itmeFileLoad', 'itmeVideoMp4FileLoad', 'itmeVideoWebmFileLoad',
+            'itmeVideoOggFileLoad', 'itmeAudioOggFileLoad', 'itmeAudioMp3FileLoad', 'itmeAudioWavFileLoad'))->render();
         $res =
             [
                 'status' => "1",
