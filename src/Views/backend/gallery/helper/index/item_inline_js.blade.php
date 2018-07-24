@@ -40,6 +40,14 @@
             data: 'description',
             name: 'description',
             title: 'توضیحات',
+            mRender: function (data, type, full) {
+                return '<div class="text_over_flow" data-toggle="tooltip" data-html="true" title=\'<p style="color:blue">'+full.description+'</p>\'>'+full.description+'</div>'
+            }
+        },
+        {
+            data: 'visit',
+            name: 'visit',
+            title: 'تعداد مشاهدات',
         },
         {
             width: '5%',
@@ -63,7 +71,7 @@
             mRender: function (data, type, full) {
                 return '' +
                     '<a class="btn_edit_gallery_item pointer" data-item_id="' + full.id + '" data-title="' + full.title + '">' +
-                    '   <i class="fa fa-edit"></i>' +
+                    '   <i class="fa fa-edit color_orange"></i>' +
                     '</a>' +
                     '<a class="btn_trash_gallery_item pointer" style="color: red" data-item_id="' + full.id + '" data-title="' + full.title + '">' +
                     '   <i class="fa fa-trash"></i>' +
@@ -93,7 +101,11 @@
             '<table id="GalleryItemGridData" class="table" width="100%"></table>';
         $('.span_manage_gallery_item_tab').html('گالری : ' + title);
         $('#manage_tab_gallery_item').html(html);
-        dataTablesGrid('#GalleryItemGridData', 'GalleryItemGridData', '{{ route('LGS.getGalleryItem') }}', gallery_item_columns, {item_id: item_id}, null, true, null, null, 1, 'desc');
+        var fixedColumns ={
+            rightColumn:2,
+            leftColumn:2
+        }
+        dataTablesGrid('#GalleryItemGridData', 'GalleryItemGridData', '{{ route('LGS.getGalleryItem') }}', gallery_item_columns, {item_id: item_id}, null, true, null, null, 1, 'desc',false,fixedColumns);
 
         $(document).off("click", "#add_gallery_item_tab");
         $(document).on("click", "#add_gallery_item_tab", function () {
@@ -196,30 +208,37 @@
 
     function showitemFile(res) {
         $('#show_area_medium_item_file').html(res.itemFile.view.medium);
+        $('#warning_picture').addClass('hidden');
     }
 
     function showVideoMp4File(res) {
         $('#show_area_medium_video_mp4_file').html(res.videoMp4itemFile.view.medium);
+        $('#warning_video_mp4').addClass('hidden');
     }
 
     function showVideoWebmFile(res) {
         $('#show_area_medium_video_webm_file').html(res.videoWebmFile.view.medium);
+        $('#warning_video_webm').addClass('hidden');
     }
 
     function showVideoOggFile(res) {
         $('#show_area_medium_video_ogg_file').html(res.videoOggFile.view.medium);
+        $('#warning_video_ogg').addClass('hidden');
     }
 
     function showAudioOggFile(res) {
         $('#show_area_medium_audio_ogg_file').html(res.audioOggFile.view.medium);
+        $('#warning_audio_ogg').addClass('hidden');
     }
 
     function showAudioMp3File(res) {
         $('#show_area_medium_audio_mp3_file').html(res.audioMp3File.view.medium);
+        $('#warning_audio_mp3').addClass('hidden');
     }
 
     function showAudioWavFile(res) {
         $('#show_area_medium_audio_wav_file').html(res.audioWavFile.view.medium);
+        $('#warning_audio_wav').addClass('hidden');
     }
 
     /*___________________________________________________Edit Gallery Item_____________________________________________________________________*/
@@ -327,35 +346,19 @@
 
     function show_input_file(value) {
         if (value == 2) {
-            $('#form_group_video_mp4').removeClass('hidden');
-            $('#form_group_video_webm').removeClass('hidden');
-            $('#form_group_video_ogg').removeClass('hidden');
-
-            $('#form_group_audio_ogg').addClass('hidden');
-            $('#form_group_audio_mp3').addClass('hidden');
-            $('#form_group_audio_wav').addClass('hidden');
+            $('#form_group_video').removeClass('hidden');
             $('#form_group_picture').addClass('hidden');
-
+            $('#form_group_audio').addClass('hidden');
         }
         else if (value == 1) {
-            $('#form_group_audio_ogg').removeClass('hidden');
-            $('#form_group_audio_mp3').removeClass('hidden');
-            $('#form_group_audio_wav').removeClass('hidden');
-
-            $('#form_group_video_mp4').addClass('hidden');
-            $('#form_group_video_webm').addClass('hidden');
-            $('#form_group_video_ogg').addClass('hidden');
+            $('#form_group_video').addClass('hidden');
             $('#form_group_picture').addClass('hidden');
+            $('#form_group_audio').removeClass('hidden');
         }
         else {
+            $('#form_group_video').addClass('hidden');
             $('#form_group_picture').removeClass('hidden');
-
-            $('#form_group_video_mp4').addClass('hidden');
-            $('#form_group_video_webm').addClass('hidden');
-            $('#form_group_video_ogg').addClass('hidden');
-            $('#form_group_audio_ogg').addClass('hidden');
-            $('#form_group_audio_mp3').addClass('hidden');
-            $('#form_group_audio_wav').addClass('hidden');
+            $('#form_group_audio').addClass('hidden');
         }
     }
 

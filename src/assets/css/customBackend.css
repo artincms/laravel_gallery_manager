@@ -440,6 +440,21 @@ li.nav-item {
     padding: 0px;
     box-shadow: 1px 1px #888888;
     margin-left: 10px;
+    float: right;
+}
+.color_orange {
+    color:#f19a2b;
+}
+.text_over_flow{
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    width:350px;
+}
+@media (min-width: 576px)and (max-width: 768px){
+    .card_flex_item {
+        flex-flow: column !important;
+    }
 }
 /*____________________________________Add Loader css_______________________________________________*/
 .total_loader {

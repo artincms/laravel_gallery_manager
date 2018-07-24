@@ -25,12 +25,12 @@
             mRender: function (data, type, full) {
                 var img = full.default_img;
                 if (typeof img === 'undefined' || img === null || img === '') {
-                    var img_item = '<img id="LGS_showThumbImage" src="{{ route('LFM.DownloadFile',['ID',''])}}/' + 0 + '/small/404.png/100/30/30?0"  class="img-rounded img-preview">';
+                    var img_item = '<img id="LGS_showThumbImage" src="{{ route('LFM.DownloadFile',['ID',''])}}/' + 0 + '/small/404.png/100/30/30?0"  data-image="{{ route('LFM.DownloadFile',['ID',''])}}/' + 0 + '/original/404.png?0"  class="img-rounded img-preview">';
                 }
                 else {
-                    var img_item = '<img id="LGS_showThumbImage" src="{{ route('LFM.DownloadFile',['ID',''])}}/' + img + '/small/404.png/100/30/30?0"  class="img-rounded img-preview">';
+                    var img_item = '<img id="LGS_showThumbImage" src="{{ route('LFM.DownloadFile',['ID',''])}}/' + img + '/small/404.png/100/30/30?0" data-image="{{ route('LFM.DownloadFile',['ID',''])}}/' + img + '/original/404.png?0"  class="img-rounded img-preview">';
                 }
-                return '<div><span class="span_image_container">'+img_item+'</span><a class="show_gallery_item pointer" data-title="' + full.title + '"  data-item_id="' + full.id + '">' + full.title + '</a></div>';
+                return '<div><div class="span_image_container">'+img_item+'</div><a class="show_gallery_item pointer" data-title="' + full.title + '"  data-item_id="' + full.id + '">' + full.title + '</a></div>';
             }
         },
         {
@@ -87,7 +87,7 @@
             mRender: function (data, type, full) {
                 return '' +
                     '<a class="btn_edit_gallery pointer" data-item_id="' + full.id + '" data-title="' + full.title + '">' +
-                    '   <i class="fa fa-edit"></i>' +
+                    '   <i class="fa fa-edit color_orange"></i>' +
                     '</a>' +
                     '<a class="btn_trash_gallery pointer" style="color: red" data-item_id="' + full.id + '" data-title="' + full.title +'">' +
                     '   <i class="fa fa-trash"></i>' +
@@ -297,5 +297,14 @@
         placement: 'bottom',
         html: true
     });
-
+    /*___________________________________________________Tooltip_____________________________________________________________________*/
+    $(document).on('mouseenter','#LGS_showThumbImage',function(){
+        console.log('dd');
+        var image_name=$(this).data('image');
+        var imageTag='<div style="position:absolute;">'+'<img src="'+image_name+'" alt="image" height="100" />'+'</div>';
+        $(this).parent('div').append(imageTag);
+    });
+    $(document).on('mouseleave','#LGS_showThumbImage',function(){
+        $(this).parent('div').children('div').remove();
+    });
 </script>
