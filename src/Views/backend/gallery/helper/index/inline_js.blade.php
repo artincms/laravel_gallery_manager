@@ -88,18 +88,23 @@
             }
         },
         {
-            width: '10%',
+            width: '7%',
             searchable: false,
             sortable: false,
             data: 'action', name: 'action', 'title': 'عملیات',
             mRender: function (data, type, full) {
-                return '' +
-                    '<a class="btn_edit_gallery pointer" data-item_id="' + full.id + '" data-title="' + full.title + '" title="ویرایش">' +
-                    '   <i class="fa fa-edit color_orange"></i>' +
-                    '</a>' +
-                    '<a class="btn_trash_gallery pointer" style="color: red" data-item_id="' + full.id + '" data-title="' + full.title + ' title="حذف">' +
-                    '   <i class="fa fa-trash"></i>' +
-                    '</a>' ;
+                return '<div class="gallerty_menu float-right" onclick="set_fixed_dropdown_menu(this)">' +
+                    '  <div class="btn btn-primary fas fa-list-ul"></div>' +
+                    '  <div class="dropdown_gallery hidden">' +
+                    '   <a class="btn_edit_gallery pointer gallery_menu-item" data-item_id="' + full.id + '" data-title="' + full.title + '" title="ویرایش">' +
+                    '       <i class="fa fa-edit"></i><span class="ml-2">ویرایش</span>' +
+                    '   </a>' +
+                    '    <a class="btn_trash_gallery pointer gallery_menu-item" data-item_id="' + full.id + '" data-title="' + full.title + ' title="حذف">' +
+                    '       <i class="fa fa-trash"></i><span class="ml-2">خذف</span>' +
+                    '   </a>'
+                    '  </div>' +
+                    '</div>' ;
+
             }
         }
     ];
@@ -108,6 +113,9 @@
         //dataTablesGrid('#GalleryManagerGridData', 'GalleryManagerGridData', getGalleryRoute, gallery_grid_columns, null, null, true, null, null, 1, 'desc', false, fixedColumn);
         datatable_load_fun();
         $('.filter_parrent ').on("select2:select",datatable_reload_fun);
+        function datatable_reload_fun() {
+
+        }
     });
 
     /*________________________________________________________________________________________________________________________*/
@@ -322,23 +330,27 @@
     /*___________________________________________________FixedColumn_____________________________________________________________________*/
     function set_fixed_dropdown_menu(e)
     {
+        $(e).find('.dropdown_gallery').toggleClass('hidden');
         var position = $(e).offset() ;
+        var position2 = $(e).position() ;
         var scrollTop  = $(document).scrollTop() ;
-        var drop_height = $(e).find('.dropdown-menu').height() +16;
+        var scrollLeft  = $(document).scrollLeft() ;
+        var drop_height = $(e).find('.dropdown_gallery').height() +16;
+        console.log(position,position2,scrollTop,scrollLeft)
         if(($(window).height() - position.top)>drop_height)
         {
-            $(e).find('.gallery_dropdown_menu').css({'position':'fixed','top':position.top-scrollTop+16,'left':position.left+22,'height':'fit-content'});
+            $(e).find('.dropdown_gallery').css({'position':'fixed','top':position.top-scrollTop+16,'left':Math.abs(position.left)+42,'height':'fit-content'});
             window.addEventListener("scroll", function (event) {
                 var scroll = this.scrollY;
-                $(e).find('.gallery_dropdown_menu').css('top',position.top-scroll+16)
+                $(e).find('.dropdown_gallery').css('top',position.top-scroll+16)
             });
         }
         else
         {
-            $(e).find('.gallery_dropdown_menu').css({'position':'fixed','top':position.top-scrollTop+16-drop_height,'left':position.left+22,'height':'fit-content'});
+            $(e).find('.dropdown_gallery').css({'position':'fixed','top':position.top-scrollTop+16-drop_height,'left':Math.abs(position.left)+42,'height':'fit-content'});
             window.addEventListener("scroll", function (event) {
                 var scroll = this.scrollY;
-                $(e).find('.gallery_dropdown_menu').css('top',position.top-scroll+16-drop_height)
+                $(e).find('.dropdown_gallery').css('top',position.top-scroll+16-drop_height)
             });
         }
     }
@@ -362,14 +374,14 @@
         filter_parrent_id = filter_parrent_id || false;
         var getGalleryRoute = '{{ route('LGS.getGallery') }}';
         var fixedColumn = {
-            leftColumns: 2,
+            leftColumns: 3,
             rightColumns: 2
         };
         data =
             {
                 filter_parrent_id: filter_parrent_id,
             };
-        dataTablesGrid('#GalleryManagerGridData', 'GalleryManagerGridData', getGalleryRoute, gallery_grid_columns);
+        dataTablesGrid('#GalleryManagerGridData', 'GalleryManagerGridData', getGalleryRoute, gallery_grid_columns,null,null, true, null, null, 1, 'desc', false, fixedColumn);
         $('#GalleryManagerGridData thead').append
         (
             '<tr role="row">' +

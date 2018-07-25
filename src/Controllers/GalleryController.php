@@ -263,20 +263,19 @@ class GalleryController extends Controller
         {
             $item->order = 0;
         }
-        if ($request->status == -1)
+        if ($request->status)
         {
-            $item->status = '0';
+            $item->status = $request->status;
         }
         else
         {
-            $item->status = $request->status;
-
+            $item->status = '0';
         }
         if (Auth::user())
         {
             if (isset(Auth::user()->id))
             {
-                $gallery->created_by = Auth::user()->id;
+                $item->created_by = Auth::user()->id;
             }
         }
         $item->save();
