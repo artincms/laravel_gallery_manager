@@ -12,19 +12,9 @@
         <div class="col-sm-4 messages"></div>
     </div>
     <div class="form-group row">
-        <label class="col-lg-2 col-sm-12 col-md-3 control-label col-form-label label_post" for="description">نوع فایل</label>
-        <div class="col-lg-6 col-md-9 col-sm-12">
-            <select id="gallery_type" name="type" class="form-control">
-                <option value="0">تصویر</option>
-                <option value="1">صوت</option>
-                <option value="2">ویدئو</option>
-            </select>
-        </div>
-    </div>
-    <div class="form-group row">
         <label class="col-lg-2 col-sm-12 col-md-3 control-label col-form-label label_post" for="description">توضیحات</label>
         <div class="col-lg-6 col-md-9 col-sm-12">
-            <textarea class="form-control" name="description" id="gallery_description" rows="3"></textarea>
+            <textarea class="form-control" name="description" id="gallery_item_description" rows="3"></textarea>
         </div>
     </div>
     <div class="form-group row ">
@@ -38,6 +28,26 @@
             <div class="form-check-inline">
                 <label class="form-check-label" for="radio2">
                     <input type="radio" class="form-check-input" id="gallery_status2" name="status" value="0">غیر فعال
+                </label>
+            </div>
+        </div>
+    </div>
+    <div class="form-group row">
+        <label class="col-lg-2 col-sm-12 col-md-3 control-label col-form-label label_post" for="description">نوع فایل</label>
+        <div class="col-lg-6 col-md-9 col-sm-12">
+            <div class="form-check-inline">
+                <label class="form-check-label" for="radio2">
+                    <input type="radio" class="form-check-input" id="gallery_type_0" name="type" value="0" checked>تصویر
+                </label>
+            </div>
+            <div class="form-check-inline">
+                <label class="form-check-label" for="radio2">
+                    <input type="radio" class="form-check-input" id="gallery_type_1" name="type" value="1">صوت
+                </label>
+            </div>
+            <div class="form-check-inline">
+                <label class="form-check-label" for="radio2">
+                    <input type="radio" class="form-check-input" id="gallery_type_2" name="type" value="2">ویدئو
                 </label>
             </div>
         </div>
@@ -134,4 +144,8 @@
     </div>
 
 </form>
-
+<script>
+    $('#gallery_item_description').summernote({
+        height: 200,
+    } );
+</script>

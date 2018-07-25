@@ -15,7 +15,7 @@
             data: 'id',
             name: 'id',
             title: 'آی دی',
-            visible:false
+            visible: false
         },
         {
             width: '20%',
@@ -30,7 +30,7 @@
                 else {
                     var img_item = '<img id="LGS_showThumbImage" src="{{ route('LFM.DownloadFile',['ID',''])}}/' + img + '/small/404.png/100/30/30?0" data-image="{{ route('LFM.DownloadFile',['ID',''])}}/' + img + '/original/404.png?0"  class="img-rounded img-preview">';
                 }
-                return '<div><div class="span_image_container">'+img_item+'</div><a class="show_gallery_item pointer" data-title="' + full.title + '"  data-item_id="' + full.id + '">' + full.title + '</a></div>';
+                return '<div><div class="span_image_container">' + img_item + '</div><a class="show_gallery_item pointer" data-title="' + full.title + '"  data-item_id="' + full.id + '">' + full.title + '</a></div>';
             }
         },
         {
@@ -38,6 +38,14 @@
             data: 'description',
             name: 'description',
             title: 'توضیحات',
+            mRender: function (data, type, full) {
+                if (full.description) {
+                    return '<div class="text_over_flow pointer td_description" onclick="hide_text_over_flow(this)">' + full.description + '</div>'
+                }
+                else {
+                    return '';
+                }
+            }
         },
         {
             width: '15%',
@@ -76,38 +84,36 @@
                     ch = 'checked';
                 else
                     ch = '';
-                return '<input class="styled " id="'+full.id+'" type="checkbox" name="special" data-item_id="' + full.id + '"  onchange="change_status_gallery(this)"' + ch + '>'
+                return '<input class="styled " id="' + full.id + '" type="checkbox" name="special" data-item_id="' + full.id + '"  onchange="change_status_gallery(this)"' + ch + '>'
             }
         },
         {
-            width: '5%',
+            width: '10%',
             searchable: false,
             sortable: false,
-            title: 'عملیات',
+            data: 'action', name: 'action', 'title': 'عملیات',
             mRender: function (data, type, full) {
                 return '' +
-                    '<a class="btn_edit_gallery pointer" data-item_id="' + full.id + '" data-title="' + full.title + '">' +
+                    '<a class="btn_edit_gallery pointer" data-item_id="' + full.id + '" data-title="' + full.title + '" title="ویرایش">' +
                     '   <i class="fa fa-edit color_orange"></i>' +
                     '</a>' +
-                    '<a class="btn_trash_gallery pointer" style="color: red" data-item_id="' + full.id + '" data-title="' + full.title +'">' +
+                    '<a class="btn_trash_gallery pointer" style="color: red" data-item_id="' + full.id + '" data-title="' + full.title + ' title="حذف">' +
                     '   <i class="fa fa-trash"></i>' +
-                    '</a>'
+                    '</a>' ;
             }
         }
     ];
     $(document).ready(function () {
-        var getGalleryRoute = '{{ route('LGS.getGallery') }}';
-        var fixedColumn =  {
-            leftColumns: 0,
-            rightColumns: 1
-        };
-        dataTablesGrid('#GalleryManagerGridData', 'GalleryManagerGridData', getGalleryRoute, gallery_grid_columns, null, null, true, null, null, 1, 'desc',false,fixedColumn);
+
+        //dataTablesGrid('#GalleryManagerGridData', 'GalleryManagerGridData', getGalleryRoute, gallery_grid_columns, null, null, true, null, null, 1, 'desc', false, fixedColumn);
+        datatable_load_fun();
+        $('.filter_parrent ').on("select2:select",datatable_reload_fun);
     });
 
     /*________________________________________________________________________________________________________________________*/
 
     function showDefaultImg(res) {
-        $('#show_area_medium_default_img').html(res.defaultImg.view.medium) ;
+        $('#show_area_medium_default_img').html(res.defaultImg.view.medium);
     }
 
     /*___________________________________________________Add Gallery_____________________________________________________________________*/
@@ -120,7 +126,7 @@
         title: {
             presence: {message: '^<strong>عنوان فرم ضروریست.</strong>'}
         },
-        order : {
+        order: {
             numericality: {
                 onlyInteger: true,
                 message: '^<strong>ترتیب نامعتبر است .</strong>'
@@ -129,6 +135,7 @@
     };
     var create_gallery_form_id = document.querySelector("#frm_create_gallery");
     init_validatejs(create_gallery_form_id, create_gallery_constraints, ajax_func_create_gallery);
+
     function ajax_func_create_gallery(formElement) {
         var formData = new FormData(formElement);
         $.ajax({
@@ -147,13 +154,13 @@
                 else {
                     clear_form_elements('#frm_create_gallery');
                     menotify('success', data.title, data.message);
-                    GalleryManagerGridData.ajax.reload(null,false);
+                    GalleryManagerGridData.ajax.reload(null, false);
                     $('a[href="#manage_tab"]').click();
                     $('#show_area_medium_default_img').html('');
-                   /* if (typeof data.section+'_available' === 'undefined')
-                    {
+                    /* if (typeof data.section+'_available' === 'undefined')
+                     {
 
-                    }*/
+                     }*/
                 }
             }
         });
@@ -164,8 +171,8 @@
     $(document).on("click", ".btn_edit_gallery", function () {
         var item_id = $(this).data('item_id');
         var title = $(this).data('title');
-        $('.span_edit_gallery_tab').html('ویرایش گالری: ' + title);
-        get_edit_gallery_form(item_id) ;
+        $('.span_edit_gallery_tab').html('ویرایش : ' + title);
+        get_edit_gallery_form(item_id);
     });
 
     function get_edit_gallery_form(item_id) {
@@ -188,7 +195,8 @@
                     var edit_gallery_form_id = document.querySelector("#frm_edit_gallery");
                     init_validatejs(edit_gallery_form_id, create_gallery_constraints, ajax_func_edit_gallery);
                 }
-                else {}
+                else {
+                }
             }
         });
     }
@@ -210,7 +218,7 @@
                 }
                 else {
                     menotify('success', data.title, data.message);
-                    GalleryManagerGridData.ajax.reload(null,false);
+                    GalleryManagerGridData.ajax.reload(null, false);
                     $('a[href="#manage_tab"]').click();
                     $('.edit_gallery_tab').addClass('hidden');
                     $('#edit_gallery').html('');
@@ -218,6 +226,7 @@
             }
         });
     }
+
     /*___________________________________________________Edit Gallery_____________________________________________________________________*/
 
     $(document).off("click", ".cancel_edit_gallery");
@@ -234,8 +243,10 @@
     $(document).off("click", ".btn_trash_gallery");
     $(document).on("click", ".btn_trash_gallery", function () {
         var item_id = $(this).data('item_id');
-        var parameters = {item_id:item_id};
-        yesNoAlert('حذف گالری', 'از حذف گالری مطمئن هستید ؟', 'warning', 'بله، گالری را حذف کن!', 'لغو', trash_gallery, parameters);
+        var title = $(this).data('title');
+        desc = 'بله گالری( ' + title + ' ) را حذف کن !';
+        var parameters = {item_id: item_id};
+        yesNoAlert('حذف گالری', 'از حذف گالری مطمئن هستید ؟', 'warning', desc, 'لغو', trash_gallery, parameters);
     });
 
     function trash_gallery(params) {
@@ -251,7 +262,7 @@
                 }
                 else {
                     menotify('success', data.title, data.message);
-                    GalleryManagerGridData.ajax.reload(null,false);
+                    GalleryManagerGridData.ajax.reload(null, false);
                 }
             }
         });
@@ -259,11 +270,12 @@
 
     /*___________________________________________________Change Status_____________________________________________________________________*/
     function change_status_gallery(input) {
-        var checked = input.checked ;
-        var item_id = input.id ;
-        var parameters = { status: checked,item_id:item_id};
-        yesNoAlert('تغییر وضعیت کاربر', 'از تغییر وضعیت کاربر مطمئن هستید ؟', 'warning', 'بله، وضعیت کاربر را تغییر بده!', 'لغو', set_gallery_status, parameters,remove_checked,parameters);
+        var checked = input.checked;
+        var item_id = input.id;
+        var parameters = {status: checked, item_id: item_id};
+        yesNoAlert('تغییر وضعیت کاربر', 'از تغییر وضعیت کاربر مطمئن هستید ؟', 'warning', 'بله، وضعیت کاربر را تغییر بده!', 'لغو', set_gallery_status, parameters, remove_checked, parameters);
     }
+
     function set_gallery_status(params) {
         $.ajax({
             type: 'POST',
@@ -274,20 +286,19 @@
                 if (result.success) {
                     menotify('success', result.title, result.message);
                 }
-                else{
+                else {
 
                 }
             }
         });
     }
-    function remove_checked (params) {
-        var $this =$('#'+params.item_id) ;
-        if(params.status)
-        {
+
+    function remove_checked(params) {
+        var $this = $('#' + params.item_id);
+        if (params.status) {
             $this.prop('checked', false);
         }
-        else
-        {
+        else {
             $this.prop('checked', true);
         }
     }
@@ -298,13 +309,83 @@
         html: true
     });
     /*___________________________________________________Tooltip_____________________________________________________________________*/
-    $(document).on('mouseenter','#LGS_showThumbImage',function(){
+    $(document).on('mouseenter', '#LGS_showThumbImage', function () {
         console.log('dd');
-        var image_name=$(this).data('image');
-        var imageTag='<div style="position:absolute;">'+'<img src="'+image_name+'" alt="image" height="100" />'+'</div>';
+        var image_name = $(this).data('image');
+        var imageTag = '<div style="position:fixed;">' + '<img src="' + image_name + '" alt="image" height="100" />' + '</div>';
         $(this).parent('div').append(imageTag);
     });
-    $(document).on('mouseleave','#LGS_showThumbImage',function(){
+    $(document).on('mouseleave', '#LGS_showThumbImage', function () {
         $(this).parent('div').children('div').remove();
     });
+
+    /*___________________________________________________FixedColumn_____________________________________________________________________*/
+    function set_fixed_dropdown_menu(e)
+    {
+        var position = $(e).offset() ;
+        var scrollTop  = $(document).scrollTop() ;
+        var drop_height = $(e).find('.dropdown-menu').height() +16;
+        if(($(window).height() - position.top)>drop_height)
+        {
+            $(e).find('.gallery_dropdown_menu').css({'position':'fixed','top':position.top-scrollTop+16,'left':position.left+22,'height':'fit-content'});
+            window.addEventListener("scroll", function (event) {
+                var scroll = this.scrollY;
+                $(e).find('.gallery_dropdown_menu').css('top',position.top-scroll+16)
+            });
+        }
+        else
+        {
+            $(e).find('.gallery_dropdown_menu').css({'position':'fixed','top':position.top-scrollTop+16-drop_height,'left':position.left+22,'height':'fit-content'});
+            window.addEventListener("scroll", function (event) {
+                var scroll = this.scrollY;
+                $(e).find('.gallery_dropdown_menu').css('top',position.top-scroll+16-drop_height)
+            });
+        }
+    }
+    /*___________________________________________________SummerNote_____________________________________________________________________*/
+
+    var init_summernote_for_add_gallery = false ;
+    $(document).off('click','.add_gallery_tab a') ;
+    $(document).on('click','.add_gallery_tab a',function () {
+        if(!init_summernote_for_add_gallery)
+        {
+            $('#gallery_description').summernote({
+                height: 150,
+            } );
+            init_summernote_for_add_gallery = true ;
+        }
+    });
+
+    /*___________________________________________________DataTable_____________________________________________________________________*/
+
+    function datatable_load_fun(filter_parrent_id) {
+        filter_parrent_id = filter_parrent_id || false;
+        var getGalleryRoute = '{{ route('LGS.getGallery') }}';
+        var fixedColumn = {
+            leftColumns: 2,
+            rightColumns: 2
+        };
+        data =
+            {
+                filter_parrent_id: filter_parrent_id,
+            };
+        dataTablesGrid('#GalleryManagerGridData', 'GalleryManagerGridData', getGalleryRoute, gallery_grid_columns);
+        $('#GalleryManagerGridData thead').append
+        (
+            '<tr role="row">' +
+            '   <td style="border: none; border-bottom: 1px lightgray solid;">&nbsp;</td>' +
+            '   <td style="border: none; border-bottom: 1px lightgray solid;">&nbsp;</td>' +
+            '   <td style="border: none; border-bottom: 1px lightgray solid;">&nbsp;</td>' +
+            '   <td style="border: none; border-bottom: 1px lightgray solid;">' +
+            '       <select class="form-control filter_parrent" style="width:100px">' +
+            '       </select>' +
+            '   </td>' +
+            '    <td style="border: none; border-bottom: 1px lightgray solid;">&nbsp;</td>' +
+            '    <td style="border: none; border-bottom: 1px lightgray solid;">&nbsp;</td>' +
+            '    <td style="border: none; border-bottom: 1px lightgray solid;">&nbsp;</td>' +
+            '</tr>'
+        );
+        init_select2_ajax('.filter_parrent', '{{route('LGS.autoCompleteGalleryParrent')}}',true) ;
+    }
+
 </script>

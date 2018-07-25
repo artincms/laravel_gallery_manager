@@ -451,6 +451,9 @@ li.nav-item {
     text-overflow: ellipsis;
     width:350px;
 }
+.font_button{
+    color: #7a7b7d;
+}
 @media (min-width: 576px)and (max-width: 768px){
     .card_flex_item {
         flex-flow: column !important;

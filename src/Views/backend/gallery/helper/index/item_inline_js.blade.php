@@ -41,7 +41,14 @@
             name: 'description',
             title: 'توضیحات',
             mRender: function (data, type, full) {
-                return '<div class="text_over_flow" data-toggle="tooltip" data-html="true" title=\'<p style="color:blue">'+full.description+'</p>\'>'+full.description+'</div>'
+                if(full.description)
+                {
+                    return '<div class="text_over_flow pointer td_description" onclick="hide_text_over_flow(this)">'+full.description+'</div>'
+                }
+                else
+                {
+                    return '' ;
+                }
             }
         },
         {
@@ -99,14 +106,9 @@
         var html = '' +
             '<div class="space-20"></div>' +
             '<table id="GalleryItemGridData" class="table" width="100%"></table>';
-        $('.span_manage_gallery_item_tab').html('گالری : ' + title);
+        $('.span_manage_gallery_item_tab').html('آیتم : ' + title);
         $('#manage_tab_gallery_item').html(html);
-        var fixedColumns ={
-            rightColumn:2,
-            leftColumn:2
-        }
-        dataTablesGrid('#GalleryItemGridData', 'GalleryItemGridData', '{{ route('LGS.getGalleryItem') }}', gallery_item_columns, {item_id: item_id}, null, true, null, null, 1, 'desc',false,fixedColumns);
-
+        datatable_load(item_id);
         $(document).off("click", "#add_gallery_item_tab");
         $(document).on("click", "#add_gallery_item_tab", function () {
             get_gallery_item(item_id);
@@ -339,8 +341,8 @@
     }
 
     /*___________________________________________________change type_____________________________________________________________________*/
-    $(document).off("change", "#gallery_type");
-    $(document).on("change", "#gallery_type", function () {
+    $(document).off("change", 'input[type=radio][name=type]');
+    $(document).on("change", 'input[type=radio][name=type]', function () {
         show_input_file(this.value);
     });
 
@@ -360,6 +362,50 @@
             $('#form_group_picture').removeClass('hidden');
             $('#form_group_audio').addClass('hidden');
         }
+    }
+
+    $(window).click(function(e) {
+        if(!$(e.target).closest(".td_description").length >0)
+        {
+            $('.td_description').addClass('text_over_flow dd');
+        }
+    });
+    function hide_text_over_flow(el)
+    {
+       $().toggleClass('text_over_flow')
+    }
+    /*___________________________________________________DataTable_____________________________________________________________________*/
+
+    function datatable_load(item_id,filter_parrent_id) {
+        filter_parrent_id = filter_parrent_id || false;
+        item_id = item_id || false;
+        var fixedColumn = {
+            leftColumns: 2,
+            rightColumns: 2
+        };
+        data =
+            {
+                filter_parrent_id: filter_parrent_id,
+                item_id: item_id,
+            };
+        dataTablesGrid('#GalleryItemGridData', 'GalleryItemGridData', '{{ route('LGS.getGalleryItem') }}', gallery_item_columns, data);
+        $('#GalleryItemGridData thead').append
+        (
+            '<tr role="row">' +
+            '   <td style="border: none; border-bottom: 1px lightgray solid;">&nbsp;</td>' +
+            '   <td style="border: none; border-bottom: 1px lightgray solid;">&nbsp;</td>' +
+            '   <td style="border: none; border-bottom: 1px lightgray solid;">&nbsp;</td>' +
+            '   <td style="border: none; border-bottom: 1px lightgray solid;">&nbsp;</td>' +
+            '   <td style="border: none; border-bottom: 1px lightgray solid;">' +
+            '       <select class="form-control filter_parrent" style="width:100px">' +
+            '       </select>' +
+            '   </td>' +
+            '    <td style="border: none; border-bottom: 1px lightgray solid;">&nbsp;</td>' +
+            '    <td style="border: none; border-bottom: 1px lightgray solid;">&nbsp;</td>' +
+            '    <td style="border: none; border-bottom: 1px lightgray solid;">&nbsp;</td>' +
+            '</tr>'
+        );
+
     }
 
 </script>

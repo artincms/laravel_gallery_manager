@@ -14,13 +14,13 @@
     <div class="form-group row">
         <label class="col-lg-2 col-sm-12 col-md-3 control-label col-form-label label_post" for="description">توضیحات</label>
         <div class="col-6">
-            <textarea class="form-control" name="description" id="gallery_description" rows="3">{!! $gallery->description !!}</textarea>
+            <textarea class="form-control" name="description" id="gallery_eidt_description" rows="3">{!! $gallery->description !!}</textarea>
         </div>
     </div>
     <div class="form-group row">
-        <label class="col-lg-2 col-sm-12 col-md-3 control-label col-form-label label_post" for="description">گالری پدر</label>
+        <label class="col-lg-2 col-sm-12 col-md-3 control-label col-form-label label_post" for="description">گالری والد</label>
         <div class="col-6">
-            <select name="parent_id" id="gallery_parrent" class="form-control">
+            <select name="parent_id" id="gallery_parrent_edit" class="form-control">
                 <option value="0">بدون والد</option>
                 @foreach($parrents as $parrent)
                     <option value="{{$parrent->id}}" @if($gallery->parent_id ==$parrent->id) selected @endif>{{$parrent->title}}</option>
@@ -45,11 +45,15 @@
     </div>
     <div class="form-group row">
         <label class="col-lg-2 col-sm-12 col-md-3 control-label col-form-label label_post" for="description">انتخاب تصویر پیش فرض</label>
-        <div class="col-6">
-            {!! $default_img['button'] !!}
-            {!! $default_img['modal_content'] !!}
-            <div id="show_area_medium_load_default_img">{!! $load_default_img['view']['medium'] !!}</div>
-        </div>
+            <div class="col-lg-6 col-sm-12 col-md-5">
+                <div class="card bg-light mb-3" style="">
+                    <div class="card-header">{!! $default_img['button'] !!}</div>
+                    <div class="card-body">
+                        {!! $default_img['modal_content'] !!}
+                        <div id="show_area_medium_load_default_img">{!! $load_default_img['view']['medium'] !!}</div>
+                    </div>
+                </div>
+            </div>
     </div>
     <div class="clearfixed"></div>
     <div class="col-12">
@@ -61,5 +65,9 @@
     function showDefaultImg(res) {
         $('#show_area_medium_load_default_img').html(res.LoadDefaultImg.view.medium) ;
     }
+    init_select2_data('#gallery_parrent_edit',{!! $parrents !!});
+    $('#gallery_eidt_description').summernote({
+        height: 150,
+    } );
 </script>
 

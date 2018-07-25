@@ -16,4 +16,8 @@ Route::group(['prefix' => config('laravel_gallery_system.backend_lgs_route_prefi
     Route::post('getEditGalleryItemForm', ['as' => 'LGS.getEditGalleryItemForm', 'uses' => 'GalleryController@getEditGalleryItemForm']);
     Route::post('editGalleryItem', ['as' => 'LGS.editGalleryItem', 'uses' => 'GalleryController@editGalleryItem']);
     Route::post('trashGalleryItem', ['as' => 'LGS.trashGalleryItem', 'uses' => 'GalleryController@trashGalleryItem']);
+
+    //------------------------------------auto complete -----------------------------------------------------------------------
+    Route::post('autoCompleteGalleryParrent', ['as' => 'LGS.autoCompleteGalleryParrent', 'uses' => 'GalleryController@autoCompleteGalleryParrent']);
+
 });

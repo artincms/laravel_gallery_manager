@@ -2,6 +2,8 @@
 @section('page_title')
     Laravel Gallery Manager
 @stop
+@section('custom_plugin_js')
+@endsection
 @section('content')
     <div class="col-sm-12">
         <div class="card">
@@ -13,7 +15,7 @@
                         <li class="nav-item add_gallery_tab">
                             <a class="nav-link" href="#add_gallery" data-toggle="tab">
                                 <i class="far fa-plus-square"></i>
-                                <span>اضافه کردن گالری</span>
+                                <span>افزودن</span>
                             </a>
                         </li>
                         <li class="nav-item edit_gallery_tab hidden">
@@ -54,7 +56,7 @@
                                 <div class="form-group row">
                                     <label class="col-lg-2 col-sm-12 col-md-3 control-label col-form-label label_post" for="description">توضیحات</label>
                                     <div class="col-6">
-                                        <textarea class="form-control" name="description" id="gallery_description" rows="3"></textarea>
+                                        <textarea class="form-control" name="description" id="gallery_description" rows="5"></textarea>
                                     </div>
                                 </div>
                                 <div class="form-group row">
@@ -73,7 +75,7 @@
                                     <div class="col-6">
                                         <div class="form-check-inline">
                                             <label class="form-check-label" for="radio2">
-                                                <input type="radio" class="form-check-input" id="gallery_status1" name="status" value="1">فعال
+                                                <input type="radio" class="form-check-input" id="gallery_status1" name="status" checked value="1">فعال
                                             </label>
                                         </div>
                                         <div class="form-check-inline">
@@ -85,12 +87,16 @@
                                 </div>
                                 <div class="form-group row">
                                     <label class="col-lg-2 col-sm-12 col-md-3 control-label col-form-label label_post" for="description">انتخاب تصویر پیش فرض</label>
-                                    <div class="col-6">
-                                        {!! $default_img['button'] !!}
-                                        {!! $default_img['modal_content'] !!}
-                                        <div id="show_area_medium_default_img"></div>
+                                        <div class="col-lg-6 col-sm-12 col-md-5">
+                                            <div class="card bg-light mb-3" style="">
+                                                <div class="card-header">{!! $default_img['button'] !!}</div>
+                                                <div class="card-body">
+                                                    {!! $default_img['modal_content'] !!}
+                                                    <div id="show_area_medium_default_img"></div>
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>
-                                </div>
                                 <div class="clearfixed"></div>
                                 <div class="col-12">
                                     <button type="submit" class="float-right btn btn-success ml-2"><i class="fa fa-save margin_left_8"></i>ذخیره</button>

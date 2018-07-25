@@ -21,3 +21,13 @@ if (!function_exists('deCodeId'))
         }
     }
 }
+
+if (!function_exists('createModalGalleryManager'))
+{
+    function createModalGalleryManager()
+    {
+        $src = route('LGS.Gallery');
+        $html = '<iframe style="width:100%;height: calc(100vh - 51px);    max-height: calc(100vh - 50px);    border: none;" id="iframShowGalleryManager" src="'.$src.'"></iframe>';
+        return $html ;
+    }
+}

@@ -25,7 +25,27 @@
     <div class="form-group row">
         <label class="col-lg-2 col-sm-12 col-md-3 control-label col-form-label label_post" for="description">توضیحات</label>
         <div class="col-6">
-            <textarea class="form-control" name="description" id="gallery_description" rows="3">{{$item->description}}</textarea>
+            <textarea class="form-control" name="description" id="gallery_item_edit_description" rows="3">{{$item->description}}</textarea>
+        </div>
+    </div>
+    <div class="form-group row">
+        <label class="col-lg-2 col-sm-12 col-md-3 control-label col-form-label label_post" for="description">نوع فایل</label>
+        <div class="col-lg-6 col-md-9 col-sm-12">
+            <div class="form-check-inline">
+                <label class="form-check-label" for="radio2">
+                    <input type="radio" class="form-check-input" id="gallery_type_0" name="type" value="0" @if($item->type ==0) checked @endif>تصویر
+                </label>
+            </div>
+            <div class="form-check-inline">
+                <label class="form-check-label" for="radio2">
+                    <input type="radio" class="form-check-input" id="gallery_type_1" name="type" value="1" @if($item->type ==1) checked @endif>صوت
+                </label>
+            </div>
+            <div class="form-check-inline">
+                <label class="form-check-label" for="radio2">
+                    <input type="radio" class="form-check-input" id="gallery_type_2" name="type" value="2" @if($item->type ==2) checked @endif>ویدئو
+                </label>
+            </div>
         </div>
     </div>
     <div class="form-group row {{$pic_class}}" id="form_group_picture_edit">
@@ -47,7 +67,7 @@
                 <div class="card-header">{!! $itmeVideoMp4File['button'] !!}</div>
                 <div class="card-body">
                     {!! $itmeVideoMp4File['modal_content'] !!}
-                    <div id="show_area_medium_video_mp4_file"></div>
+                    <div id="show_area_medium_video_mp4_file">{!! $itmeVideoMp4FileLoad['view']['medium'] !!}</div>
                 </div>
             </div>
             <div class="card bg-light col-lg-4 col-md-6 col-sm-12 mb-3 no-padding">
@@ -66,15 +86,12 @@
             </div>
         </div>
     </div>
-    <div class="form-group row hidden" id="form_group_audio_edit">
+    <div class="form-group row {{$audio_class}}" id="form_group_audio_edit">
         <label class="col-lg-2 col-md-3 col-sm-12 control-label col-form-label label_post" for="description">آپلود فایل</label>
         <div class="col-lg-10 col-md-9 col-sm-12 card-deck card_flex_item">
             <div class="card bg-light col-lg-4 col-md-6 col-sm-12 mb-3 no-padding">
                 <div class="card-header">{!! $itmeAudioOggFile['button'] !!}</div>
                 <div class="card-body">
-                    <div class="alert alert-warning" id="warning_audio_ogg_edit" role="alert">
-                        انتخاب فایل صوتی با فرمت ogg
-                    </div>
                     {!! $itmeAudioOggFile['modal_content'] !!}
                     <div id="show_area_medium_audio_ogg_file_edit">{!! $itmeAudioOggFileLoad['view']['medium'] !!}</div>
                 </div>
@@ -155,5 +172,8 @@
             $('#form_group_audio_edit').addClass('hidden');
         }
     }
+    $('#gallery_item_edit_description').summernote({
+        height: 200,
+    } );
 </script>
 
