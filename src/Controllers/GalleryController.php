@@ -14,10 +14,22 @@ use Illuminate\Support\Facades\Auth;
 
 class GalleryController extends Controller
 {
+    private function reOrderGalleryForm($parrent_id)
+    {
+        $all_Gallery= Gallery::where('parent_id' , $parrent_id)->orderBy('order','desc')->get();
+        $i = 1;
+        foreach ($all_Gallery as $item)
+        {
+            $item->order = $i++;
+            $item->save();
+        }
+        return $i;
+    }
+
     public function index()
     {
         $option_default_img = ['size_file' => 2000, 'max_file_number' => 1, 'true_file_extension' => ['png', 'jpg']];
-        $default_img = LFM_CreateModalFileManager('defaultImg', $option_default_img, 'insert', 'showDefaultImg',false, false, false, 'انتخاب فایل تصویر', 'btn-block','fa fa-folder-open font_button mr-2');
+        $default_img = LFM_CreateModalFileManager('defaultImg', $option_default_img, 'insert', 'showDefaultImg', false, false, false, 'انتخاب فایل تصویر', 'btn-block', 'fa fa-folder-open font_button mr-2');
         $parrents = Gallery::with('parent')->get();
 
         //dd($parrents);
@@ -27,13 +39,34 @@ class GalleryController extends Controller
     public function getGallery(Request $request)
     {
         $gallery = Gallery::with('parent', 'user');
-
+        if ($request->filter_title)
+        {
+            $gallery->where('title', 'like', '%' . $request->filter_title . '%');
+        }
+        if ($request->filter_parrent_id != 'false')
+        {
+            $gallery->where('parent_id', $request->filter_parrent_id);
+        }
+        if ($request->filter_is_active == "1")
+        {
+            $gallery->where('is_active', '1');
+        }
+        elseif ($request->filter_is_active == "0")
+        {
+            $gallery->where('is_active', '0');
+        }
         return DataTables::eloquent($gallery)
             ->editColumn('id', function ($data) {
                 return enCodeId($data->id);
             })
+            ->editColumn('parent_id', function ($data) {
+                return enCodeId($data->parent_id);
+            })
             ->editColumn('default_img', function ($data) {
                 return enCodeId($data->default_img);
+            })
+            ->editColumn('description', function ($data) {
+                return strip_tags($data->description);
             })
             ->make(true);
     }
@@ -51,13 +84,13 @@ class GalleryController extends Controller
         {
             $gallery->order = 0;
         }
-        if ($request->status == -1)
+        if ($request->is_active == -1)
         {
-            $gallery->status = '0';
+            $gallery->is_active = '0';
         }
         else
         {
-            $gallery->status = $request->status;
+            $gallery->is_active = $request->is_active;
 
         }
         $gallery->parent_id = $request->parent_id;
@@ -69,7 +102,7 @@ class GalleryController extends Controller
             }
         }
         $gallery->save();
-        $res['file'] = LFM_SaveSingleFile($gallery, 'default_img', 'defaultImg', 'options');
+        $res['file'] = LFM_SaveSingleFile($gallery, 'default_img', 'defaultImg', 'default_img_options');
         $res =
             [
                 'status'      => "1",
@@ -88,12 +121,13 @@ class GalleryController extends Controller
         $gallery = Gallery::find(deCodeId($request->item_id)[0]);
         $gallery->encode_id = enCodeId($gallery->id);
         $parrents = Gallery::all();
-        $default_img = LFM_CreateModalFileManager('LoadDefaultImg', $option_default_img, 'insert', 'showDefaultImg', 'gallery_edit_tab', false, false, 'انتخاب فایل تصویر', 'btn-block','fa fa-folder-open font_button mr-2');
+        $default_img = LFM_CreateModalFileManager('LoadDefaultImg', $option_default_img, 'insert', 'showDefaultImg', 'gallery_edit_tab', false, false, 'انتخاب فایل تصویر', 'btn-block', 'fa fa-folder-open font_button mr-2');
         $load_default_img = LFM_loadSingleFile($gallery, 'default_img', 'LoadDefaultImg');
         $gallery_form = view('laravel_gallery_system::backend.gallery.view.edit', compact('gallery', 'parrents', 'default_img', 'load_default_img'))->render();
         $res =
             [
                 'status'            => "1",
+                'success'            => true,
                 'status_type'       => "success",
                 'gallery_edit_view' => $gallery_form
             ];
@@ -117,13 +151,13 @@ class GalleryController extends Controller
         {
             $gallery->order = 0;
         }
-        if ($request->status == -1)
+        if ($request->is_active == -1)
         {
-            $gallery->status = '0';
+            $gallery->is_active = '0';
         }
         else
         {
-            $gallery->status = $request->status;
+            $gallery->is_active = $request->is_active;
 
         }
         $gallery->parent_id = $request->parent_id;
@@ -135,7 +169,7 @@ class GalleryController extends Controller
             }
         }
         $gallery->save();
-        $res['file'] = LFM_SaveSingleFile($gallery, 'default_img', 'LoadDefaultImg', 'options');
+        $res['file'] = LFM_SaveSingleFile($gallery, 'default_img', 'LoadDefaultImg', 'default_img_options');
         $res =
             [
                 'status'      => "1",
@@ -170,14 +204,14 @@ class GalleryController extends Controller
     public function setGalleryStatus(Request $request)
     {
         $gallery = Gallery::find(deCodeId($request->item_id)[0]);
-        if ($request->status == "true")
+        if ($request->is_active == "true")
         {
-            $gallery->status = "1";
+            $gallery->is_active = "1";
             $res['message'] = ' گالری فعال گردید';
         }
         else
         {
-            $gallery->status = "0";
+            $gallery->is_active = "0";
             $res['message'] = 'گالری غیر فعال شد';
         }
         $gallery->save();
@@ -216,21 +250,21 @@ class GalleryController extends Controller
         $option_audio_wav_file = ['size_file' => 2000, 'max_file_number' => 1, 'true_file_extension' => ['wav']];
 
         $itmeFile = LFM_CreateModalFileManager('itemFile', $option_item_file, 'insert', 'showitemFile', false, false, false,
-            'انتخاب فایل تصویر', 'btn-block','fa fa-folder-open font_button mr-2');
+            'انتخاب فایل تصویر', 'btn-block', 'fa fa-folder-open font_button mr-2');
 
         $itmeVideoMp4File = LFM_CreateModalFileManager('videoMp4itemFile', $option_video_mp4_file, 'insert', 'showVideoMp4File', false,
-            false, false, 'انتخاب  فایل ویدئو(mp4)', 'btn-block','fa fa-folder-open font_button mr-2');
+            false, false, 'انتخاب  فایل ویدئو(mp4)', 'btn-block', 'fa fa-folder-open font_button mr-2');
         $itmeVideoWebmFile = LFM_CreateModalFileManager('videoWebmFile', $option_video_webm_file, 'insert', 'showVideoWebmFile', false,
-            false, false, 'انتخاب فایل ویدئو(webm)', 'btn-block','fa fa-folder-open font_button mr-2');
+            false, false, 'انتخاب فایل ویدئو(webm)', 'btn-block', 'fa fa-folder-open font_button mr-2');
         $itmeVideoOggFile = LFM_CreateModalFileManager('videoOggFile', $option_video_ogg_file, 'insert', 'showVideoOggFile', false,
-            false, false, 'انتخاب فایل ویدئو(ogg)', 'btn-block','fa fa-folder-open font_button mr-2');
+            false, false, 'انتخاب فایل ویدئو(ogg)', 'btn-block', 'fa fa-folder-open font_button mr-2');
 
         $itmeAudioOggFile = LFM_CreateModalFileManager('audioOggFile', $option_audio_ogg_file, 'insert', 'showAudioOggFile', false,
-            false, false, 'انتخاب فایل صوت(ogg)', 'btn-block','fa fa-folder-open font_button mr-2');
+            false, false, 'انتخاب فایل صوت(ogg)', 'btn-block', 'fa fa-folder-open font_button mr-2');
         $itmeAudioMp3File = LFM_CreateModalFileManager('audioMp3File', $option_audio_mp3_file, 'insert', 'showAudioMp3File', false,
-            false, false, 'انتخاب فایل صوت(mp3)', 'btn-block','fa fa-folder-open font_button mr-2');
+            false, false, 'انتخاب فایل صوت(mp3)', 'btn-block', 'fa fa-folder-open font_button mr-2');
         $itmeAudioWavFile = LFM_CreateModalFileManager('audioWavFile', $option_audio_wav_file, 'insert', 'showAudioWavFile', false,
-            false, false, 'انتخاب فایل(wav)', 'btn-block','fa fa-folder-open font_button mr-2');
+            false, false, 'انتخاب فایل(wav)', 'btn-block', 'fa fa-folder-open font_button mr-2');
 
         $gallery_id = $request->item_id;
         $gallery_form = view('laravel_gallery_system::backend.gallery.view.add_item', compact('gallery_id', 'itmeFile', 'itmeVideoMp4File'
@@ -263,13 +297,13 @@ class GalleryController extends Controller
         {
             $item->order = 0;
         }
-        if ($request->status)
+        if ($request->is_active)
         {
-            $item->status = $request->status;
+            $item->is_active = $request->is_active;
         }
         else
         {
-            $item->status = '0';
+            $item->is_active = '0';
         }
         if (Auth::user())
         {
@@ -315,14 +349,14 @@ class GalleryController extends Controller
     public function setItemStatus(Request $request)
     {
         $item = GalleryItem::find(deCodeId($request->item_id)[0]);
-        if ($request->status == "true")
+        if ($request->is_active == "true")
         {
-            $item->status = "1";
+            $item->is_active = "1";
             $res['message'] = ' آیتم فعال گردید';
         }
         else
         {
-            $item->status = "0";
+            $item->is_active = "0";
             $res['message'] = 'آیتم غیر فعال شد';
         }
         $item->save();
@@ -354,21 +388,21 @@ class GalleryController extends Controller
         $option_audio_wav_file = ['size_file' => 2000, 'max_file_number' => 1, 'true_file_extension' => ['wav']];
 
         $itmeFile = LFM_CreateModalFileManager('editItemFile', $option_item_file, 'insert', 'showEdititemFile', false,
-            false, false, 'انتخاب فایل تصویر', 'btn-block','fa fa-folder-open font_button mr-2');
+            false, false, 'انتخاب فایل تصویر', 'btn-block', 'fa fa-folder-open font_button mr-2');
 
         $itmeVideoMp4File = LFM_CreateModalFileManager('editVideoMp4itemFile', $option_video_mp4_file, 'insert', 'showEditVideoMp4File', false,
-            false, false, 'انتخاب فایل ویدئویی (mp4)', 'btn-block','fa fa-folder-open font_button mr-2');
+            false, false, 'انتخاب فایل ویدئویی (mp4)', 'btn-block', 'fa fa-folder-open font_button mr-2');
         $itmeVideoWebmFile = LFM_CreateModalFileManager('editVideoWebmFile', $option_video_webm_file, 'insert', 'showEditVideoWebmFile', false,
-            false, false, 'انتخاب فایل ویدئویی(webm)', 'btn-block','fa fa-folder-open font_button mr-2');
+            false, false, 'انتخاب فایل ویدئویی(webm)', 'btn-block', 'fa fa-folder-open font_button mr-2');
         $itmeVideoOggFile = LFM_CreateModalFileManager('editVideoOggFile', $option_video_ogg_file, 'insert', 'showEditVideoOggFile', false,
-            false, false, 'انتخاب فایل ویدئویی(ogg)', 'btn-block','fa fa-folder-open font_button mr-2');
+            false, false, 'انتخاب فایل ویدئویی(ogg)', 'btn-block', 'fa fa-folder-open font_button mr-2');
 
         $itmeAudioOggFile = LFM_CreateModalFileManager('editAudioOggFile', $option_audio_ogg_file, 'insert', 'showEditAudioOggFile', false,
-            false, false, 'انتخاب فایل صوتی(ogg)', 'btn-block','fa fa-folder-open font_button mr-2');
+            false, false, 'انتخاب فایل صوتی(ogg)', 'btn-block', 'fa fa-folder-open font_button mr-2');
         $itmeAudioMp3File = LFM_CreateModalFileManager('editAudioMp3File', $option_audio_mp3_file, 'insert', 'showEditAudioMp3File', false,
-            false, false, 'انتخاب فایل صوتی(mp3)', 'btn-block','fa fa-folder-open font_button mr-2');
+            false, false, 'انتخاب فایل صوتی(mp3)', 'btn-block', 'fa fa-folder-open font_button mr-2');
         $itmeAudioWavFile = LFM_CreateModalFileManager('editAudioWavFile', $option_audio_wav_file, 'insert', 'showEditAudioWavFile', false,
-            false, false, 'انتخاب فایل صوتی(wav)', 'btn-block','fa fa-folder-open font_button mr-2');
+            false, false, 'انتخاب فایل صوتی(wav)', 'btn-block', 'fa fa-folder-open font_button mr-2');
 
         //load files
         $itmeFileLoad = LFM_loadSingleFile($item, 'file_id', 'editItemFile');
@@ -429,13 +463,13 @@ class GalleryController extends Controller
         {
             $item->order = 0;
         }
-        if ($request->status == -1)
+        if ($request->is_active == -1)
         {
-            $item->status = '0';
+            $item->is_active = '0';
         }
         else
         {
-            $item->status = $request->status;
+            $item->is_active = $request->is_active;
 
         }
         if (Auth::user())
@@ -501,17 +535,69 @@ class GalleryController extends Controller
     public function autoCompleteGalleryParrent(Request $request)
     {
         $x = $request->term;
-        $data = Gallery::select("id", 'title AS text')->where('status', '1');
+        $data = Gallery::select("id", 'title AS text')->where('is_active', '1');
         if ($x['term'] != '...')
         {
             $data = Gallery::select("id", 'title AS text')
-                ->where('status', '1')
+                ->where('is_active', '1')
                 ->where("title", "LIKE", "%" . $x['term'] . "%");
         }
         $data = $data->get();
-        $data = array('results' => $data);
+        $data = ['results' => $data];
+
         return response()->json($data);
     }
+
+    public function saveOrderGalleryForm(Request $request)
+    {
+        $item_id = deCodeId($request->item_id)[0];
+        $parrent_id =deCodeId($request->parrent_id)[0] ;
+        $count = $this->reOrderGalleryForm($parrent_id);
+        $gallery = Gallery::find($item_id);
+
+        $order = $gallery->order;
+        if ($request->order_type == 'increase')
+        {
+            $nextItem = Gallery::where([
+                ['parent_id', $parrent_id],
+                ['order', $order + 1]
+            ])->first();
+            if ($nextItem)
+            {
+                $gallery->order = $order + 1;
+                $gallery->save();
+                //set new order
+                $nextItem->order = $order;
+                $nextItem->save();
+            }
+        }
+        elseif ($request->order_type == 'decrease')
+        {
+
+            $previousItem = Gallery::where([
+                ['parent_id', $parrent_id],
+                ['order', $order - 1]
+            ])->first();
+            if ($previousItem)
+            {
+                $gallery->order = $order - 1;
+                $gallery->save();
+                //set new order
+                $previousItem->order = $order;
+                $previousItem->save();
+            }
+        }
+        else
+        {
+            $result['error'][] = "متاسفانه با مشکل مواجه شد!";
+            $result['success'] = false;
+            return response()->json($result, 200)->withHeaders(['Content-Type' => 'json', 'charset' => 'utf-8']);
+        }
+        $result['message'][] = "با موفقیت انجام شد.";
+        $result['success'] = true;
+        return response()->json($result, 200)->withHeaders(['Content-Type' => 'json', 'charset' => 'utf-8']);
+    }
+
 
 
 }

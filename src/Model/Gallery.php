@@ -7,6 +7,18 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Gallery extends Model
 {
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::creating(function ($query)
+        {
+            if ($query->order == null)
+            {
+                $query->order = self::where('parent_id','=',$query->parent_id)->max('order')+1;
+            }
+        });
+    }
     use softDeletes;
     protected $table = 'lgs_galleries';
 

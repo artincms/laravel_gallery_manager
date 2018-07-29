@@ -449,10 +449,20 @@ li.nav-item {
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
-    width:350px;
+    width:250px;
 }
 .font_button{
     color: #7a7b7d;
+}
+.bg-info-400 {
+    background-color: #26c6da;
+    border-color: #26c6da;
+    color: #fff;
+}
+.bg-info-800 {
+    background-color: #00838f;
+    border-color: #00838f;
+    color: #fff;
 }
 @media (min-width: 576px)and (max-width: 768px){
     .card_flex_item {

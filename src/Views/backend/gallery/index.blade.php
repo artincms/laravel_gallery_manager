@@ -75,12 +75,12 @@
                                     <div class="col-6">
                                         <div class="form-check-inline">
                                             <label class="form-check-label" for="radio2">
-                                                <input type="radio" class="form-check-input" id="gallery_status1" name="status" checked value="1">فعال
+                                                <input type="radio" class="form-check-input" id="gallery_is_active1" name="is_active" checked value="1">فعال
                                             </label>
                                         </div>
                                         <div class="form-check-inline">
                                             <label class="form-check-label" for="radio2">
-                                                <input type="radio" class="form-check-input" id="gallery_status2" name="status" value="0">غیر فعال
+                                                <input type="radio" class="form-check-input" id="gallery_is_active2" name="is_active" value="0">غیر فعال
                                             </label>
                                         </div>
                                     </div>

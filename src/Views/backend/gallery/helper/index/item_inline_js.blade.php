@@ -58,16 +58,16 @@
         },
         {
             width: '5%',
-            data: 'status',
-            name: 'status',
+            data: 'is_active',
+            name: 'is_active',
             title: 'وضعیت',
             mRender: function (data, type, full) {
                 var ch = '';
-                if (parseInt(full.status))
+                if (parseInt(full.is_active))
                     ch = 'checked';
                 else
                     ch = '';
-                return '<input class="styled " id="change_item_status_' + full.id + '" type="checkbox" name="special" data-item_id="' + full.id + '"  onchange="change_status_item(this)"' + ch + '>'
+                return '<input class="styled " id="change_item_is_active_' + full.id + '" type="checkbox" name="special" data-item_id="' + full.id + '"  onchange="change_is_active_item(this)"' + ch + '>'
             }
         },
         {
@@ -125,7 +125,7 @@
                 },
                 success: function (result) {
                     $('#edit_gallery .total_loader').remove();
-                    if (result.status == true) {
+                    if (result.is_active == true) {
                         $('#add_gallery_item').html(result.gallery_add_item);
                         var frm_gallery_add_item = document.querySelector("#frm_create_gallery_item");
                         init_validatejs(frm_gallery_add_item, create_gallery_item_constraints, ajax_func_add_gallery_item);
@@ -141,7 +141,7 @@
                                 contentType: false,
                                 success: function (data) {
                                     $('#frm_create_gallery_item .total_loader').remove();
-                                    if (data.status == -1) {
+                                    if (data.is_active == -1) {
                                         showMessages(data.message, 'form_message_box', 'error', formElement);
                                         showErrors(formElement, data.errors);
                                     }
@@ -169,17 +169,17 @@
         //$('#edit_gallery').html('');
     });
 
-    /*___________________________________________________change status_____________________________________________________________________*/
-    function change_status_item(input) {
+    /*___________________________________________________change is_active_____________________________________________________________________*/
+    function change_is_active_item(input) {
         console.log();
         var checked = input.checked;
         var id = input.id;
         var item_id = $(input).data('item_id');
-        var parameters = {status: checked, item_id: item_id};
-        yesNoAlert('تغییر وضعیت کاربر', 'از تغییر وضعیت کاربر مطمئن هستید ؟', 'warning', 'بله، وضعیت کاربر را تغییر بده!', 'لغو', set_item_status, parameters, remove_checked_item, parameters);
+        var parameters = {is_active: checked, item_id: item_id};
+        yesNoAlert('تغییر وضعیت کاربر', 'از تغییر وضعیت کاربر مطمئن هستید ؟', 'warning', 'بله، وضعیت کاربر را تغییر بده!', 'لغو', set_item_is_active, parameters, remove_checked_item, parameters);
     }
 
-    function set_item_status(params) {
+    function set_item_is_active(params) {
         $.ajax({
             type: 'POST',
             dataType: 'json',
@@ -197,8 +197,8 @@
     }
 
     function remove_checked_item(params) {
-        var $this = $('#change_item_status_' + params.item_id);
-        if (params.status) {
+        var $this = $('#change_item_is_active_' + params.item_id);
+        if (params.is_active) {
             $this.prop('checked', false);
         }
         else {
@@ -264,7 +264,7 @@
             },
             success: function (result) {
                 $('#edit_gallery_item .total_loader').remove();
-                if (result.status == true) {
+                if (result.is_active == true) {
                     $('#edit_gallery_item').append(result.gallery_item_edit_view);
                     $('.edit_gallery_item_tab').removeClass('hidden');
                     $('a[href="#edit_gallery_item"]').click();
@@ -290,7 +290,7 @@
             contentType: false,
             success: function (data) {
                 $('#frm_edit_gallery .total_loader').remove();
-                if (data.status == -1) {
+                if (data.is_active == -1) {
                     showMessages(data.message, 'form_message_box', 'error', formElement);
                     showErrors(formElement, data.errors);
                 }
@@ -328,7 +328,7 @@
             url: '{!!  route('LGS.trashGalleryItem') !!}',
             data: params,
             success: function (data) {
-                if (data.status == -1) {
+                if (data.is_active == -1) {
                     showMessages(data.message, 'form_message_box', 'error', formElement);
                     showErrors(formElement, data.errors);
                 }
