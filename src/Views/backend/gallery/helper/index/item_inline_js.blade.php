@@ -17,6 +17,68 @@
             visible: false
         },
         {
+            width: '12%',
+            data: 'order',
+            name: 'order',
+            title: 'ترتیب',
+            searchable: false,
+            mRender: function (data, type, full) {
+                var order = GalleryItemGridData.order();
+                if (order[0][0] == 2) {
+                    if (order[0][1] == 'desc') {
+                        var result = '';
+                        result += '' +
+                            '<div class="input-group mb-3">' +
+                            '   <div class="input-group-prepend ">' +
+                            '       <button type="button" style="float: right;border-radius: 0px;" class="btn btn-outline-secondary reorder_gallery_item_form_grid_data bg-info-400" ' +
+                            '           data-order_type="increase" ' +
+                            '           data-item_id="' + full.id + '"' +
+                            '           data-gallery_id="' + full.gallery_id + '" >' +
+                            '           <i class="fas fa-level-up-alt"></i>'  +
+                            '       </button>' +
+                            '   </div>' +
+                            '   <input type="text" class="form-control text-center" style="width:30% " disabled value="'+full.order+'">' +
+                            '    <div class="input-group-append">' +
+                            '       <button type="button" style="border-radius: 0px;" class="btn btn-outline-secondary reorder_gallery_item_form_grid_data bg-info-800" ' +
+                            '           data-order_type="decrease"' +
+                            '           data-item_id="' + full.id + '"' +
+                            '           data-gallery_id="' + full.gallery_id + '" >' +
+                            '       <i class="fas fa-level-down-alt fa-flip-horizontal"></i>' +
+                            '   </button>';
+                        '   </div>' +
+                        '</div>';
+                        return result;
+                    }
+                    else {
+                        var result = ''+
+                            '<div class="input-group mb-3">' +
+                            '   <div class="input-group-prepend ">' +
+                            '       <button type="button" style="float: right;border-radius: 0px;" class="btn btn-outline-secondary reorder_gallery_item_form_grid_data bg-info-400" ' +
+                            '           data-order_type="decrease" ' +
+                            '           data-item_id="' + full.id + '"' +
+                            '           data-gallery_id="' + full.gallery_id + '">' +
+                            '           <i class="fas fa-level-up-alt"></i>'  +
+                            '       </button>' +
+                            '   </div>' +
+                            '   <input type="text" class="form-control text-center" style="width:30% " disabled value="'+full.order+'">' +
+                            '    <div class="input-group-append">' +
+                            '       <button type="button" style="border-radius: 0px;" class="btn btn-outline-secondary reorder_gallery_item_form_grid_data bg-info-800" ' +
+                            '           data-order_type="increase"' +
+                            '           data-item_id="' + full.id + '"' +
+                            '           data-gallery_id="' + full.gallery_id + '">' +
+                            '       <i class="fas fa-level-down-alt fa-flip-horizontal"></i>' +
+                            '   </button>';
+                        '   </div>' +
+                        '</div>';
+                        return result;
+                    }
+                }
+                else {
+                    return '<span class="order_number">' + full.order + '</span>';
+                }
+            }
+        },
+        {
             data: 'type',
             name: 'type',
             title: 'نوع',
@@ -32,11 +94,13 @@
             }
         },
         {
+            width: '20%',
             data: 'title',
             name: 'title',
             title: 'عنوان',
         },
         {
+            width: '25%',
             data: 'description',
             name: 'description',
             title: 'توضیحات',
@@ -52,12 +116,13 @@
             }
         },
         {
+            width: '10%',
             data: 'visit',
             name: 'visit',
             title: 'تعداد مشاهدات',
         },
         {
-            width: '5%',
+            width: '255%',
             data: 'is_active',
             name: 'is_active',
             title: 'وضعیت',
@@ -71,18 +136,23 @@
             }
         },
         {
-            width: '5%',
+            width: '15%',
             searchable: false,
             sortable: false,
             title: 'عملیات',
             mRender: function (data, type, full) {
                 return '' +
-                    '<a class="btn_edit_gallery_item pointer" data-item_id="' + full.id + '" data-title="' + full.title + '">' +
-                    '   <i class="fa fa-edit color_orange"></i>' +
-                    '</a>' +
-                    '<a class="btn_trash_gallery_item pointer" style="color: red" data-item_id="' + full.id + '" data-title="' + full.title + '">' +
-                    '   <i class="fa fa-trash"></i>' +
-                    '</a>'
+                        '<div class="gallerty_menu float-right" onclick="set_fixed_dropdown_menu(this)">' +
+                        '  <div class="fas fa-list-ul"></div>' +
+                        '  <div class="dropdown_gallery hidden">' +
+                        '   <a class="btn_edit_gallery_item pointer gallery_menu-item" data-item_id="' + full.id + '" data-title="' + full.title + '">' +
+                        '       <i class="fa fa-edit"></i><span class="ml-2">ویرایش</span>' +
+                        '   </a>' +
+                        '    <a class="btn_trash_gallery_item pointer gallery_menu-item" data-item_id="' + full.id + '" data-title="' + full.title + ' ">' +
+                        '       <i class="fa fa-trash"></i><span class="ml-2">خذف</span>' +
+                        '   </a>'
+                    '  </div>' +
+                    '</div>';
             }
         }
     ];
@@ -108,7 +178,7 @@
             '<table id="GalleryItemGridData" class="table" width="100%"></table>';
         $('.span_manage_gallery_item_tab').html('آیتم : ' + title);
         $('#manage_tab_gallery_item').html(html);
-        datatable_load(item_id);
+        datatable_load_item(item_id);
         $(document).off("click", "#add_gallery_item_tab");
         $(document).on("click", "#add_gallery_item_tab", function () {
             get_gallery_item(item_id);
@@ -125,7 +195,7 @@
                 },
                 success: function (result) {
                     $('#edit_gallery .total_loader').remove();
-                    if (result.is_active == true) {
+                    if (result.status == true) {
                         $('#add_gallery_item').html(result.gallery_add_item);
                         var frm_gallery_add_item = document.querySelector("#frm_create_gallery_item");
                         init_validatejs(frm_gallery_add_item, create_gallery_item_constraints, ajax_func_add_gallery_item);
@@ -141,7 +211,7 @@
                                 contentType: false,
                                 success: function (data) {
                                     $('#frm_create_gallery_item .total_loader').remove();
-                                    if (data.is_active == -1) {
+                                    if (data.status == -1) {
                                         showMessages(data.message, 'form_message_box', 'error', formElement);
                                         showErrors(formElement, data.errors);
                                     }
@@ -158,6 +228,17 @@
                     }
                 }
             });
+        }
+        //--------------filter------------------------------------------------------------------
+        $(document).off('change', '.filter_item_is_active');
+        $(document).on('change', '.filter_item_is_active', datatable_reload_item_fun);
+        init_doAfterStopTyping('.filter_item_title', datatable_reload_item_fun);
+        function datatable_reload_item_fun() {
+            var filter_item_is_active = $('.filter_item_is_active').val();
+            var filter_item_title = $('.filter_item_title').val();
+            GalleryItemGridData.destroy();
+            $('#GalleryItemGridData').empty();
+            datatable_load_item(item_id, filter_item_is_active,filter_item_title);
         }
     });
 
@@ -264,7 +345,7 @@
             },
             success: function (result) {
                 $('#edit_gallery_item .total_loader').remove();
-                if (result.is_active == true) {
+                if (result.status == true) {
                     $('#edit_gallery_item').append(result.gallery_item_edit_view);
                     $('.edit_gallery_item_tab').removeClass('hidden');
                     $('a[href="#edit_gallery_item"]').click();
@@ -290,7 +371,7 @@
             contentType: false,
             success: function (data) {
                 $('#frm_edit_gallery .total_loader').remove();
-                if (data.is_active == -1) {
+                if (data.status == -1) {
                     showMessages(data.message, 'form_message_box', 'error', formElement);
                     showErrors(formElement, data.errors);
                 }
@@ -317,8 +398,10 @@
     $(document).off("click", ".btn_trash_gallery_item");
     $(document).on("click", ".btn_trash_gallery_item", function () {
         var item_id = $(this).data('item_id');
+        var title = $(this).data('title');
+        desc = 'بله گالری( ' + title + ' ) را حذف کن !';
         var parameters = {item_id: item_id};
-        yesNoAlert('حذف گالری', 'از حذف گالری مطمئن هستید ؟', 'warning', 'بله، گالری را حذف کن!', 'لغو', trash_gallery_item, parameters);
+        yesNoAlert('حذف گالری', 'از حذف گالری مطمئن هستید ؟', 'warning', desc, 'لغو', trash_gallery_item, parameters);
     });
 
     function trash_gallery_item(params) {
@@ -328,7 +411,7 @@
             url: '{!!  route('LGS.trashGalleryItem') !!}',
             data: params,
             success: function (data) {
-                if (data.is_active == -1) {
+                if (data.status == -1) {
                     showMessages(data.message, 'form_message_box', 'error', formElement);
                     showErrors(formElement, data.errors);
                 }
@@ -372,20 +455,22 @@
     });
     function hide_text_over_flow(el)
     {
-       $().toggleClass('text_over_flow')
+       $(el).toggleClass('text_over_flow')
     }
     /*___________________________________________________DataTable_____________________________________________________________________*/
 
-    function datatable_load(item_id,filter_parrent_id) {
-        filter_parrent_id = filter_parrent_id || false;
+    function datatable_load_item(item_id,filter_item_is_active,filter_item_title) {
         item_id = item_id || false;
+        filter_item_is_active = filter_item_is_active || false;
+        filter_item_title = filter_item_title || '';
         var fixedColumn = {
             leftColumns: 2,
             rightColumns: 2
         };
         data =
             {
-                filter_parrent_id: filter_parrent_id,
+                filter_item_is_active: filter_item_is_active,
+                filter_item_title: filter_item_title,
                 item_id: item_id,
             };
         dataTablesGrid('#GalleryItemGridData', 'GalleryItemGridData', '{{ route('LGS.getGalleryItem') }}', gallery_item_columns, data);
@@ -395,17 +480,48 @@
             '   <td style="border: none; border-bottom: 1px lightgray solid;">&nbsp;</td>' +
             '   <td style="border: none; border-bottom: 1px lightgray solid;">&nbsp;</td>' +
             '   <td style="border: none; border-bottom: 1px lightgray solid;">&nbsp;</td>' +
-            '   <td style="border: none; border-bottom: 1px lightgray solid;">&nbsp;</td>' +
             '   <td style="border: none; border-bottom: 1px lightgray solid;">' +
-            '       <select class="form-control filter_parrent" style="width:100px">' +
-            '       </select>' +
+            '       <input type="text" class="form-control filter_item_title" name="filter_item_title" value="' + filter_item_title + '" style="width: 100%;">' +
             '   </td>' +
             '    <td style="border: none; border-bottom: 1px lightgray solid;">&nbsp;</td>' +
             '    <td style="border: none; border-bottom: 1px lightgray solid;">&nbsp;</td>' +
+            '    <td style="border: none; border-bottom: 1px lightgray solid;">' +
+            '       <select class="form-control filter_item_is_active" name="filter_item_is_active" style="width:150px">' +
+            '           <option value="-1">انتخاب وضعیت</option>' +
+            '           <option value="0" '+('0' === filter_item_is_active ? 'selected="selected"' : '')+'>غیرفعال</option>' +
+            '           <option value="1" '+('1' === filter_item_is_active ? 'selected="selected"' : '')+'>فعال</option>' +
+            '       </select>' +
+            '    </td>' +
             '    <td style="border: none; border-bottom: 1px lightgray solid;">&nbsp;</td>' +
             '</tr>'
         );
+    }
 
+    /*-----------------------------------------------Order item------------------------------------------------------*/
+    $(document).off("click", '.reorder_gallery_item_form_grid_data');
+    $(document).on('click', '.reorder_gallery_item_form_grid_data', function () {
+        var $this = $(this);
+        var order_type = $this.data('order_type');
+        var item_id = $this.data('item_id');
+        var gallery_id = $this.data('gallery_id');
+        reOrderGalleryItemFormGridData(order_type, item_id,gallery_id);
+    });
+
+    function reOrderGalleryItemFormGridData(order_type, item_id,gallery_id) {
+        var result = false;
+        $.ajax({
+            type: "POST",
+            url: '{{ route('LGS.saveOrderGalleryItemForm')}}',
+            dataType: "json",
+            data: {item_id:item_id, order_type: order_type,gallery_id:gallery_id},
+            success: function (data) {
+                if (data.success == true) {
+                    window.GalleryItemGridData.ajax.reload(null,false);
+                    result = true;
+                }
+            }
+        });
+        return result;
     }
 
 </script>

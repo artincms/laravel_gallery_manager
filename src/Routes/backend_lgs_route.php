@@ -19,6 +19,7 @@ Route::group(['prefix' => config('laravel_gallery_system.backend_lgs_route_prefi
 
     //------------------------------------route for order -----------------------------------------------------------------------
     Route::post('saveOrderGalleryForm', ['as' => 'LGS.saveOrderGalleryForm', 'uses' => 'GalleryController@saveOrderGalleryForm']);
+    Route::post('saveOrderGalleryItemForm', ['as' => 'LGS.saveOrderGalleryItemForm', 'uses' => 'GalleryController@saveOrderGalleryItemForm']);
 
     //------------------------------------auto complete -----------------------------------------------------------------------
     Route::post('autoCompleteGalleryParrent', ['as' => 'LGS.autoCompleteGalleryParrent', 'uses' => 'GalleryController@autoCompleteGalleryParrent']);

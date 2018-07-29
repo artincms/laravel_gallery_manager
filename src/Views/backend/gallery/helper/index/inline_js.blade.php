@@ -54,7 +54,7 @@
                             '           <i class="fas fa-level-up-alt"></i>'  +
                             '       </button>' +
                             '   </div>' +
-                            '   <input type="text" style="width: 35%;" class="form-control text-center" style="width:35% " disabled value="'+full.order+'">' +
+                            '   <input type="text" class="form-control text-center" style="width:30% " disabled value="'+full.order+'">' +
                             '    <div class="input-group-append">' +
                             '       <button type="button" style="border-radius: 0px;" class="btn btn-outline-secondary reorder_gallery_form_grid_data bg-info-800" ' +
                             '           data-order_type="decrease"' +
@@ -77,7 +77,7 @@
                             '           <i class="fas fa-level-up-alt"></i>'  +
                             '       </button>' +
                             '   </div>' +
-                            '   <input type="text" class="form-control text-center" style="width:35% " disabled value="'+full.order+'">' +
+                            '   <input type="text" class="form-control text-center" style="width:30% " disabled value="'+full.order+'">' +
                             '    <div class="input-group-append">' +
                             '       <button type="button" style="border-radius: 0px;" class="btn btn-outline-secondary reorder_gallery_form_grid_data bg-info-800" ' +
                             '           data-order_type="increase"' +
@@ -265,7 +265,7 @@
             },
             success: function (result) {
                 $('#edit_gallery .total_loader').remove();
-                if (result.is_active == true) {
+                if (result.success) {
                     $('#edit_gallery').append(result.gallery_edit_view);
                     $('.edit_gallery_tab').removeClass('hidden');
                     $('a[href="#edit_gallery"]').click();
@@ -444,8 +444,7 @@
             leftColumns: 3,
             rightColumns: 2
         };
-        data =
-            {
+        data ={
                 filter_parrent_id: filter_parrent_id,
                 filter_title: filter_title,
                 filter_is_active: filter_is_active,
@@ -458,7 +457,7 @@
             GalleryManagerGridData.columns([3]).visible(true);
             html_td = '   <td style="border: none; border-bottom: 1px lightgray solid;">' ;
         }
-        $('#GalleryManagerGridData_wrapper').find('thead').append
+        $('#GalleryManagerGridData').find('thead').first().append
         (
             '<tr role="row">' +
             '   <td style="border: none; border-bottom: 1px lightgray solid;">&nbsp;</td>' +

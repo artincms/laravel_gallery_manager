@@ -16,7 +16,19 @@ class GalleryController extends Controller
 {
     private function reOrderGalleryForm($parrent_id)
     {
-        $all_Gallery= Gallery::where('parent_id' , $parrent_id)->orderBy('order','desc')->get();
+        $all_Gallery= Gallery::where('parent_id' , $parrent_id)->orderBy('order','asc')->get();
+        $i = 1;
+        foreach ($all_Gallery as $item)
+        {
+            $item->order = $i++;
+            $item->save();
+        }
+        return $i;
+    }
+
+    private function reOrderGalleryItemForm($gallery_id)
+    {
+        $all_Gallery= GalleryItem::where('gallery_id' , $gallery_id)->orderBy('order','asc')->get();
         $i = 1;
         foreach ($all_Gallery as $item)
         {
@@ -225,13 +237,30 @@ class GalleryController extends Controller
     public function getGalleryItem(Request $request)
     {
         $item = GalleryItem::with('gallery')->where('gallery_id', deCodeId($request->item_id)[0]);
-
+        if ($request->filter_item_title)
+        {
+            $item->where('title', 'like', '%' . $request->filter_item_title . '%');
+        }
+        if ($request->filter_item_is_active == "1")
+        {
+            $item->where('is_active', '1');
+        }
+        elseif ($request->filter_item_is_active == "0")
+        {
+            $item->where('is_active', '0');
+        }
         return DataTables::eloquent($item)
             ->editColumn('id', function ($data) {
                 return enCodeId($data->id);
             })
             ->editColumn('file_id', function ($data) {
                 return enCodeId($data->file_id);
+            })
+            ->editColumn('gallery_id', function ($data) {
+                return enCodeId($data->gallery_id);
+            })
+            ->editColumn('description', function ($data) {
+                return strip_tags($data->description);
             })
             ->make(true);
     }
@@ -554,7 +583,6 @@ class GalleryController extends Controller
         $parrent_id =deCodeId($request->parrent_id)[0] ;
         $count = $this->reOrderGalleryForm($parrent_id);
         $gallery = Gallery::find($item_id);
-
         $order = $gallery->order;
         if ($request->order_type == 'increase')
         {
@@ -582,6 +610,55 @@ class GalleryController extends Controller
             {
                 $gallery->order = $order - 1;
                 $gallery->save();
+                //set new order
+                $previousItem->order = $order;
+                $previousItem->save();
+            }
+        }
+        else
+        {
+            $result['error'][] = "متاسفانه با مشکل مواجه شد!";
+            $result['success'] = false;
+            return response()->json($result, 200)->withHeaders(['Content-Type' => 'json', 'charset' => 'utf-8']);
+        }
+        $result['message'][] = "با موفقیت انجام شد.";
+        $result['success'] = true;
+        return response()->json($result, 200)->withHeaders(['Content-Type' => 'json', 'charset' => 'utf-8']);
+    }
+
+    public function saveOrderGalleryItemForm(Request $request)
+    {
+        $item_id = deCodeId($request->item_id)[0];
+        $gallery_id =deCodeId($request->gallery_id)[0] ;
+        $count = $this->reOrderGalleryItemForm($gallery_id);
+        $item = GalleryItem::find($item_id);
+        $order = $item->order;
+        if ($request->order_type == 'increase')
+        {
+            $nextItem = GalleryItem::where([
+                ['gallery_id', $gallery_id],
+                ['order', $order + 1]
+            ])->first();
+            if ($nextItem)
+            {
+                $item->order = $order + 1;
+                $item->save();
+                //set new order
+                $nextItem->order = $order;
+                $nextItem->save();
+            }
+        }
+        elseif ($request->order_type == 'decrease')
+        {
+
+            $previousItem = GalleryItem::where([
+                ['gallery_id', $gallery_id],
+                ['order', $order - 1]
+            ])->first();
+            if ($previousItem)
+            {
+                $item->order = $order - 1;
+                $item->save();
                 //set new order
                 $previousItem->order = $order;
                 $previousItem->save();
