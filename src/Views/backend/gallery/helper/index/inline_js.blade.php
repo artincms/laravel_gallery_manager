@@ -25,12 +25,12 @@
             mRender: function (data, type, full) {
                 var img = full.default_img;
                 if (typeof img === 'undefined' || img === null || img === '') {
-                    var img_item = '<img id="LGS_showThumbImage" src="{{ route('LFM.DownloadFile',['ID',''])}}/' + 0 + '/small/404.png/100/30/30?0"  data-image="{{ route('LFM.DownloadFile',['ID',''])}}/' + 0 + '/original/404.png?0"  class="img-rounded img-preview">';
+                    var img_item = '<img class="span_image_container" id="LGS_showThumbImage" src="{{ route('LFM.DownloadFile',['ID',''])}}/' + 0 + '/small/404.png/100/30/30?0"  data-image="{{ route('LFM.DownloadFile',['ID',''])}}/' + 0 + '/original/404.png?0"  class="img-rounded img-preview">';
                 }
                 else {
-                    var img_item = '<img id="LGS_showThumbImage" src="{{ route('LFM.DownloadFile',['ID',''])}}/' + img + '/small/404.png/100/30/30?0" data-image="{{ route('LFM.DownloadFile',['ID',''])}}/' + img + '/original/404.png?0"  class="img-rounded img-preview">';
+                    var img_item = '<img class="span_image_container" id="LGS_showThumbImage" src="{{ route('LFM.DownloadFile',['ID',''])}}/' + img + '/small/404.png/100/30/30?0" data-image="{{ route('LFM.DownloadFile',['ID',''])}}/' + img + '/original/404.png?0"  class="img-rounded img-preview">';
                 }
-                return '<div><div class="span_image_container">' + img_item + '</div><a class="show_gallery_item pointer" data-title="' + full.title + '"  data-item_id="' + full.id + '">' + full.title + '</a></div>';
+                return '<div><div class="">' + img_item + '</div><a class="show_gallery_item pointer" data-title="' + full.title + '"  data-item_id="' + full.id + '">' + full.title + '</a></div>';
             }
         },
         {

@@ -24,4 +24,16 @@ Route::group(['prefix' => config('laravel_gallery_system.backend_lgs_route_prefi
     //------------------------------------auto complete -----------------------------------------------------------------------
     Route::post('autoCompleteGalleryParrent', ['as' => 'LGS.autoCompleteGalleryParrent', 'uses' => 'GalleryController@autoCompleteGalleryParrent']);
 
+    //--------------------------------------Slider Manager Route ------------------------------------------------//
+    Route::group(['prefix' => 'Slider'], function () {
+        Route::get('/', ['as' => 'LGS.Slider', 'uses' => 'SliderController@index']);
+        Route::post('getSlider', ['as' => 'LGS.Slider.getSlider', 'uses' => 'SliderController@getSlider']);
+        Route::post('createSlider', ['as' => 'LGS.Slider.createSlider', 'uses' => 'SliderController@createSlider']);
+        Route::post('setStatusSlider', ['as' => 'LGS.Slider.setStatusSlider', 'uses' => 'SliderController@setStatusSlider']);
+        Route::post('trashSlider', ['as' => 'LGS.Slider.trashSlider', 'uses' => 'SliderController@trashSlider']);
+        Route::post('getAdvanceStyleOptoins', ['as' => 'LGS.Slider.getAdvanceStyleOptoins', 'uses' => 'SliderController@getAdvanceStyleOptoins']);
+        Route::post('getEditSliderForm', ['as' => 'LGS.Slider.getEditSliderForm', 'uses' => 'SliderController@getEditSliderForm']);
+        Route::post('editSlider', ['as' => 'LGS.Slider.editSlider', 'uses' => 'SliderController@editSlider']);
+    });
+
 });
