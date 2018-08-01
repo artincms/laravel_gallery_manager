@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use ArtinCMS\LGS\Model\Gallery;
 use ArtinCMS\LGS\Model\GalleryItem;
 use ArtinCMS\LGS\Model\Slider;
+use ArtinCMS\LGS\Model\SliderItem;
 use DataTables;
 use Illuminate\Http\Exceptions\HttpResponseException;
 use Illuminate\Http\Request;
@@ -86,7 +87,7 @@ class SliderController extends Controller
         switch ($request->style_id)
         {
             case '1':
-                $transitions =$this->transitions[1] ;
+                $transitions = $this->transitions[1];
                 break;
             default:
                 $transitions = [];
@@ -122,11 +123,12 @@ class SliderController extends Controller
                 $slider->created_by = Auth::user()->id;
             }
         }
-        $options['transition'] = $request->transition;
-        $options['transition_speed'] = $request->transition_speed;
-        $options['text_position'] = $request->text_position;
-        $options['show_button'] = $request->show_button;
-        $options['show_arrow'] = $request->show_arrow;
+        $options = new \stdClass();
+        $options->transition = $request->transition;
+        $options->transition_speed = $request->transition_speed;
+        $options->text_position = $request->text_position;
+        $options->show_button = $request->show_button;
+        $options->show_arrow = $request->show_arrow;
         $slider->style_options = json_encode($options);
         $slider->save();
         $res =
@@ -183,14 +185,153 @@ class SliderController extends Controller
     {
         $slider = Slider::find(deCodeId($request->item_id)[0]);
         $slider->encode_id = enCodeId($slider->id);
-        $sliderTypes = $this->sliderTypes ;
-        $slider_form = view('laravel_gallery_system::backend.slider.view.edit_slider', compact('slider','sliderTypes'))->render();
+        $sliderTypes = $this->sliderTypes;
+        $options = json_decode($slider->style_options);
+        $transitions = $this->transitions[ $slider->style ];
+        $slider_form = view('laravel_gallery_system::backend.slider.view.edit_slider', compact('slider', 'sliderTypes', 'transitions', 'options'))->render();
         $res =
             [
-                'success'           => true,
-                'status_type'       => "success",
+                'success'          => true,
+                'status_type'      => "success",
                 'slider_edit_view' => $slider_form
             ];
+        throw new HttpResponseException(
+            response()
+                ->json($res, 200)
+                ->withHeaders(['Content-Type' => 'text/plain', 'charset' => 'utf-8'])
+        );
+    }
+
+    public function editSlider(Request $request)
+    {
+        $slider = Slider::find(deCodeId($request->encode_id)[0]);
+        $slider->title = $request->title;
+        $slider->description = $request->description;
+        $slider->style = $request->style;
+        $slider->is_active = $request->is_active;
+        if (Auth::user())
+        {
+            if (isset(Auth::user()->id))
+            {
+                $slider->created_by = Auth::user()->id;
+            }
+        }
+        $options = new \stdClass();
+        $options->transition = $request->transition;
+        $options->transition_speed = $request->transition_speed;
+        $options->text_position = $request->text_position;
+        $options->show_button = $request->show_button;
+        $options->show_arrow = $request->show_arrow;
+        $slider->style_options = json_encode($options);
+        $slider->save();
+        $res =
+            [
+                'success' => true,
+                'title'   => "ثبت اسلایدر",
+                'section' => 'defaultImg',
+                'message' => 'اسلایدر با موفقیت ثبت شد.'
+            ];
+
+        return $res;
+    }
+
+    //----------------------------------------------Slider Items ------------------------------------------------------------------------------
+    public function getSliderItem(Request $request)
+    {
+        $slider = SliderItem::with('user')->where('slider_id', deCodeId($request->item_id)[0]);
+
+        return DataTables::eloquent($slider)
+            ->editColumn('id', function ($data) {
+                return enCodeId($data->id);
+            })
+            ->addColumn('title', function ($data) {
+                return $data->item->title;
+            })
+            ->addColumn('description', function ($data) {
+                return strip_tags($data->item->description);
+            })
+            ->make(true);
+    }
+
+    public function getAddSliderItem(Request $request)
+    {
+        $slider_id = $request->item_id;
+        $sliders = SliderItem::all();
+        $add_slider_form = view('laravel_gallery_system::backend.slider.view.add_slider_item', compact('sliders', 'slider_id'))->render();
+        $res = [
+            'success'         => true,
+            'status_type'     => "success",
+            'slider_add_item' => $add_slider_form
+        ];
+        throw new HttpResponseException(
+            response()
+                ->json($res, 200)
+                ->withHeaders(['Content-Type' => 'text/plain', 'charset' => 'utf-8'])
+        );
+    }
+
+    public function createSliderItem(Request $request)
+    {
+        if ($request->selected_slider_items)
+        {
+            foreach ($request->selected_slider_items as $selected_slider_items )
+            {
+                $item = new SliderItem;
+                $item->slider_id = deCodeId($request->slider_id_in_item)[0] ;
+                $item->item_id = deCodeId($selected_slider_items)[0] ;
+                if (Auth::user())
+                {
+                    if (isset(Auth::user()->id))
+                    {
+                        $item->created_by = Auth::user()->id;
+                    }
+                }
+                $item->save();
+            }
+            $res =
+                [
+                    'success' => true,
+                    'title'   => "ثبت آیتم جدید",
+                    'message' => 'آیتم با موفقیت به اسلایدر اضافه شد.'
+                ];
+        }
+        else
+        {
+            $res =
+                [
+                    'success' => false,
+                    'title'   => "ثبت آیتم جدید",
+                    'message' => 'هیچ آیتمی انتخاب نشده است .'
+                ];
+        }
+        return $res ;
+    }
+
+    public function autoCompleteGallery(Request $request)
+    {
+        $x = $request->term;
+        $data = Gallery::select("id", 'title AS text')->where('is_active', '1');
+        if ($x['term'] != '...')
+        {
+            $data = Gallery::select("id", 'title AS text')
+                ->where('is_active', '1')
+                ->where("title", "LIKE", "%" . $x['term'] . "%");
+        }
+        $data = $data->get();
+        $data = ['results' => $data];
+
+        return response()->json($data);
+    }
+
+    public function getViewGalleryItem(Request $request)
+    {
+        $galleryItems = GalleryItem::where('gallery_id', $request->gallery_id)->whereNotNull('file_id')->get();
+        $view_get_gallery_item = view('laravel_gallery_system::backend.slider.view.get_view_slider_items', compact('galleryItems'))->render();
+        $res = [
+            'success'               => true,
+            'status_type'           => "success",
+            'view_get_gallery_item' => $view_get_gallery_item
+        ];
         throw new HttpResponseException(
             response()
                 ->json($res, 200)

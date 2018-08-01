@@ -20,6 +20,10 @@
             width: '20%',
             data: 'title',
             name: 'title',
+            title: 'عنوان',
+            mRender: function (data, type, full) {
+                return '<a href="#" class="show_slider_item pointer" data-title="' + full.title + '"  data-item_id="' + full.id +'">'+full.title+'</a>' ;
+            }
         },
         {
             width: '25%',
@@ -90,6 +94,11 @@
     $(document).ready(function () {
         datatable_load_fun();
     });
+    window['create_slider_constraints']   = {
+        title: {
+            presence: {message: '^<strong>عنوان فرم ضروریست.</strong>'}
+        },
+    };
 
     function datatable_load_fun(filter_title, filter_is_active) {
         filter_title = filter_title || '';
@@ -146,6 +155,9 @@
         $(document).off('click', '#add_slider_advance_tab a');
         $(document).on('click', '#add_slider_advance_tab a', function () {
             var style_id = $('#style').val();
+            var title = $('#slider_type_'+style_id).text();
+            var text = 'تنظیمات پیشرفته ('+title+')' ;
+            $('#span_advance_setting').text(text);
             get_slider_advance_options(style_id);
         });
 
@@ -191,11 +203,6 @@
         }
 
         //--------------------validate and submit form --------------------------------
-        var create_slider_constraints = {
-            title: {
-                presence: {message: '^<strong>عنوان فرم ضروریست.</strong>'}
-            },
-        };
         var add_slider_form_id = document.querySelector("#frm_create_slider");
         init_validatejs(add_slider_form_id, create_slider_constraints, ajax_func_add_slider);
     });
@@ -268,7 +275,7 @@
         });
     }
 
-    //---------------------------------------------------Edit slider
+    //---------------------------------------------------Edit slider-------------------------------------------------------------------------------------
     $(document).off("click", ".btn_edit_slider");
     $(document).on("click", ".btn_edit_slider", function () {
         var item_id = $(this).data('item_id');
@@ -302,11 +309,41 @@
                         init_summernote_for_edit_slider = true;
                     }
 
+                    //-------------------------------------------------cancel edit form--------------------------------------
+                    $(document).off("click", ".cancel_edit_slider");
+                    $(document).on("click", ".cancel_edit_slider", function () {
+                        $('a[href="#manage_tab"]').click();
+                        $('.edit_slider_tab').addClass('hidden');
+                        $('#edit_slider').html('');
+                    });
+                    
+                    //------------------------------------------------change advance form -------------------------------------
+                    $(document).off('change', '#edit_style');
+                    $(document).on('change', '#edit_style', change_advance_form);
+                    
+                    function change_advance_form() {
+                        $('#edit_slider_advance').html('');
+                        get_edit_slider_advance_form(this.value);
+                    }
+
+                    function get_edit_slider_advance_form (style_id) {
+                        $.ajax({
+                            type: "POST",
+                            url: '{{ route('LGS.Slider.getAdvanceStyleOptoins')}}',
+                            dataType: "json",
+                            data: {style_id:style_id},
+                            success: function (data) {
+                                if (data.success == true) {
+                                    $('#edit_slider_advance').html(data.slider_create_style_options);
+                                }
+                            }
+                        });
+                    }
+
                     //--------------------------------------------------save edit form ---------------------------------------
                     var edit_slider_form_id = document.querySelector("#frm_edit_slider");
                     init_validatejs(edit_slider_form_id, create_slider_constraints, ajax_func_edit_slider);
 
-                    //--------------------------------------------save edit slider ----------------------------------------
                     function ajax_func_edit_slider(formElement) {
                         var formData = new FormData(formElement);
                         $.ajax({
@@ -317,17 +354,17 @@
                             processData: false,
                             contentType: false,
                             success: function (data) {
-                                $('#frm_edit_gallery .total_loader').remove();
+                                $('#frm_edit_slider .total_loader').remove();
                                 if (!data.success) {
                                     showMessages(data.message, 'form_message_box', 'error', formElement);
                                     showErrors(formElement, data.errors);
                                 }
                                 else {
                                     menotify('success', data.title, data.message);
-                                    GalleryManagerGridData.ajax.reload(null, false);
+                                    SliderManagerGridData.ajax.reload(null, false);
                                     $('a[href="#manage_tab"]').click();
-                                    $('.edit_gallery_tab').addClass('hidden');
-                                    $('#edit_gallery').html('');
+                                    $('.edit_slider_tab').addClass('hidden');
+                                    $('#edit_slider').html('');
                                 }
                             }
                         });
@@ -338,4 +375,10 @@
             }
         });
     }
+    //-------------------------------------------------cancel add slider form--------------------------------------
+    $(document).off("click", ".cancel_add_slider");
+    $(document).on("click", ".cancel_add_slider", function () {
+        $('a[href="#manage_tab"]').click();
+        clear_form_elements('#frm_create_slider');
+    });
 </script>

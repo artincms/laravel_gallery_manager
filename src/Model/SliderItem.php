@@ -3,22 +3,19 @@
 namespace ArtinCMS\LGS\Model;
 
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
 use ArtinCMS\LFM\Traits\lfmFillable ;
 
-class Slider extends Model
+class SliderItem extends Model
 {
     use lfmFillable ;
-    use softDeletes;
-    protected $table = 'lgs_sliders';
+    protected $table = 'lgs_slider_items';
     public function user()
     {
         return $this->belongsTo(config('laravel_gallery_system.userModel'), 'created_by');
     }
 
-    public function slider_items()
+    public function item()
     {
-        return $this->hasMany('ArtinCMS\LGS\Model\SliderItem', 'slider_id');
+        return $this->hasOne('ArtinCMS\LGS\Model\GalleryItem','id');
     }
-
 }

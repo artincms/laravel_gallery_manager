@@ -21,7 +21,7 @@
             width: '20%',
             data: 'title',
             name: 'title',
-            title: '<b>عنوان</b>',
+            title: 'عنوان',
             mRender: function (data, type, full) {
                 var img = full.default_img;
                 if (typeof img === 'undefined' || img === null || img === '') {

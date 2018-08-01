@@ -22,10 +22,15 @@ class GalleryItem extends Model
             }
         });
     }
-    protected $table = 'lgs_gallery_items';
+    protected $table = 'lgs_items';
     public function gallery()
     {
         return $this->belongsTo('ArtinCMS\LGS\Model\Gallery');
+    }
+
+    public function getEncodeIdAttribute()
+    {
+        return enCodeId($this->id);
     }
 
 }

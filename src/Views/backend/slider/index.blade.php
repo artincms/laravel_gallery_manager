@@ -54,7 +54,7 @@
                                     <li class="nav-item" id="add_slider_advance_tab">
                                         <a class="nav-link" href="#add_slider_advance" data-toggle="tab">
                                             <i class="far fa-plus-square"></i>
-                                            <span>تنظیمات پیشرفته</span>
+                                            <span id="span_advance_setting">تنظیمات پیشرفته</span>
                                         </a>
                                     </li>
                                 </ul>
@@ -72,19 +72,19 @@
                                                 <div class="col-sm-4 messages"></div>
                                             </div>
                                             <div class="form-group row">
-                                                <label class="col-lg-2 col-sm-12 col-md-3 control-label col-form-label label_post" for="description">توضیحات</label>
-                                                <div class="col-6">
-                                                    <textarea class="form-control" name="description" id="slider_description" rows="5"></textarea>
-                                                </div>
-                                            </div>
-                                            <div class="form-group row">
                                                 <label class="col-lg-2 col-sm-12 col-md-3 control-label col-form-label label_post" for="description">نوع اسلایدر</label>
                                                 <div class="col-6">
                                                     <select name="style" id="style" class="form-control">
                                                         @foreach($sliderTypes as $type)
-                                                            <option value="{{$type->id}}">{{$type->title}}</option>
+                                                            <option id="slider_type_{{$type->id}}" value="{{$type->id}}">{{$type->title}}</option>
                                                         @endforeach
                                                     </select>
+                                                </div>
+                                            </div>
+                                            <div class="form-group row">
+                                                <label class="col-lg-2 col-sm-12 col-md-3 control-label col-form-label label_post" for="description">توضیحات</label>
+                                                <div class="col-6">
+                                                    <textarea class="form-control" name="description" id="slider_description" rows="5"></textarea>
                                                 </div>
                                             </div>
                                             <div class="form-group row ">
@@ -108,7 +108,7 @@
                                 </div>
                                 <div class="col-12">
                                     <button type="submit" class="float-right btn btn-success ml-2"><i class="fa fa-save margin_left_8"></i>ذخیره</button>
-                                    <button type="button" class="float-right btn bg-secondary color_white cancel_add_close_btn"><i class="fa fa-times margin_left_8"></i>انصراف</button>
+                                    <button type="button" class="float-right btn bg-secondary color_white cancel_add_slider"><i class="fa fa-times margin_left_8"></i>انصراف</button>
                                 </div>
                             </div>
                             </form>
@@ -121,26 +121,42 @@
                                         <li class="nav-item">
                                             <a class="nav-link active" href="#manage_tab_slider_item" data-toggle="tab">
                                                 <i class="fas fa-th-list"></i>
-                                                <span class="margin_right_5">مدیریت آیتم ها</span>
+                                                <span class="margin_right_5">مدیریت تصاویر</span>
                                             </a>
                                         </li>
                                         <li class="nav-item" id="add_slider_item_tab">
                                             <a class="nav-link" href="#add_slider_item" data-toggle="tab">
                                                 <i class="far fa-plus-square"></i>
-                                                <span>افزودن آیتم</span>
+                                                <span>افزودن تصویر</span>
                                             </a>
-                                        </li>
-                                        <li class="nav-item edit_slider_item_tab hidden">
-                                            <a href="#edit_slider_item" class="nav-link paddin_left_30" data-toggle="tab">
-                                                <span class="span_edit_slider_item_tab">ویرایش</span>
-                                            </a>
-                                            <button class="close closeTab cancel_edit_slider_item_tab" type="button">×</button>
                                         </li>
                                     </ul>
                                     <div class="tab-content">
                                         <div class="tab-pane active" id="manage_tab_slider_item"></div>
-                                        <div class="tab-pane" id="add_slider_item"></div>
-                                        <div class="tab-pane" id="edit_slider_item"></div>
+                                        <div class="tab-pane" id="add_slider_item">
+                                            <div class="space-20"></div>
+                                            <form id="frm_create_slider_item" class="form-horizontal" name="frm_create_slider_item">
+                                                <input type="hidden" id="slider_id_in_item" name="slider_id_in_item" value="" >
+                                                <div class="space-20"></div>
+                                                <div class="form-group row">
+                                                    <label class="col-lg-2 col-sm-12 col-md-3 control-label col-form-label label_transition" for="transition">انتخاب گالری</label>
+                                                    <div class="col-6">
+                                                        <select name="slider_id" id="slider_id" class="form-control">
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group row">
+                                                    <label class="col-lg-2 col-sm-12 col-md-3 control-label col-form-label label_transition" for="transition"></label>
+                                                    <div class="col-lg-10 col-sm-12 col-md-9">
+                                                        <div class="show_slider_items"></div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-12">
+                                                    <button type="submit" class="float-right btn btn-success ml-2"><i class="fa fa-save margin_left_8"></i>ذخیره</button>
+                                                    <button type="button" class="float-right btn bg-secondary color_white cancel_add_slider_item"><i class="fa fa-times margin_left_8"></i>انصراف</button>
+                                                </div>
+                                            </form>
+                                        </div>
                                     </div>
                                 </div>
                         </div>
@@ -152,4 +168,5 @@
 @endsection
 @section('inline_js')
     @include('laravel_gallery_system::backend.slider.helper.inline_js')
+    @include('laravel_gallery_system::backend.slider.helper.item_inline_js')
 @stop

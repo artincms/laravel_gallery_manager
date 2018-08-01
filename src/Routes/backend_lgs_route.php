@@ -34,6 +34,17 @@ Route::group(['prefix' => config('laravel_gallery_system.backend_lgs_route_prefi
         Route::post('getAdvanceStyleOptoins', ['as' => 'LGS.Slider.getAdvanceStyleOptoins', 'uses' => 'SliderController@getAdvanceStyleOptoins']);
         Route::post('getEditSliderForm', ['as' => 'LGS.Slider.getEditSliderForm', 'uses' => 'SliderController@getEditSliderForm']);
         Route::post('editSlider', ['as' => 'LGS.Slider.editSlider', 'uses' => 'SliderController@editSlider']);
+
+        //---------------------------------------------slider items ---------------------------------------------------------------------------
+        Route::post('getSliderItem', ['as' => 'LGS.Slider.getSliderItem', 'uses' => 'SliderController@getSliderItem']);
+        Route::post('getAddSliderItem', ['as' => 'LGS.Slider.getAddSliderItem', 'uses' => 'SliderController@getAddSliderItem']);
+        Route::post('addSliderItem', ['as' => 'LGS.Slider.addSliderItem', 'uses' => 'SliderController@createSliderItem']);
+        Route::post('getViewGalleryItem', ['as' => 'LGS.Slider.getViewGalleryItem', 'uses' => 'SliderController@getViewGalleryItem']);
+
+        //-------------------------------------------autoComplete----------------------------------------------------------------------------------
+        Route::post('autoCompleteGalleryParrent', ['as' => 'LGS.Slider.autoCompleteGallery', 'uses' => 'SliderController@autoCompleteGallery']);
+
+
     });
 
 });
