@@ -71,10 +71,10 @@ class SliderController extends Controller
 
         return DataTables::eloquent($slider)
             ->editColumn('id', function ($data) {
-                return enCodeId($data->id);
+                return LFM_getEncodeId($data->id);
             })
             ->editColumn('default_img', function ($data) {
-                return enCodeId($data->default_img);
+                return LFM_getEncodeId($data->default_img);
             })
             ->editColumn('description', function ($data) {
                 return strip_tags($data->description);
@@ -144,7 +144,7 @@ class SliderController extends Controller
 
     public function setStatusSlider(Request $request)
     {
-        $slider = Slider::find(deCodeId($request->item_id)[0]);
+        $slider = Slider::find(LFM_GetDecodeId($request->item_id));
         if ($request->is_active == "true")
         {
             $slider->is_active = "1";
@@ -164,7 +164,7 @@ class SliderController extends Controller
 
     public function trashSlider(Request $request)
     {
-        $slider = Slider::find(deCodeId($request->item_id)[0])->first();
+        $slider = Slider::find(LFM_GetDecodeId($request->item_id))->first();
         $slider->delete();
 
         $res =
@@ -183,8 +183,8 @@ class SliderController extends Controller
 
     public function getEditSliderForm(Request $request)
     {
-        $slider = Slider::find(deCodeId($request->item_id)[0]);
-        $slider->encode_id = enCodeId($slider->id);
+        $slider = Slider::find(LFM_GetDecodeId($request->item_id));
+        $slider->encode_id = LFM_getEncodeId($slider->id);
         $sliderTypes = $this->sliderTypes;
         $options = json_decode($slider->style_options);
         $transitions = $this->transitions[ $slider->style ];
@@ -204,7 +204,7 @@ class SliderController extends Controller
 
     public function editSlider(Request $request)
     {
-        $slider = Slider::find(deCodeId($request->encode_id)[0]);
+        $slider = Slider::find(LFM_GetDecodeId($request->encode_id));
         $slider->title = $request->title;
         $slider->description = $request->description;
         $slider->style = $request->style;
@@ -238,10 +238,10 @@ class SliderController extends Controller
     //----------------------------------------------Slider Items ------------------------------------------------------------------------------
     public function getSliderItem(Request $request)
     {
-        $slider = SliderItem::with('user')->where('slider_id', deCodeId($request->item_id)[0]);
+        $slider = SliderItem::with('user')->where('slider_id', LFM_GetDecodeId($request->item_id));
         return DataTables::eloquent($slider)
             ->editColumn('id', function ($data) {
-                return enCodeId($data->id);
+                return LFM_getEncodeId($data->id);
             })
             ->addColumn('title', function ($data) {
                 if (isset($data->item->title))
@@ -290,8 +290,8 @@ class SliderController extends Controller
             foreach ($request->selected_slider_items as $selected_slider_items)
             {
                 $item = new SliderItem;
-                $item->slider_id = deCodeId($request->slider_id_in_item)[0];
-                $item->item_id = deCodeId($selected_slider_items)[0];
+                $item->slider_id = LFM_GetDecodeId($request->slider_id_in_item);
+                $item->item_id = LFM_GetDecodeId($selected_slider_items);
                 if (Auth::user())
                 {
                     if (isset(Auth::user()->id))
@@ -355,7 +355,7 @@ class SliderController extends Controller
 
     public function setSliderItemStatus(Request $request)
     {
-        $slider = SliderItem::find(deCodeId($request->item_id)[0]);
+        $slider = SliderItem::find(LFM_GetDecodeId($request->item_id));
         if ($request->is_active == "true")
         {
             $slider->is_active = "1";

@@ -69,13 +69,13 @@ class GalleryController extends Controller
         }
         return DataTables::eloquent($gallery)
             ->editColumn('id', function ($data) {
-                return enCodeId($data->id);
+                return LFM_getEncodeId($data->id);
             })
             ->editColumn('parent_id', function ($data) {
-                return enCodeId($data->parent_id);
+                return LFM_getEncodeId($data->parent_id);
             })
             ->editColumn('default_img', function ($data) {
-                return enCodeId($data->default_img);
+                return LFM_getEncodeId($data->default_img);
             })
             ->editColumn('description', function ($data) {
                 return strip_tags($data->description);
@@ -130,8 +130,8 @@ class GalleryController extends Controller
     public function getEditGalleryForm(Request $request)
     {
         $option_default_img = ['size_file' => 2000, 'max_file_number' => 1, 'true_file_extension' => ['png', 'jpg']];
-        $gallery = Gallery::find(deCodeId($request->item_id)[0]);
-        $gallery->encode_id = enCodeId($gallery->id);
+        $gallery = Gallery::find(LFM_GetDecodeId($request->item_id));
+        $gallery->encode_id = LFM_getEncodeId($gallery->id);
         $parrents = Gallery::all();
         $default_img = LFM_CreateModalFileManager('LoadDefaultImg', $option_default_img, 'insert', 'showDefaultImg', 'gallery_edit_tab', false, false, 'انتخاب فایل تصویر', 'btn-block', 'fa fa-folder-open font_button mr-2');
         $load_default_img = LFM_loadSingleFile($gallery, 'default_img', 'LoadDefaultImg');
@@ -152,7 +152,7 @@ class GalleryController extends Controller
 
     public function editGallery(Request $request)
     {
-        $gallery = Gallery::find(deCodeId($request->item_id)[0]);
+        $gallery = Gallery::find(LFM_GetDecodeId($request->item_id));
         $gallery->title = $request->title;
         $gallery->description = $request->description;
         if ($request->order)
@@ -196,7 +196,7 @@ class GalleryController extends Controller
 
     public function trashGallery(Request $request)
     {
-        $gallery = Gallery::find(deCodeId($request->item_id)[0])->first();
+        $gallery = Gallery::find(LFM_GetDecodeId($request->item_id))->first();
         $gallery->delete();
 
         $res =
@@ -215,7 +215,7 @@ class GalleryController extends Controller
 
     public function setGalleryStatus(Request $request)
     {
-        $gallery = Gallery::find(deCodeId($request->item_id)[0]);
+        $gallery = Gallery::find(LFM_GetDecodeId($request->item_id));
         if ($request->is_active == "true")
         {
             $gallery->is_active = "1";
@@ -236,7 +236,7 @@ class GalleryController extends Controller
     //--------------------------------------------------ITem function --------------------------------
     public function getGalleryItem(Request $request)
     {
-        $item = GalleryItem::with('gallery')->where('gallery_id', deCodeId($request->item_id)[0]);
+        $item = GalleryItem::with('gallery')->where('gallery_id', LFM_GetDecodeId($request->item_id));
         if ($request->filter_item_title)
         {
             $item->where('title', 'like', '%' . $request->filter_item_title . '%');
@@ -251,13 +251,13 @@ class GalleryController extends Controller
         }
         return DataTables::eloquent($item)
             ->editColumn('id', function ($data) {
-                return enCodeId($data->id);
+                return LFM_getEncodeId($data->id);
             })
             ->editColumn('file_id', function ($data) {
-                return enCodeId($data->file_id);
+                return LFM_getEncodeId($data->file_id);
             })
             ->editColumn('gallery_id', function ($data) {
-                return enCodeId($data->gallery_id);
+                return LFM_getEncodeId($data->gallery_id);
             })
             ->editColumn('description', function ($data) {
                 return strip_tags($data->description);
@@ -314,7 +314,7 @@ class GalleryController extends Controller
     public function createGalleryItem(Request $request)
     {
         $item = new GalleryItem;
-        $item->gallery_id = deCodeId($request->gallery_id)[0];
+        $item->gallery_id = LFM_GetDecodeId($request->gallery_id);
         $item->title = $request->title;
         $item->description = $request->description;
         $item->type = $request->type;
@@ -377,7 +377,7 @@ class GalleryController extends Controller
 
     public function setItemStatus(Request $request)
     {
-        $item = GalleryItem::find(deCodeId($request->item_id)[0]);
+        $item = GalleryItem::find(LFM_GetDecodeId($request->item_id));
         if ($request->is_active == "true")
         {
             $item->is_active = "1";
@@ -397,9 +397,9 @@ class GalleryController extends Controller
 
     public function getEditGalleryItemForm(Request $request)
     {
-        $item = GalleryItem::find(deCodeId($request->item_id)[0]);
-        $item->encode_id = enCodeId($item->id);
-        $item->gallery_encode_id = enCodeId($item->gallery_id);
+        $item = GalleryItem::find(LFM_GetDecodeId($request->item_id));
+        $item->encode_id = LFM_getEncodeId($item->id);
+        $item->gallery_encode_id = LFM_getEncodeId($item->gallery_id);
 
         //image options
         $option_item_file = ['size_file' => 2000, 'max_file_number' => 1, 'true_file_extension' => ['png', 'jpg']];
@@ -480,7 +480,7 @@ class GalleryController extends Controller
 
     public function editGalleryItem(Request $request)
     {
-        $item = GalleryItem::find(deCodeId($request->item_id)[0]);
+        $item = GalleryItem::find(LFM_GetDecodeId($request->item_id));
         $item->title = $request->title;
         $item->description = $request->description;
         $item->type = $request->type;
@@ -543,7 +543,7 @@ class GalleryController extends Controller
 
     public function trashGalleryItem(Request $request)
     {
-        $item = GalleryItem::find(deCodeId($request->item_id)[0]);
+        $item = GalleryItem::find(LFM_GetDecodeId($request->item_id));
         $item->delete();
 
         $res =
@@ -579,8 +579,8 @@ class GalleryController extends Controller
 
     public function saveOrderGalleryForm(Request $request)
     {
-        $item_id = deCodeId($request->item_id)[0];
-        $parrent_id =deCodeId($request->parrent_id)[0] ;
+        $item_id = LFM_GetDecodeId($request->item_id);
+        $parrent_id =LFM_GetDecodeId($request->parrent_id) ;
         $count = $this->reOrderGalleryForm($parrent_id);
         $gallery = Gallery::find($item_id);
         $order = $gallery->order;
@@ -628,8 +628,8 @@ class GalleryController extends Controller
 
     public function saveOrderGalleryItemForm(Request $request)
     {
-        $item_id = deCodeId($request->item_id)[0];
-        $gallery_id =deCodeId($request->gallery_id)[0] ;
+        $item_id = LFM_GetDecodeId($request->item_id);
+        $gallery_id =LFM_GetDecodeId($request->gallery_id) ;
         $count = $this->reOrderGalleryItemForm($gallery_id);
         $item = GalleryItem::find($item_id);
         $order = $item->order;
