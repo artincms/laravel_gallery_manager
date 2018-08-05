@@ -16,6 +16,6 @@ class SliderItem extends Model
 
     public function item()
     {
-        return $this->hasOne('ArtinCMS\LGS\Model\GalleryItem','id');
+        return $this->hasOne('ArtinCMS\LGS\Model\GalleryItem','id','item_id');
     }
 }

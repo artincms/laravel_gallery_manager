@@ -239,16 +239,29 @@ class SliderController extends Controller
     public function getSliderItem(Request $request)
     {
         $slider = SliderItem::with('user')->where('slider_id', deCodeId($request->item_id)[0]);
-
         return DataTables::eloquent($slider)
             ->editColumn('id', function ($data) {
                 return enCodeId($data->id);
             })
             ->addColumn('title', function ($data) {
-                return $data->item->title;
+                if (isset($data->item->title))
+                {
+                    return $data->item->title;
+                }
+                else
+                {
+                    return '';
+                }
             })
             ->addColumn('description', function ($data) {
-                return strip_tags($data->item->description);
+                if (isset($data->item->description))
+                {
+                    return strip_tags($data->item->description);
+                }
+                else
+                {
+                    return '';
+                }
             })
             ->make(true);
     }
@@ -274,11 +287,11 @@ class SliderController extends Controller
     {
         if ($request->selected_slider_items)
         {
-            foreach ($request->selected_slider_items as $selected_slider_items )
+            foreach ($request->selected_slider_items as $selected_slider_items)
             {
                 $item = new SliderItem;
-                $item->slider_id = deCodeId($request->slider_id_in_item)[0] ;
-                $item->item_id = deCodeId($selected_slider_items)[0] ;
+                $item->slider_id = deCodeId($request->slider_id_in_item)[0];
+                $item->item_id = deCodeId($selected_slider_items)[0];
                 if (Auth::user())
                 {
                     if (isset(Auth::user()->id))
@@ -304,7 +317,8 @@ class SliderController extends Controller
                     'message' => 'هیچ آیتمی انتخاب نشده است .'
                 ];
         }
-        return $res ;
+
+        return $res;
     }
 
     public function autoCompleteGallery(Request $request)
@@ -337,5 +351,25 @@ class SliderController extends Controller
                 ->json($res, 200)
                 ->withHeaders(['Content-Type' => 'text/plain', 'charset' => 'utf-8'])
         );
+    }
+
+    public function setSliderItemStatus(Request $request)
+    {
+        $slider = SliderItem::find(deCodeId($request->item_id)[0]);
+        if ($request->is_active == "true")
+        {
+            $slider->is_active = "1";
+            $res['message'] = ' تصویر فعال گردید';
+        }
+        else
+        {
+            $slider->is_active = "0";
+            $res['message'] = 'تصویر غیر فعال شد';
+        }
+        $slider->save();
+        $res['success'] = true;
+        $res['title'] = 'وضعیت تصویر تغییر پیدا کرد .';
+
+        return $res;
     }
 }

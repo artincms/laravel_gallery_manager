@@ -130,6 +130,12 @@
                                                 <span>افزودن تصویر</span>
                                             </a>
                                         </li>
+                                        <li class="nav-item hidden" id="edit_slider_item_tab">
+                                            <a class="nav-link" href="#edit_slider_item" data-toggle="tab">
+                                                <i class="far fa-plus-square"></i>
+                                                <span id="span_edit_slider_item_tab">ویرایش تصویر</span>
+                                            </a>
+                                        </li>
                                     </ul>
                                     <div class="tab-content">
                                         <div class="tab-pane active" id="manage_tab_slider_item"></div>
@@ -157,6 +163,7 @@
                                                 </div>
                                             </form>
                                         </div>
+                                        <div class="tab-pane" id="edit_slider_item"></div>
                                     </div>
                                 </div>
                         </div>

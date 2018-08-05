@@ -40,6 +40,7 @@ Route::group(['prefix' => config('laravel_gallery_system.backend_lgs_route_prefi
         Route::post('getAddSliderItem', ['as' => 'LGS.Slider.getAddSliderItem', 'uses' => 'SliderController@getAddSliderItem']);
         Route::post('addSliderItem', ['as' => 'LGS.Slider.addSliderItem', 'uses' => 'SliderController@createSliderItem']);
         Route::post('getViewGalleryItem', ['as' => 'LGS.Slider.getViewGalleryItem', 'uses' => 'SliderController@getViewGalleryItem']);
+        Route::post('setSliderItemStatus', ['as' => 'LGS.Slider.setSliderItemStatus', 'uses' => 'SliderController@setSliderItemStatus']);
 
         //-------------------------------------------autoComplete----------------------------------------------------------------------------------
         Route::post('autoCompleteGalleryParrent', ['as' => 'LGS.Slider.autoCompleteGallery', 'uses' => 'SliderController@autoCompleteGallery']);

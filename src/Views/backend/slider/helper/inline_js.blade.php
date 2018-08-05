@@ -73,7 +73,7 @@
             data: 'action', name: 'action', 'title': 'عملیات',
             mRender: function (data, type, full) {
                 return '' +
-                    '<div class="gallerty_menu float-right" onclick="set_fixed_dropdown_menu(this)">' +
+                    '<div class="gallerty_menu float-right" onclick="set_fixed_dropdown_menu(this)" data-toggle="dropdowns">' +
                     '<span>' +
                     '   <em class="fas fa-caret-down"></em>' +
                     '   <i class="fas fa-bars"></i> ' +
@@ -93,6 +93,13 @@
     ];
     $(document).ready(function () {
         datatable_load_fun();
+        $(window).click(function(e) {
+            if(!$(e.target).closest(".gallerty_menu ").length >0)
+            {
+                $('.dropdown_gallery').addClass('hidden');
+            }
+
+        });
     });
     window['create_slider_constraints']   = {
         title: {

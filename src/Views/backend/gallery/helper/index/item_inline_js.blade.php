@@ -523,5 +523,4 @@
         });
         return result;
     }
-
 </script>

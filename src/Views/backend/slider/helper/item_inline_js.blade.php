@@ -213,6 +213,78 @@
         $('#slider_id').val('');
     });
 
+    //-------------------------------------------------Edit items--------------------------------------
+    $(document).off("click", ".btn_edit_slider_item");
+    $(document).on("click", ".btn_edit_slider_item ", function () {
+        $('a[href="#manage_tab"]').click();
+        $('.manage_slider_item_tab').addClass('hidden');
+        $('#manage_tab_slider_item').html('');
+    });
+
+    //--------------------set status ----------------------------------------------------------------//
+    function change_is_active_slider_item (input) {
+        var checked = input.checked;
+        var item_id = input.id;
+        var parameters = {is_active: checked, item_id: item_id};
+        yesNoAlert('تغییر وضعیت تصویر', 'از تغییر وضعیت تصویر مطمئن هستید ؟', 'warning', 'بله، وضعیت تصویر را تغییر بده!', 'لغو', set_slider_item_is_active, parameters, remove_checked, parameters);
+    }
+
+    function set_slider_item_is_active(params) {
+        $.ajax({
+            type: 'POST',
+            dataType: 'json',
+            url: '{!!  route('LGS.Slider.setSliderItemStatus') !!}',
+            data: params,
+            success: function (result) {
+                if (result.success) {
+                    menotify('success', result.title, result.message);
+                }
+                else {
+
+                }
+            }
+        });
+    }
+
+    function remove_checked(params) {
+        var $this = $('#' + params.item_id);
+        if (params.is_active) {
+            $this.prop('checked', false);
+        }
+        else {
+            $this.prop('checked', true);
+        }
+    }
+
+    //---------------------------------------------------Edit slider-------------------------------------------------------------------------------------
+    $(document).off("click", ".btn_edit_slider_item");
+    $(document).on("click", ".btn_edit_slider_item", function () {
+        var item_id = $(this).data('item_id');
+        var title = $(this).data('title');
+        $('#span_edit_slider_item_tab').html('ویرایش : ' + title);
+        get_edit_slider_item_form(item_id);
+    });
+
+    function get_edit_slider_item_form(item_id) {
+        $('#edit_slider_item').children().remove();
+        $('#edit_slider_item').append(generate_loader_html('لطفا منتظر بمانید...'));
+        $.ajax({
+            type: "POST",
+            url: '{{ route('LGS.Slider.getEditSliderForm')}}',
+            dataType: "json",
+            data: {
+                item_id: item_id
+            },
+            success: function (result) {
+                $('#edit_slider_item .total_loader').remove();
+                if (result.success) {
+                    $('#edit_slider_item').append(result.slider_item_edit_view);
+                    $('.edit_slider_item_tab').removeClass('hidden');
+                    $('a[href="#edit_slider_item"]').click();
+                }
+            }
+        });
+    }
 
 
 </script>
