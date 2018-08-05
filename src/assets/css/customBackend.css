@@ -606,4 +606,7 @@ div#SysProcessGridData_filter {
 .gallerty_menu {
     position: relative;
 }
+.hidden{
+    display:none
+}
 
