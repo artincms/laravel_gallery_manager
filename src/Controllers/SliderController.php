@@ -372,4 +372,12 @@ class SliderController extends Controller
 
         return $res;
     }
+
+    public function getSliderItemFront(Request $request)
+    {
+        $slider_id = $request->slider_id ;
+        $sliders = Slider::find($slider_id);
+        $result =LGS_propearSlider($sliders,'original',100,400,400);
+        return $result ;
+    }
 }
