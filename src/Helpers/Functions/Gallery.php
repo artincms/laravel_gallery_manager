@@ -51,7 +51,7 @@ if (!function_exists('LGS_getImagesLink'))
         $src=[];
         $title=[];
         $items = $sliders->slider_items ;
-        $result['options'] = json_decode($sliders->style_options) ;
+        $options = json_decode($sliders->style_options) ;
         foreach ($items as $item)
         {
             $itemFind = \ArtinCMS\LGS\Model\GalleryItem::find($item->item_id);
@@ -61,6 +61,7 @@ if (!function_exists('LGS_getImagesLink'))
         }
         $result['captions']=$title;
         $result['url']=$src;
+        $result['options'] = $options ;
         return $result ;
     }
 }

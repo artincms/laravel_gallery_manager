@@ -35,11 +35,7 @@
                 },
                 fluxImages: [],
                 setImages :false ,
-                fluxTransitions: {
-                    transitionFade: Transitions.transitionFade,
-                    transitionTurn3d: Transitions.transitionTurn3d,
-                    transitionBlocks2d2: Transitions.transitionBlocks2d2
-                },
+                fluxTransitions: {},
                 fluxCaptions: [],
                 rendered: false
             }
@@ -48,25 +44,38 @@
             slider: function() {
                 return this.$refs.slider;
             },
+
+            currentTransition: function() {
+                if (!this.rendered)
+                    return undefined;
+
+                return this.$refs.slider.transition.current;
+            }
         },
         beforeMount() {
-            axios.post("/LGS/Slider/getSliderItemFront", {slider_id: this.slider_id}).then(response => {
-                this.$nextTick(() =>{
-                    this.fluxImages = response.data.url ;
-                    this.fluxCaptions = response.data.captions ;
-                    this.setImages =  true ;
-                });
-            });
+
         },
         mounted() {
             this.rendered = true;
+            this.getData();
         },
         methods: {
             getData : function () {
-                axios.post("/LGS/Slider/getSliderItemFront", {slider_id: this.slider_id}).then((response) => {
-                    this.fluxImages = JSON.parse(response.data.image_src) ;
+                axios.post("/LGS/Slider/getSliderItemFront", {slider_id: this.slider_id}).then(response => {
+                    this.$nextTick(() =>{
+                        this.fluxImages = response.data.url ;
+                        this.fluxCaptions = response.data.captions ;
+                        var trans =response.data.transiton ;
+                        console.log(response.data.transiton);
+                        this.fluxTransitions = {transition:Transitions.transitionFade};
+                        this.setImages =  true ;
+                    });
                 });
             },
+
+            setTransition(transition) {
+                return this.currentTransition === transition? 'active' : '';
+            }
         }
     }
 </script>

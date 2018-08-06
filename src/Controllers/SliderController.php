@@ -28,20 +28,20 @@ class SliderController extends Controller
         $this->transitions = [
             0 => [],
             1 => [
-                (object)['id' => 1, 'title' => 'Fade'],
-                (object)['id' => 2, 'title' => 'Swipe'],
-                (object)['id' => 3, 'title' => 'Slide 2D'],
-                (object)['id' => 4, 'title' => 'Bars 3D'],
-                (object)['id' => 5, 'title' => 'Zip'],
-                (object)['id' => 6, 'title' => 'Blinds 2D'],
-                (object)['id' => 7, 'title' => 'Blinds 3D'],
-                (object)['id' => 8, 'title' => 'Turn 3D'],
-                (object)['id' => 9, 'title' => 'Blocks 2D 2'],
-                (object)['id' => 9, 'title' => 'Blocks 2D 1'],
-                (object)['id' => 9, 'title' => 'Blocks 3D'],
-                (object)['id' => 9, 'title' => 'Concentric'],
-                (object)['id' => 9, 'title' => 'Warp'],
-                (object)['id' => 9, 'title' => 'Camera'],
+                (object)['id' => 0, 'title' => 'Fade','name'=> 'transitionFade'],
+                (object)['id' => 1, 'title' => 'Swipe','name'=> 'transitionSwipe'],
+                (object)['id' => 2, 'title' => 'Slide 2D','name'=> 'transitionSlide2d'],
+                (object)['id' => 3, 'title' => 'Bars 3D','name'=> 'transitionSlide3d'],
+                (object)['id' => 4, 'title' => 'Zip','name'=> 'transitionZip'],
+                (object)['id' => 5, 'title' => 'Blinds 2D','name'=> 'transitionBlinds2d'],
+                (object)['id' => 6, 'title' => 'Blinds 3D','name'=> 'transitionBlinds3d'],
+                (object)['id' => 7, 'title' => 'Turn 3D','name'=> 'transitionTurn3d'],
+                (object)['id' => 8, 'title' => 'Blocks 2D 2','name'=> 'transitionBlocks2d1'],
+                (object)['id' => 9, 'title' => 'Blocks 2D 1','name'=> 'transitionBlocks2d2'],
+                (object)['id' => 10, 'title' => 'Blocks 3D','name'=> 'transitionBlocks3d'],
+                (object)['id' => 11, 'title' => 'Concentric','name'=> 'transitionConcentric'],
+                (object)['id' => 12, 'title' => 'Warp','name'=> 'transitionWarp'],
+                (object)['id' => 13, 'title' => 'Camera','name'=> 'transitionCamera'],
             ]
         ];
     }
@@ -377,7 +377,11 @@ class SliderController extends Controller
     {
         $slider_id = $request->slider_id ;
         $sliders = Slider::find($slider_id);
+        $options = json_decode($sliders->style_options) ;
         $result =LGS_propearSlider($sliders,'original',100,400,400);
+        $name = $this->transitions[$sliders->style][$options->transition]->name;
+        $result['transiton'] =$name;
+        $result['transiton_id'] = $options->transition;
         return $result ;
     }
 }

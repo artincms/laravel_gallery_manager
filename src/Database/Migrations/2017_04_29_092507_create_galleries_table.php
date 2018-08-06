@@ -18,10 +18,10 @@ class CreateGalleriesTable extends Migration
             $table->string('title', 255);
             $table->string('description', 1000)->nullable()->default(null);
             $table->integer('default_img')->unsigned()->nullable()->default(null);
-            $table->text('options')->nullable()->default(null);
+            $table->text('default_img_options')->nullable()->default(null);
             $table->integer('parent_id')->unsigned()->default(0);
             $table->integer('order')->default(0);
-            $table->enum('status', array('0','1'))->default('0');
+            $table->enum('is_active', array('0','1'))->default('0');
             $table->integer('visit')->unsigned()->default(0);
             $table->integer('created_by')->unsigned()->default(0);
             $table->timestamps();

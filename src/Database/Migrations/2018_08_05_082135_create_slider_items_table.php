@@ -13,7 +13,7 @@ class CreateSliderItemsTable extends Migration
      */
     public function up()
     {
-        Schema::create('slider_items', function (Blueprint $table) {
+        Schema::create('lgs_slider_items', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('slider_id')->unsigned()->default(0);
             $table->integer('item_id')->unsigned()->default(0);
