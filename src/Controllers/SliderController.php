@@ -378,7 +378,7 @@ class SliderController extends Controller
         $slider_id = $request->slider_id ;
         $sliders = Slider::find($slider_id);
         $options = json_decode($sliders->style_options) ;
-        $result =LGS_propearSlider($sliders,'original',100,400,400);
+        $result =LGS_propearSlider($sliders,'original',100,$request->image_width,$request->image_height);
         $name = $this->transitions[$sliders->style][$options->transition]->name;
         $result['transiton'] =$name;
         $result['transiton_id'] = $options->transition;
