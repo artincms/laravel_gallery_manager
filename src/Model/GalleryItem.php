@@ -10,6 +10,8 @@ class GalleryItem extends Model
 {
     use lfmFillable ;
     use softDeletes;
+    protected $table = 'lgs_items';
+
     protected static function boot()
     {
         parent::boot();
@@ -22,7 +24,6 @@ class GalleryItem extends Model
             }
         });
     }
-    protected $table = 'lgs_items';
     public function gallery()
     {
         return $this->belongsTo('ArtinCMS\LGS\Model\Gallery');

@@ -11,11 +11,10 @@ class Gallery extends Model
     {
         parent::boot();
 
-        static::creating(function ($query)
-        {
+        static::creating(function ($query) {
             if ($query->order == null)
             {
-                $query->order = self::where('parent_id','=',$query->parent_id)->max('order')+1;
+                $query->order = self::where('parent_id', '=', $query->parent_id)->max('order') + 1;
             }
         });
     }
@@ -40,6 +39,16 @@ class Gallery extends Model
     public function items()
     {
         return $this->hasMany('ArtinCMS\LGS\Model\GalleryItem', 'gallery_id');
+    }
+
+    public function getEncodeIdAttribute()
+    {
+        return LFM_getEncodeId($this->id);
+    }
+
+    public function getDefaultImageLinkSmallAttribute()
+    {
+        return LFM_GenerateDownloadLink('ID', $this->default_img, 'small');
     }
 
 }

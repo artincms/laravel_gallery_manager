@@ -23,7 +23,7 @@
     // import swipe_func from '../../../../../public/vendor/laravel_gallery_system/js/init_functions/init_touch_swipe.js';
 
     export default {
-        name: 'laravel_gallery_system',
+        name: 'laravel_slider_system',
         props:['slider_id','image_width','image_height'],
         components: {
             VueFlux

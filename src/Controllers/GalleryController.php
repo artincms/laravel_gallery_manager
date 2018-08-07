@@ -16,25 +16,27 @@ class GalleryController extends Controller
 {
     private function reOrderGalleryForm($parrent_id)
     {
-        $all_Gallery= Gallery::where('parent_id' , $parrent_id)->orderBy('order','asc')->get();
+        $all_Gallery = Gallery::where('parent_id', $parrent_id)->orderBy('order', 'asc')->get();
         $i = 1;
         foreach ($all_Gallery as $item)
         {
             $item->order = $i++;
             $item->save();
         }
+
         return $i;
     }
 
     private function reOrderGalleryItemForm($gallery_id)
     {
-        $all_Gallery= GalleryItem::where('gallery_id' , $gallery_id)->orderBy('order','asc')->get();
+        $all_Gallery = GalleryItem::where('gallery_id', $gallery_id)->orderBy('order', 'asc')->get();
         $i = 1;
         foreach ($all_Gallery as $item)
         {
             $item->order = $i++;
             $item->save();
         }
+
         return $i;
     }
 
@@ -67,6 +69,7 @@ class GalleryController extends Controller
         {
             $gallery->where('is_active', '0');
         }
+
         return DataTables::eloquent($gallery)
             ->editColumn('id', function ($data) {
                 return LFM_getEncodeId($data->id);
@@ -139,7 +142,7 @@ class GalleryController extends Controller
         $res =
             [
                 'status'            => "1",
-                'success'            => true,
+                'success'           => true,
                 'status_type'       => "success",
                 'gallery_edit_view' => $gallery_form
             ];
@@ -249,6 +252,7 @@ class GalleryController extends Controller
         {
             $item->where('is_active', '0');
         }
+
         return DataTables::eloquent($item)
             ->editColumn('id', function ($data) {
                 return LFM_getEncodeId($data->id);
@@ -580,7 +584,7 @@ class GalleryController extends Controller
     public function saveOrderGalleryForm(Request $request)
     {
         $item_id = LFM_GetDecodeId($request->item_id);
-        $parrent_id =LFM_GetDecodeId($request->parrent_id) ;
+        $parrent_id = LFM_GetDecodeId($request->parrent_id);
         $count = $this->reOrderGalleryForm($parrent_id);
         $gallery = Gallery::find($item_id);
         $order = $gallery->order;
@@ -619,17 +623,19 @@ class GalleryController extends Controller
         {
             $result['error'][] = "متاسفانه با مشکل مواجه شد!";
             $result['success'] = false;
+
             return response()->json($result, 200)->withHeaders(['Content-Type' => 'json', 'charset' => 'utf-8']);
         }
         $result['message'][] = "با موفقیت انجام شد.";
         $result['success'] = true;
+
         return response()->json($result, 200)->withHeaders(['Content-Type' => 'json', 'charset' => 'utf-8']);
     }
 
     public function saveOrderGalleryItemForm(Request $request)
     {
         $item_id = LFM_GetDecodeId($request->item_id);
-        $gallery_id =LFM_GetDecodeId($request->gallery_id) ;
+        $gallery_id = LFM_GetDecodeId($request->gallery_id);
         $count = $this->reOrderGalleryItemForm($gallery_id);
         $item = GalleryItem::find($item_id);
         $order = $item->order;
@@ -668,13 +674,53 @@ class GalleryController extends Controller
         {
             $result['error'][] = "متاسفانه با مشکل مواجه شد!";
             $result['success'] = false;
+
             return response()->json($result, 200)->withHeaders(['Content-Type' => 'json', 'charset' => 'utf-8']);
         }
         $result['message'][] = "با موفقیت انجام شد.";
         $result['success'] = true;
+
         return response()->json($result, 200)->withHeaders(['Content-Type' => 'json', 'charset' => 'utf-8']);
     }
 
+    //--------------------------------------------------front controllers-------------------------------------
+    public function getGalleryItemFront(Request $request)
+    {
+        $gallery_id = $request->gallery_id;
+        $result['galleries'] = Gallery::where('parent_id', $gallery_id)->get();
+        foreach ($result['galleries'] as $gallery)
+        {
+            $gallery->encode_id = LFM_getEncodeId($gallery->id);
+        }
+        $images = GalleryItem::where('gallery_id', $gallery_id)->get();
+        foreach ($images as $item)
+        {
+            $item->encode_id = LFM_getEncodeId($item->id);
+            if ($item->file_id && $item->type == 0)
+            {
+                $item->encode_file_id = LFM_getEncodeId($item->file_id);
+            }
+            else
+            {
+                if ($item->type == 1 || $item->type == 2)
+                {
+                    $encode_file_id = [] ;
+                    foreach ( $item->files as $file)
+                    {
+                        $encode_file_id[] = LFM_getEncodeId($file->id) ;
+                    }
+                    $item->encode_file_id = $encode_file_id ;
+                }
+                else
+                {
+                    $item->source_file = [] ;
+                }
+            }
+            $result['images'] = $images;
+        }
+
+        return $result;
+    }
 
 
 }
