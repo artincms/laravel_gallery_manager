@@ -19,8 +19,8 @@
 <script>
     import VueFlux from './components/VueFlux.vue';
     import Transitions from './components/transitions/index.js';
-    import swipe from '../../../../../public/vendor/laravel_gallery_system/packages/jquery_touch_swipe/jquery.touchSwipe.min.js';
-    import swipe_func from '../../../../../public/vendor/laravel_gallery_system/js/init_functions/init_touch_swipe.js';
+    // import swipe from '../../../../../public/vendor/laravel_gallery_system/packages/jquery_touch_swipe/jquery.touchSwipe.min.js';
+    // import swipe_func from '../../../../../public/vendor/laravel_gallery_system/js/init_functions/init_touch_swipe.js';
 
     export default {
         name: 'laravel_gallery_system',
@@ -146,7 +146,7 @@
 </script>
 
 <style lang="scss" scoped>
-    @import  '../../../../../public/vendor/laravel_gallery_system/css/vue_flux.css';
+    @import  '../../../../../../public/vendor/laravel_gallery_system/css/vue_flux.css';
     h1.ui.header {
         margin-top: 18px;
     }
