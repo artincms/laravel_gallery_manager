@@ -23,6 +23,8 @@ class CreateGalleriesTable extends Migration
             $table->integer('order')->default(0);
             $table->enum('is_active', array('0','1'))->default('0');
             $table->integer('visit')->unsigned()->default(0);
+            $table->integer('like')->unsigned()->default(0);
+            $table->integer('dis_like')->unsigned()->default(0);
             $table->integer('created_by')->unsigned()->default(0);
             $table->timestamps();
             $table->softDeletes();

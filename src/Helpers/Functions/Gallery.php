@@ -50,14 +50,16 @@ if (!function_exists('LGS_getImagesLink'))
     {
         $src=[];
         $title=[];
-        $items = $sliders->slider_items ;
         $options = json_decode($sliders->style_options) ;
-        foreach ($items as $item)
+        foreach ( $sliders->slider_items as $item)
         {
             $itemFind = \ArtinCMS\LGS\Model\GalleryItem::find($item->item_id);
-            $link=LFM_GenerateDownloadLink('ID',$itemFind->file_id,$type,'404.png',$quality,$width,$height);
-            array_push($src,$link);
-            array_push($title,$itemFind->title);
+            if($itemFind)
+            {
+                $link=LFM_GenerateDownloadLink('ID',$itemFind->file_id,$type,'404.png',$quality,$width,$height);
+                array_push($src,$link);
+                array_push($title,$itemFind->title);
+            }
         }
         $result['captions']=$title;
         $result['url']=$src;

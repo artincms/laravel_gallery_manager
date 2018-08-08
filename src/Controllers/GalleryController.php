@@ -687,36 +687,98 @@ class GalleryController extends Controller
     public function getGalleryItemFront(Request $request)
     {
         $gallery_id = $request->gallery_id;
-        $result['galleries'] = Gallery::where('parent_id', $gallery_id)->get();
-        foreach ($result['galleries'] as $gallery)
+        $galleries = Gallery::where('parent_id', $gallery_id)->get();
+        foreach ($galleries as $gallery)
         {
             $gallery->encode_id = LFM_getEncodeId($gallery->id);
+            $gallery->encode_file_id = LFM_getEncodeId($gallery->default_img);
         }
-        $images = GalleryItem::where('gallery_id', $gallery_id)->get();
-        foreach ($images as $item)
+        if ($gallery_id != 0)
         {
-            $item->encode_id = LFM_getEncodeId($item->id);
-            if ($item->file_id && $item->type == 0)
+            $myGallery = Gallery::find($gallery_id);
+            $myGallery->visit = $myGallery->visit + 1;
+            $myGallery->save();
+            $myGallery->encode_img_id = LFM_getEncodeId($myGallery->default_img);
+            $myGallery->encode_id = LFM_getEncodeId($myGallery->id);
+            $myGallery->string_description = strip_tags($myGallery->description);
+            $result['gallery'] = $myGallery;
+            $images = GalleryItem::where('gallery_id', $gallery_id)->get();
+            foreach ($images as $item)
             {
-                $item->encode_file_id = LFM_getEncodeId($item->file_id);
-            }
-            else
-            {
-                if ($item->type == 1 || $item->type == 2)
+                $item->encode_id = LFM_getEncodeId($item->id);
+                if ($item->file_id && $item->type == 0)
                 {
-                    $encode_file_id = [] ;
-                    foreach ( $item->files as $file)
-                    {
-                        $encode_file_id[] = LFM_getEncodeId($file->id) ;
-                    }
-                    $item->encode_file_id = $encode_file_id ;
+                    $item->encode_file_id = LFM_getEncodeId($item->file_id);
                 }
                 else
                 {
-                    $item->source_file = [] ;
+                    if ($item->type == 1 || $item->type == 2)
+                    {
+                        $encode_file_id = [];
+                        foreach ($item->files as $file)
+                        {
+                            $encode_file_id[] = LFM_getEncodeId($file->id);
+                        }
+                        $item->encode_file_id = $encode_file_id;
+                    }
+                    else
+                    {
+                        $item->source_file = [];
+                    }
                 }
+                $result['images'] = $images;
             }
-            $result['images'] = $images;
+        }
+        else
+        {
+            $result['images']=[];
+        }
+
+
+
+        $result['galleries'] = $galleries;
+        return $result;
+    }
+
+    public function chnageLike(Request $request)
+    {
+        $id = LFM_GetDecodeId($request->encode_id);
+        if ($request->type == 'gallery')
+        {
+            $gallery = Gallery::find($id);
+            if ($request->action == 'increament')
+            {
+                $gallery->like++;
+            }
+            else
+            {
+                $gallery->dis_like++;
+            }
+            $gallery->save();
+            $result = [
+                'success'  => true,
+                'like'     => $gallery->like,
+                'dis_like' => $gallery->dis_like
+            ];
+        }
+        else
+        {
+            $item = GalleryItem::find($id);
+            if ($request->action == 'increament')
+            {
+                $item->like++;
+            }
+            else
+            {
+                $item->dis_like++;
+            }
+            $item->like++;
+            $item->save();
+            $result = [
+                'success'  => true,
+                'like'     => $item->like,
+                'dis_like' => $item->dis_like
+            ];
         }
 
         return $result;
