@@ -698,7 +698,7 @@ class GalleryController extends Controller
             $myGallery = Gallery::find($gallery_id);
             $myGallery->visit = $myGallery->visit + 1;
             $myGallery->save();
-            $myGallery->encode_img_id = LFM_getEncodeId($myGallery->default_img);
+            $myGallery->encode_file_id = LFM_getEncodeId($myGallery->default_img);
             $myGallery->encode_id = LFM_getEncodeId($myGallery->id);
             $myGallery->string_description = strip_tags($myGallery->description);
             $result['gallery'] = $myGallery;
@@ -726,12 +726,14 @@ class GalleryController extends Controller
                         $item->source_file = [];
                     }
                 }
-                $result['images'] = $images;
             }
+            $result['images'] = $images;
+            $result['showHeader'] = true;
         }
         else
         {
             $result['images']=[];
+            $result['showHeader'] = false;
         }
 
 

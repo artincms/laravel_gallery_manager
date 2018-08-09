@@ -1,8 +1,9 @@
 <template>
-    <div class="galllery_image_div">
-        <div class="stack text-center">
+    <div class="galllery_image_div"  :style="{margin:margin_el+ 'px'}">
+        <div class="stack_image text-center">
             <div v-if="item.type==0" class="showImage height_225">
-                <img class="img_galleyr showFullScreen" :src="'/LFM/DownloadFile/ID/'+item.encode_file_id+'/small/404.png/100/272/208'" :data-caption="item.description" :data-title="item.title" :id="'fullImage'+ item.encode_id" :data-image="'/LFM/DownloadFile/ID/'+item.encode_file_id+'/small/404.png/100/272/208'">
+                <img class="img_galleyr showFullScreen pointer"  :src="'/LFM/DownloadFile/ID/'+item.encode_file_id+'/small/404.png/100/272/208'"
+                     :data-caption="item.description" :data-title="item.title" :id="'fullImageitem'+ item.encode_id" :data-image="link">
             </div>
             <div v-if="item.type==2" class="height_225 back_gray">
                 <video controls  width="100%" height="205" >
@@ -34,9 +35,14 @@
     import operation from './operation'
     export default {
         name: "image-style",
-        props:['item'],
+        props:['item','margin_el'],
         components:{
             operation
+        },
+        computed: {
+            link: function () {
+                return '/LFM/DownloadFile/ID/' + this.item.encode_file_id
+            },
         },
         methods:{
             changeImage:function () {

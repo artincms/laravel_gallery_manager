@@ -1,5 +1,5 @@
 <template>
-    <div class="main_gallery_div">
+    <div class="main_gallery_div" :style="{margin:margin_el+ 'px'}">
         <div class="stack text-center">
             <div @click="changeGallery(parent_id)" class="height_225">
                 <span class="level_up pointer"><i class="fas fa-level-up-alt thumbnail_back"></i></span>
@@ -19,7 +19,7 @@
 <script>
     export default {
         name: "gallery_back",
-        props:['parent_id','gallery_id'],
+        props:['parent_id','gallery_id','margin_el'],
         methods:{
             changeGallery :function (parent_id) {
                 console.log(this.parent_id,this.gallrery_id);

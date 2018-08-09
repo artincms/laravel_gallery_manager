@@ -1,11 +1,11 @@
 <template>
     <div class="text-center row">
-        <div class="col-lg-6 float-left text-left">
-            <i class="fas fa-search-plus color_light_orange pointer showFullScreen" :data-caption="item.description" :data-title="item.title" :id="'fullImage'+ item.encode_id" :data-image="link"></i>
-            <i class="fas fa-download color_blue_martina"></i>
+        <div class="col-lg-6 col-sm-6 float-left text-left">
+            <i v-if="type =='gallery' || item.type == 0" class="fas fa-search-plus color_light_orange pointer showFullScreen" :data-caption="item.description" :data-title="item.title" :id="'fullImage'+ item.encode_id" :data-image="link"></i>
+            <a class="fas fa-download color_blue_martina" :href="link" target="_blank"></a>
             <i class="far fa-eye color_blue"></i><span class="ml-1">{{item.visit}}</span>
         </div>
-        <div class="col-lg-6 float-left text-right">
+        <div class="col-lg-6 col-sm-6 float-left text-right">
             <i class="far fa-thumbs-up color_green like pointer" @click="changeLike(item.encode_id,type,'increament')"></i><span class="ml-2">{{like}}</span>
             <i class="far fa-thumbs-down color_red dis_like pointer"  @click="changeLike(item.encode_id,type,'decreament')"></i><span class="ml-2">{{dis_like}}</span>
         </div>
@@ -45,7 +45,14 @@
                     }
                 },
                 link:function () {
-                   return '/LFM/DownloadFile/ID/'+this.item.encode_file_id
+                    if(this.item.type ==0)
+                    {
+                        return '/LFM/DownloadFile/ID/'+this.item.encode_file_id ;
+                    }
+                    else
+                    {
+                        return '/LFM/DownloadFile/ID/'+this.item.encode_file_id[0] ;
+                    }
                 }
         },
         methods:{
@@ -60,6 +67,9 @@
             },
             showFullScreen:function (element) {
                 console.log(element);
+            },
+            downloadFile:function () {
+
             }
         }
     }

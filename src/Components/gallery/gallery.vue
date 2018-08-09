@@ -1,5 +1,5 @@
 <template>
-    <div class="main_gallery_div">
+    <div class="main_gallery_div" :style="{margin:margin_el+ 'px'}">
         <div class="stack text-center">
             <div @click="changeGallery(item.id)" class="showImage height_225">
                 <img class="img_galleyr pointer" :src="'/LFM/DownloadFile/ID/'+item.encode_file_id+'/small/404.png/100/272/208'">
@@ -22,9 +22,14 @@
     import operation from './operation'
     export default {
         name: "gallery-style",
-        props:['item'],
+        props:['item','margin_el'],
         components:{
             operation
+        },
+        data: function () {
+            return {
+
+            }
         },
         methods:{
             changeGallery :function (gallery_id) {
