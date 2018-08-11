@@ -142,8 +142,11 @@
             title: 'عملیات',
             mRender: function (data, type, full) {
                 return '' +
-                        '<div class="gallerty_menu float-right" onclick="set_fixed_dropdown_menu(this)">' +
-                        '  <div class="fas fa-list-ul"></div>' +
+                        '<div class="gallerty_menu float-right" onclick="set_fixed_dropdown_menu(this)" data-toggle="dropdowns">' +
+                        '<span>' +
+                        '   <em class="fas fa-caret-down"></em>' +
+                        '   <i class="fas fa-bars"></i> ' +
+                        '</span>' +
                         '  <div class="dropdown_gallery hidden">' +
                         '   <a class="btn_edit_gallery_item pointer gallery_menu-item" data-item_id="' + full.id + '" data-title="' + full.title + '">' +
                         '       <i class="fa fa-edit"></i><span class="ml-2">ویرایش</span>' +
@@ -350,7 +353,7 @@
                     $('.edit_gallery_item_tab').removeClass('hidden');
                     $('a[href="#edit_gallery_item"]').click();
 
-                    var edit_gallery_item_form_id = document.querySelector("#frm_create_gallery_item");
+                    var edit_gallery_item_form_id = document.querySelector("#frm_edit_gallery_item");
                     init_validatejs(edit_gallery_item_form_id, create_gallery_item_constraints, ajax_func_edit_gallery_item);
                 }
                 else {

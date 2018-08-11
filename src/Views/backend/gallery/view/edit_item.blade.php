@@ -1,5 +1,5 @@
 <div class="space-20"></div>
-<form id="frm_create_gallery_item" class="form-horizontal" name="frm_create_gallery">
+<form id="frm_edit_gallery_item" class="form-horizontal" name="frm_edit_gallery_item">
     <input type="hidden" value="{{$item->gallery_encode_id}}" name="gallery_id">
     <input type="hidden" value="{{$item->encode_id}}" name="item_id">
     <div class="form-group row fg_title">
