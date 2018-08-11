@@ -22,7 +22,7 @@ class CreateGalleryItemsTable extends Migration
             $table->integer('visit')->unsigned()->default(0);
             $table->enum('is_active',['0','1'])->default('0');
             $table->enum('type', ['0','1','2'])->default('0')->comment('0 is picture 1 is Audio and 2 is video');
-            $table->text()->nullable()->default(null);
+            $table->text('options')->nullable()->default(null);
             $table->integer('order')->default(0);
             $table->integer('created_by')->unsigned()->default(0);
             $table->timestamps();
