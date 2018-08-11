@@ -235,6 +235,7 @@
                     GalleryManagerGridData.ajax.reload(null, false);
                     $('a[href="#manage_tab"]').click();
                     $('#show_area_medium_default_img').html('');
+                    defaultImg_available = 1;
                     /* if (typeof data.section+'_available' === 'undefined')
                      {
 

@@ -46,7 +46,6 @@ class GalleryController extends Controller
         $default_img = LFM_CreateModalFileManager('defaultImg', $option_default_img, 'insert', 'showDefaultImg', false, false, false, 'انتخاب فایل تصویر', 'btn-block', 'fa fa-folder-open font_button mr-2');
         $parrents = Gallery::with('parent')->get();
 
-        //dd($parrents);
         return view('laravel_gallery_system::backend.gallery.index', compact('default_img', 'parrents'));
     }
 
@@ -732,13 +731,13 @@ class GalleryController extends Controller
         }
         else
         {
-            $result['images']=[];
+            $result['images'] = [];
             $result['showHeader'] = false;
         }
 
 
-
         $result['galleries'] = $galleries;
+
         return $result;
     }
 
