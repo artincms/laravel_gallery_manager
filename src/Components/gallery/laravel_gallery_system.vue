@@ -5,7 +5,7 @@
             <div class="header_gallery_image">
                 <img class="img_header" :src="'/LFM/DownloadFile/ID/'+mygallery.encode_file_id+'/small/404.png/00/410/225'">
                 <div class="header_gallery_opeartioin">
-                    <operation :item="mygallery" type="gallery"  :like="mygallery.like" :dis_like="mygallery.dis_like"></operation>
+                    <!--<operation :item="mygallery" type="gallery"  :like="mygallery.like" :dis_like="mygallery.dis_like"></operation>-->
                 </div>
             </div>
             <div class="gallery_content">
@@ -29,7 +29,7 @@
     import galleryStyle from './gallery'
     import back from './back'
     import imageStyle from './image'
-    import axios from 'axios'
+    import axios from '../../../../../../public/vendor/laravel_gallery_system/packages/axios/index.js'
     import operation from './operation'
     import generateLoader from './generate_loader'
     import custom from '../../../../../../public/vendor/laravel_gallery_system/js/custome_front.js';

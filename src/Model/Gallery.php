@@ -4,9 +4,11 @@ namespace ArtinCMS\LGS\Model;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use App\Traits\LaraveLikeablesSystem ;
 
 class Gallery extends Model
 {
+    use LaraveLikeablesSystem ;
     protected static function boot()
     {
         parent::boot();

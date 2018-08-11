@@ -1,24 +1,25 @@
 <template>
     <div class="text-center row">
-        <div class="col-lg-6 col-sm-6 float-left text-left">
+        <div class="width_50 float-left text-left">
             <i v-if="type =='gallery' || item.type == 0" class="fas fa-search-plus color_light_orange pointer showFullScreen" :data-caption="item.description" :data-title="item.title" :id="'fullImage'+ item.encode_id" :data-image="link"></i>
             <a class="fas fa-download color_blue_martina" :href="link" target="_blank"></a>
             <i class="far fa-eye color_blue"></i><span class="ml-1">{{item.visit}}</span>
         </div>
-        <div class="col-lg-6 col-sm-6 float-left text-right">
-            <i class="far fa-thumbs-up color_green like pointer" @click="changeLike(item.encode_id,type,'increament')"></i><span class="ml-2">{{like}}</span>
-            <i class="far fa-thumbs-down color_red dis_like pointer"  @click="changeLike(item.encode_id,type,'decreament')"></i><span class="ml-2">{{dis_like}}</span>
+        <div class="width_50 float-left text-right">
+          <likeable :model="'ArtinCMS\\LGS\\Model\\Gallery'" :item ="item" type="like"></likeable>
+          <likeable :model="'ArtinCMS\\LGS\\Model\\Gallery'" :item ="item" type="disLike"></likeable>
         </div>
     </div>
 </template>
 
 <script>
-    import axios from 'axios'
+    import axios from '../../../../../../public/vendor/laravel_gallery_system/packages/axios/index.js'
+    import likeable from '../../laravel_likeable_system/laravel_likeable_system.vue'
     export default {
         name: "operation",
-        props: ['item','type','like','dis_like'],
+        props: ['item','type'],
         components :{
-
+            likeable
         },
         data: function () {
             return {
@@ -45,14 +46,23 @@
                     }
                 },
                 link:function () {
-                    if(this.item.type ==0)
+                    if (this.type =='image')
                     {
-                        return '/LFM/DownloadFile/ID/'+this.item.encode_file_id ;
+                        if(this.item.type ==0)
+                        {
+                            return '/LFM/DownloadFile/ID/'+this.item.encode_file_id ;
+                        }
+                        else
+                        {
+                            return '/LFM/DownloadFile/ID/'+this.item.encode_file_id[0] ;
+                        }
                     }
                     else
                     {
-                        return '/LFM/DownloadFile/ID/'+this.item.encode_file_id[0] ;
+                        return '/LFM/DownloadFile/ID/'+this.item.encode_file_id ;
                     }
+
+
                 }
         },
         methods:{

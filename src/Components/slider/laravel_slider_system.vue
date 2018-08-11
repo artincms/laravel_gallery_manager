@@ -11,12 +11,13 @@
                     </template>-->
                 </vue-flux>
             </div>
-            </div>
         </div>
+    </div>
     </div>
 </template>
 
 <script>
+    import axios from '../../../../../../public/vendor/laravel_gallery_system/packages/axios/index.js'
     import VueFlux from './components/VueFlux.vue';
     import Transitions from './components/transitions/index.js';
     // import swipe from '../../../../../public/vendor/laravel_gallery_system/packages/jquery_touch_swipe/jquery.touchSwipe.min.js';

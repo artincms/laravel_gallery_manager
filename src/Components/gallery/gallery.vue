@@ -7,7 +7,7 @@
             </div>
             <div class="showContent">
                 <div class="showOperateion">
-                    <operation :item="item" :like="item.like" :dis_like="item.dis_like" type="gallery"></operation>
+                    <operation :item="item" type="gallery"></operation>
                 </div>
                 <div class="showTitle">
                     <a class="pointer" @click="changeGallery(item.id)"><h5 class="title_item_h">{{item.title}}</h5></a>

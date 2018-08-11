@@ -686,7 +686,7 @@ class GalleryController extends Controller
     public function getGalleryItemFront(Request $request)
     {
         $gallery_id = $request->gallery_id;
-        $galleries = Gallery::where('parent_id', $gallery_id)->get();
+        $galleries = Gallery::with('likes', 'disLikes')->where('parent_id', $gallery_id)->get();
         foreach ($galleries as $gallery)
         {
             $gallery->encode_id = LFM_getEncodeId($gallery->id);
@@ -694,7 +694,7 @@ class GalleryController extends Controller
         }
         if ($gallery_id != 0)
         {
-            $myGallery = Gallery::find($gallery_id);
+            $myGallery = Gallery::with('likes', 'disLikes')->find($gallery_id);
             $myGallery->visit = $myGallery->visit + 1;
             $myGallery->save();
             $myGallery->encode_file_id = LFM_getEncodeId($myGallery->default_img);
@@ -734,56 +734,8 @@ class GalleryController extends Controller
             $result['images'] = [];
             $result['showHeader'] = false;
         }
-
-
         $result['galleries'] = $galleries;
 
         return $result;
     }
-
-    public function chnageLike(Request $request)
-    {
-        $id = LFM_GetDecodeId($request->encode_id);
-        if ($request->type == 'gallery')
-        {
-            $gallery = Gallery::find($id);
-            if ($request->action == 'increament')
-            {
-                $gallery->like++;
-            }
-            else
-            {
-                $gallery->dis_like++;
-            }
-            $gallery->save();
-            $result = [
-                'success'  => true,
-                'like'     => $gallery->like,
-                'dis_like' => $gallery->dis_like
-            ];
-        }
-        else
-        {
-            $item = GalleryItem::find($id);
-            if ($request->action == 'increament')
-            {
-                $item->like++;
-            }
-            else
-            {
-                $item->dis_like++;
-            }
-            $item->like++;
-            $item->save();
-            $result = [
-                'success'  => true,
-                'like'     => $item->like,
-                'dis_like' => $item->dis_like
-            ];
-        }
-
-        return $result;
-    }
-
-
 }
