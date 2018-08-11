@@ -93,7 +93,6 @@
     ];
     $(document).ready(function () {
         datatable_load_fun();
-       });
     });
     window['create_slider_constraints']   = {
         title: {
