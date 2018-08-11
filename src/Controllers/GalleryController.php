@@ -198,7 +198,7 @@ class GalleryController extends Controller
 
     public function trashGallery(Request $request)
     {
-        $gallery = Gallery::find(LFM_GetDecodeId($request->item_id))->first();
+        $gallery = Gallery::find(LFM_GetDecodeId($request->item_id));
         $gallery->delete();
 
         $res =

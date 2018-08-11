@@ -93,13 +93,7 @@
     ];
     $(document).ready(function () {
         datatable_load_fun();
-        $(window).click(function(e) {
-            if(!$(e.target).closest(".gallerty_menu ").length >0)
-            {
-                $('.dropdown_gallery').addClass('hidden');
-            }
-
-        });
+       });
     });
     window['create_slider_constraints']   = {
         title: {
