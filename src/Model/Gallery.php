@@ -5,10 +5,12 @@ namespace ArtinCMS\LGS\Model;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use App\Traits\LaraveLikeablesSystem ;
+use App\Traits\LaravelVisitablesSystem ;
 
 class Gallery extends Model
 {
     use LaraveLikeablesSystem ;
+    use LaravelVisitablesSystem ;
     protected static function boot()
     {
         parent::boot();

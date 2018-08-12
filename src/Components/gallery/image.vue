@@ -17,10 +17,10 @@
             </div>
             <div class="showContent">
                 <div class="showOperateion">
-                    <operation :item="item"  :like="item.like" :dis_like="item.dis_like" type="image"></operation>
+                    <operation :item="item" type="image" :model="'ArtinCMS\\LGS\\Model\\GalleryItem'"></operation>
                 </div>
                 <div class="showTitle">
-                    <a class="pointer" @click="changeImage(item.id)"><h5 class="title_item_h">{{item.title}}</h5></a>
+                    <a class="pointer" @click="showItem"><h5 class="title_item_h">{{item.title}}</h5></a>
                 </div>
             </div>
             <div class="showTags"><i class="fas fa-tags">
@@ -45,8 +45,9 @@
             },
         },
         methods:{
-            changeImage:function () {
-
+            showItem:function () {
+                this.$parent.show_item_temp=true ;
+                this.$parent.item=this.item ;
             }
         }
     }

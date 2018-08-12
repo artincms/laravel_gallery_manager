@@ -3,11 +3,11 @@
         <div class="width_50 float-left text-left">
             <i v-if="type =='gallery' || item.type == 0" class="fas fa-search-plus color_light_orange pointer showFullScreen" :data-caption="item.description" :data-title="item.title" :id="'fullImage'+ item.encode_id" :data-image="link"></i>
             <a class="fas fa-download color_blue_martina" :href="link" target="_blank"></a>
-            <i class="far fa-eye color_blue"></i><span class="ml-1">{{item.visit}}</span>
+            <visitable ref="visit" :model="model" :item ="item"></visitable>
         </div>
         <div class="width_50 float-left text-right">
-          <likeable :model="'ArtinCMS\\LGS\\Model\\Gallery'" :item ="item" type="like"></likeable>
-          <likeable :model="'ArtinCMS\\LGS\\Model\\Gallery'" :item ="item" type="disLike"></likeable>
+          <likeable :model="model" :item ="item" type="like"></likeable>
+          <likeable :model="model" :item ="item" type="disLike"></likeable>
         </div>
     </div>
 </template>
@@ -15,11 +15,12 @@
 <script>
     import axios from '../../../../../../public/vendor/laravel_gallery_system/packages/axios/index.js'
     import likeable from '../../laravel_likeable_system/laravel_likeable_system.vue'
+    import visitable from '../../laravel_visitable/laravel_visitable_system.vue'
     export default {
         name: "operation",
-        props: ['item','type'],
+        props: ['item','type','model'],
         components :{
-            likeable
+            likeable,visitable
         },
         data: function () {
             return {

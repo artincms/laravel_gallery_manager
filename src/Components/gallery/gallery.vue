@@ -7,7 +7,7 @@
             </div>
             <div class="showContent">
                 <div class="showOperateion">
-                    <operation :item="item" type="gallery"></operation>
+                    <operation :item="item" type="gallery" :model="'ArtinCMS\\LGS\\Model\\Gallery'"></operation>
                 </div>
                 <div class="showTitle">
                     <a class="pointer" @click="changeGallery(item.id)"><h5 class="title_item_h">{{item.title}}</h5></a>

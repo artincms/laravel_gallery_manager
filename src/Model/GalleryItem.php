@@ -5,11 +5,16 @@ namespace ArtinCMS\LGS\Model;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use ArtinCMS\LFM\Traits\lfmFillable ;
+use App\Traits\LaraveLikeablesSystem ;
+use App\Traits\LaravelVisitablesSystem ;
 
 class GalleryItem extends Model
 {
     use lfmFillable ;
     use softDeletes;
+    use LaraveLikeablesSystem ;
+    use LaravelVisitablesSystem ;
+
     protected $table = 'lgs_items';
 
     protected static function boot()
@@ -32,6 +37,10 @@ class GalleryItem extends Model
     public function getEncodeIdAttribute()
     {
         return enCodeId($this->id);
+    }
+    public function comments()
+    {
+        return $this->morphMany('ArtinCMS\LCS\Models\Comment', 'commentable','target_type','target_id');
     }
 
 }

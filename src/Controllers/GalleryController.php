@@ -686,7 +686,7 @@ class GalleryController extends Controller
     public function getGalleryItemFront(Request $request)
     {
         $gallery_id = $request->gallery_id;
-        $galleries = Gallery::with('likes', 'disLikes')->where('parent_id', $gallery_id)->get();
+        $galleries = Gallery::with('likes', 'disLikes','visits')->where('parent_id', $gallery_id)->get();
         foreach ($galleries as $gallery)
         {
             $gallery->encode_id = LFM_getEncodeId($gallery->id);
@@ -694,14 +694,13 @@ class GalleryController extends Controller
         }
         if ($gallery_id != 0)
         {
-            $myGallery = Gallery::with('likes', 'disLikes')->find($gallery_id);
-            $myGallery->visit = $myGallery->visit + 1;
+            $myGallery = Gallery::with('likes', 'disLikes','visits')->find($gallery_id);
             $myGallery->save();
             $myGallery->encode_file_id = LFM_getEncodeId($myGallery->default_img);
             $myGallery->encode_id = LFM_getEncodeId($myGallery->id);
             $myGallery->string_description = strip_tags($myGallery->description);
             $result['gallery'] = $myGallery;
-            $images = GalleryItem::where('gallery_id', $gallery_id)->get();
+            $images = GalleryItem::with('likes', 'disLikes','visits')->where('gallery_id', $gallery_id)->get();
             foreach ($images as $item)
             {
                 $item->encode_id = LFM_getEncodeId($item->id);
