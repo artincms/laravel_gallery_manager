@@ -116,6 +116,7 @@ class GalleryController extends Controller
             }
         }
         $gallery->save();
+        $res['tag']=LTS_saveTag($gallery,$request->tag);
         $res['file'] = LFM_SaveSingleFile($gallery, 'default_img', 'defaultImg', 'default_img_options');
         $res =
             [
@@ -134,10 +135,11 @@ class GalleryController extends Controller
         $option_default_img = ['size_file' => 2000, 'max_file_number' => 1, 'true_file_extension' => ['png', 'jpg']];
         $gallery = Gallery::find(LFM_GetDecodeId($request->item_id));
         $gallery->encode_id = LFM_getEncodeId($gallery->id);
+        $tags = LTS_showTag($gallery);
         $parrents = Gallery::all();
         $default_img = LFM_CreateModalFileManager('LoadDefaultImg', $option_default_img, 'insert', 'showDefaultImg', 'gallery_edit_tab', false, false, 'انتخاب فایل تصویر', 'btn-block', 'fa fa-folder-open font_button mr-2');
         $load_default_img = LFM_loadSingleFile($gallery, 'default_img', 'LoadDefaultImg');
-        $gallery_form = view('laravel_gallery_system::backend.gallery.view.edit', compact('gallery', 'parrents', 'default_img', 'load_default_img'))->render();
+        $gallery_form = view('laravel_gallery_system::backend.gallery.view.edit', compact('gallery','tags', 'parrents', 'default_img', 'load_default_img'))->render();
         $res =
             [
                 'status'            => "1",
@@ -183,6 +185,7 @@ class GalleryController extends Controller
             }
         }
         $gallery->save();
+        $res['tag']=LTS_saveTag($gallery,$request->tag);
         $res['file'] = LFM_SaveSingleFile($gallery, 'default_img', 'LoadDefaultImg', 'default_img_options');
         $res =
             [
@@ -345,7 +348,7 @@ class GalleryController extends Controller
             }
         }
         $item->save();
-
+        $res['tag']=LTS_saveTag($item,$request->tag);
         switch ($request->type)
         {
             case 1 :
@@ -403,6 +406,7 @@ class GalleryController extends Controller
         $item = GalleryItem::find(LFM_GetDecodeId($request->item_id));
         $item->encode_id = LFM_getEncodeId($item->id);
         $item->gallery_encode_id = LFM_getEncodeId($item->gallery_id);
+        $tags = LTS_showTag($item);
 
         //image options
         $option_item_file = ['size_file' => 2000, 'max_file_number' => 1, 'true_file_extension' => ['png', 'jpg']];
@@ -467,7 +471,7 @@ class GalleryController extends Controller
 
         $item_form = view('laravel_gallery_system::backend.gallery.view.edit_item', compact('item', 'itmeFile', 'itmeVideoMp4File'
             , 'itmeVideoWebmFile', 'itmeVideoOggFile', 'itmeAudioOggFile', 'itmeAudioMp3File', 'itmeAudioWavFile', 'itmeFileLoad', 'itmeVideoMp4FileLoad', 'itmeVideoWebmFileLoad',
-            'itmeVideoOggFileLoad', 'itmeAudioOggFileLoad', 'itmeAudioMp3FileLoad', 'itmeAudioWavFileLoad', 'pic_class', 'audio_class', 'video_class'))->render();
+            'itmeVideoOggFileLoad', 'itmeAudioOggFileLoad', 'itmeAudioMp3FileLoad', 'itmeAudioWavFileLoad', 'pic_class', 'audio_class', 'video_class','tags'))->render();
         $res =
             [
                 'status'                 => "1",
@@ -532,6 +536,7 @@ class GalleryController extends Controller
                 break;
         }
         $item->save();
+        $res['tag']=LTS_saveTag($item,$request->tag);
         $res =
             [
                 'status'      => "1",

@@ -83,8 +83,8 @@
                     })
                 })
             },
-            increaseVisit :function () {
-                this.$emit('visitItem')
+            increaseVisit:function () {
+               //console.log(this.$refs);
             }
 
 

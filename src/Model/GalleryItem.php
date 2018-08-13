@@ -7,6 +7,8 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use ArtinCMS\LFM\Traits\lfmFillable ;
 use App\Traits\LaraveLikeablesSystem ;
 use App\Traits\LaravelVisitablesSystem ;
+use App\Traits\LaraveTagablesSystem ;
+
 
 class GalleryItem extends Model
 {
@@ -14,6 +16,7 @@ class GalleryItem extends Model
     use softDeletes;
     use LaraveLikeablesSystem ;
     use LaravelVisitablesSystem ;
+    use LaraveTagablesSystem ;
 
     protected $table = 'lgs_items';
 

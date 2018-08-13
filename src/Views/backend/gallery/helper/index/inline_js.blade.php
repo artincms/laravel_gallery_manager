@@ -520,4 +520,8 @@
         });
         return result;
     }
+    //--------------------------------------------tag select----------------------------------------------
+    init_select2_ajax('#showSelectTag', '{{route('LTS.autoCompleteTag')}}', true,true,true);
+
+
 </script>

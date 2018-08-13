@@ -11,6 +11,17 @@
         </div>
         <div class="col-sm-4 messages"></div>
     </div>
+    <div class="form-group row fg_title">
+        <label class="col-sm-2 control-label col-form-label label_post" for="title">
+            <span class="more_info"></span>
+            <span class="label_title">انتخاب تگ</span>
+        </label>
+        <div class="col-sm-6">
+            <select class="form-control" multiple id="showSelectTagItem" name="tag[]">
+            </select>
+        </div>
+        <div class="col-sm-4 messages"></div>
+    </div>
     <div class="form-group row">
         <label class="col-lg-2 col-sm-12 col-md-3 control-label col-form-label label_post" for="description">توضیحات</label>
         <div class="col-lg-6 col-md-9 col-sm-12">
@@ -148,4 +159,6 @@
     $('#gallery_item_description').summernote({
         height: 200,
     } );
+    //--------------------------------------------tag select----------------------------------------------
+    init_select2_ajax('#showSelectTagItem', '{{route('LTS.autoCompleteTag')}}', true,true,true);
 </script>
