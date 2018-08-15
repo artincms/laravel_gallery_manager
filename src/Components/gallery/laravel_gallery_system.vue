@@ -1,13 +1,14 @@
 <template>
 <div class="container-fluid" style="direction: rtl">
     <div v-if="show_item_temp" class="show_item_temp">
+        <breadcrumb :item="mygallery" :gallery_id="gallery_id"></breadcrumb>
         <show-item :item="item"></show-item>
     </div>
     <div v-else class="show_gallery_temp">
         <div v-if="show_header" class="lgs_gallery_header color_white">
             <div>
                 <div class="header_gallery_image">
-                    <img class="img_header" :src="'/LFM/DownloadFile/ID/'+mygallery.encode_file_id+'/small/404.png/00/410/225'">
+                    <img class="img_header" :src="'/LFM/DownloadFile/ID/'+mygallery.encode_file_id+'/small/404.png/100/410/225'">
                     <div class="header_gallery_opeartioin">
                         <operation ref="mainGallery" :item="mygallery" type="gallery" :model="'ArtinCMS\\LGS\\Model\\Gallery'"></operation>
                     </div>
@@ -20,9 +21,12 @@
                 </div>
             </div>
         </div>
+        <div>
+            <breadcrumb :item="mygallery" :gallery_id="gallery_id"></breadcrumb>
+        </div>
         <div class="gallery_items" style="width: 100%;">
             <generate-loader v-if="show_loader"></generate-loader>
-            <back v-if="showback" :parent_id="mygallery.parent_id" :gallery_id="gallery_id" :margin_el="margin_el"></back>
+            <back v-if="showback" :parent_id="mygallery.encode_parent_id" :gallery_id="gallery_id" :margin_el="margin_el"></back>
             <gallery-style v-for="(gallery,index) in galleries" :key="gallery.id" :item="gallery" :margin_el="margin_el"></gallery-style>
             <image-style v-for="(image,index) in images" :key="image.title" :item="image" :margin_el="margin_el" ></image-style>
         </div>
@@ -38,8 +42,24 @@
     import axios from '../../../../../../public/vendor/laravel_gallery_system/packages/axios/index.js'
     import operation from './operation'
     import generateLoader from './generate_loader'
+    import breadcrumb from './breadcrumb'
     import showItem from './show-item'
-    import custom from '../../../../../../public/vendor/laravel_gallery_system/js/custome_front.js';
+    import VueTranslate from '../../../../../../public/vendor/laravel_comments_system/packages/vue-translate-plugin/dist/vue-translate.js'
+    import jquery from      '../../../../../../public/vendor/laravel_gallery_system/packages/jquery/jquery-3.3.1';
+    var VueScrollTo = require('vue-scrollto');
+    Vue.use(VueTranslate);
+    Vue.use(VueScrollTo, {
+        container: "body",
+        duration: 1000,
+        easing: "ease-in-out",
+        offset: -60,
+        cancelable: true,
+        onStart: false,
+        onDone: false,
+        onCancel: false,
+        x: false,
+        y: true
+    })
     export default {
         name: 'laravel_gallery_system',
         props:['gallery_id'],
@@ -52,7 +72,8 @@
                 showback:false,
                 show_loader:false,
                 show_item_temp:false,
-                item:[]
+                item:[],
+                crumb:[]
             }
         },
         mounted() {
@@ -63,7 +84,7 @@
         },
         computed: {
             margin_el:function () {
-                var body_width=window.$('.gallery_items').width();
+                var body_width=jquery('.gallery_items').width();
                 var num_el = Math.floor(body_width/290) ;
                 var sum_margin=body_width-(num_el*290);
                 var margin_el = Math.floor(sum_margin/(num_el*2));
@@ -72,6 +93,7 @@
         },
         methods: {
             getGallery : function (gallery_id) {
+                this.show_item_temp=false ;
                 this.show_loader = true;
                 axios.post("/LGS/getGalleryItemFront", {gallery_id: gallery_id}).then(response => {
                     this.$nextTick(() =>{
@@ -90,7 +112,7 @@
 
         },
         components: {
-            galleryStyle,imageStyle,operation,back,generateLoader,showItem
+            galleryStyle,imageStyle,operation,back,generateLoader,showItem,breadcrumb
         }
     }
 </script>

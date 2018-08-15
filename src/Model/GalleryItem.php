@@ -8,6 +8,7 @@ use ArtinCMS\LFM\Traits\lfmFillable ;
 use App\Traits\LaraveLikeablesSystem ;
 use App\Traits\LaravelVisitablesSystem ;
 use App\Traits\LaraveTagablesSystem ;
+use Illuminate\Support\Facades\Auth;
 
 
 class GalleryItem extends Model
@@ -17,6 +18,8 @@ class GalleryItem extends Model
     use LaraveLikeablesSystem ;
     use LaravelVisitablesSystem ;
     use LaraveTagablesSystem ;
+    protected $hidden = ['id','gallery_id','file_id'];
+    protected $appends = ['auth','encode_id','encode_file_id','encode_gallery_id'];
 
     protected $table = 'lgs_items';
 
@@ -32,18 +35,58 @@ class GalleryItem extends Model
             }
         });
     }
+
     public function gallery()
     {
         return $this->belongsTo('ArtinCMS\LGS\Model\Gallery');
     }
 
-    public function getEncodeIdAttribute()
-    {
-        return enCodeId($this->id);
-    }
     public function comments()
     {
         return $this->morphMany('ArtinCMS\LCS\Models\Comment', 'commentable','target_type','target_id');
+    }
+
+    public function getEncodeIdAttribute()
+    {
+        return LFM_getEncodeId($this->id);
+    }
+
+    public function getEncodeFileIdAttribute()
+    {
+        return LFM_getEncodeId($this->file_id);
+    }
+
+    public function getEncodeGalleryIdAttribute()
+    {
+        return LFM_getEncodeId($this->gallery_id);
+    }
+    public function getLikesCountAttribute($value)
+    {
+        return (int)LGS_ConvertNumbersEntoFa($value);
+    }
+
+    public function getDisLikesCountAttribute($value)
+    {
+        return (int)LGS_ConvertNumbersEntoFa($value);
+    }
+
+    public function getVisitsCountAttribute($value)
+    {
+        return (int)LGS_ConvertNumbersEntoFa($value);
+    }
+
+    public function getAuthAttribute($value)
+    {
+        if(!config('laravel_gallery_system.guestCanVote'))
+        {
+            $auth = Auth::check() ;
+
+        }
+        else
+        {
+            $auth = true ;
+        }
+        return $auth ;
     }
 
 }

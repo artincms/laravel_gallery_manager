@@ -690,46 +690,14 @@ class GalleryController extends Controller
     //--------------------------------------------------front controllers-------------------------------------
     public function getGalleryItemFront(Request $request)
     {
-        $gallery_id = $request->gallery_id;
-        $galleries = Gallery::with('likes', 'disLikes','visits')->where('parent_id', $gallery_id)->get();
-        foreach ($galleries as $gallery)
+        $gallery_id = LFM_GetDecodeId($request->gallery_id);
+        $galleries = Gallery::withCount('likes', 'disLikes','visits')->where('parent_id', $gallery_id)->get();
+        if ($gallery_id !=0)
         {
-            $gallery->encode_id = LFM_getEncodeId($gallery->id);
-            $gallery->encode_file_id = LFM_getEncodeId($gallery->default_img);
-        }
-        if ($gallery_id != 0)
-        {
-            $myGallery = Gallery::with('likes', 'disLikes','visits')->find($gallery_id);
-            $myGallery->save();
-            $myGallery->encode_file_id = LFM_getEncodeId($myGallery->default_img);
-            $myGallery->encode_id = LFM_getEncodeId($myGallery->id);
+            $myGallery = Gallery::withCount('likes', 'disLikes','visits')->find($gallery_id);
             $myGallery->string_description = strip_tags($myGallery->description);
             $result['gallery'] = $myGallery;
-            $images = GalleryItem::with('likes', 'disLikes','visits')->where('gallery_id', $gallery_id)->get();
-            foreach ($images as $item)
-            {
-                $item->encode_id = LFM_getEncodeId($item->id);
-                if ($item->file_id && $item->type == 0)
-                {
-                    $item->encode_file_id = LFM_getEncodeId($item->file_id);
-                }
-                else
-                {
-                    if ($item->type == 1 || $item->type == 2)
-                    {
-                        $encode_file_id = [];
-                        foreach ($item->files as $file)
-                        {
-                            $encode_file_id[] = LFM_getEncodeId($file->id);
-                        }
-                        $item->encode_file_id = $encode_file_id;
-                    }
-                    else
-                    {
-                        $item->source_file = [];
-                    }
-                }
-            }
+            $images = GalleryItem::withCount('likes', 'disLikes','visits')->with('files')->where('gallery_id', $gallery_id)->get();
             $result['images'] = $images;
             $result['showHeader'] = true;
         }

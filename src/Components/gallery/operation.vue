@@ -6,8 +6,7 @@
             <visitable ref="visit" :model="model" :item ="item"></visitable>
         </div>
         <div class="width_50 float-left text-right">
-          <likeable :model="model" :item ="item" type="like"></likeable>
-          <likeable :model="model" :item ="item" type="disLike"></likeable>
+          <likeable :model="model" :item ="item" :auth="auth"></likeable>
         </div>
     </div>
 </template>
@@ -24,7 +23,7 @@
         },
         data: function () {
             return {
-                showModal :false
+                auth : this.item.auth
             }
             },
         computed: {
@@ -55,7 +54,7 @@
                         }
                         else
                         {
-                            return '/LFM/DownloadFile/ID/'+this.item.encode_file_id[0] ;
+                            return '/LFM/DownloadFile/ID/'+this.item.files[0].encode_id ;
                         }
                     }
                     else

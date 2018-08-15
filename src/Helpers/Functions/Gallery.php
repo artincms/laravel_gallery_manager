@@ -67,3 +67,22 @@ if (!function_exists('LGS_getImagesLink'))
         return $result ;
     }
 }
+
+if (!function_exists('LGS_ConvertNumbersEntoFa'))
+{
+    function LGS_ConvertNumbersEntoFa($matches)
+    {
+        $farsi_array = array('۰', '۱', '۲', '۳', '۴', '۵', '۶', '۷', '۸', '۹');
+        $english_array = array('0', '1', '2', '3', '4', '5', '6', '7', '8', '9');
+        return str_replace($english_array, $farsi_array, $matches);
+    }
+}
+if (!function_exists('LGS_ConvertNumbersFatoEn'))
+{
+    function LGS_ConvertNumbersFatoEn($matches)
+    {
+        $farsi_array = array('۰', '۱', '۲', '۳', '۴', '۵', '۶', '۷', '۸', '۹');
+        $english_array = array('0', '1', '2', '3', '4', '5', '6', '7', '8', '9');
+        return str_replace($farsi_array, $english_array, $matches);
+    }
+}

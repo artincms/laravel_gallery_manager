@@ -230,6 +230,32 @@
     flex: 0 0 50%;
     max-width: 50%;
 }
+.smaller-50 {
+    font-size: 50% !important;
+}
+
+.smaller-60 {
+    font-size: 60% !important;;
+}
+
+.smaller-70 {
+    font-size: 70% !important;;
+}
+
+.smaller-80 {
+    font-size: 80% !important;;
+}
+
+.smaller-90 {
+    font-size: 90% !important;;
+}
+.margin_right_20 {
+    margin-right: 20px;
+}
+.margin_left_20
+{
+    margin-left: 20px;
+}
 @media (min-width: 576px)
 {
     .width_50 {

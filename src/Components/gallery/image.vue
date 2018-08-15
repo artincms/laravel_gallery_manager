@@ -5,14 +5,14 @@
                 <img class="img_galleyr showFullScreen pointer"  :src="'/LFM/DownloadFile/ID/'+item.encode_file_id+'/small/404.png/100/272/208'"
                      :data-caption="item.description" :data-title="item.title" :id="'fullImageitem'+ item.encode_id" :data-image="link">
             </div>
-            <div v-if="item.type==2" class="height_225 back_gray">
+            <div v-if="item.type==2 && item.files.length>0" class="height_225 back_gray">
                 <video controls  width="100%" height="205" >
-                    <source v-for="file_id in item.encode_file_id" :src="'/LFM/DownloadFile/ID/'+file_id" type="video/mp4">
+                    <source v-for="file in item.files" :src="'/LFM/DownloadFile/ID/'+file.encode_id" type="video/mp4">
                 </video>
             </div>
-            <div class="audio_parent_div height_225" v-if="item.type==1" width="250" height="150">
+            <div class="audio_parent_div height_225" v-if="item.type==1 && item.files.length>0" width="250" height="150">
                 <audio class="audio_file" controls width="250" height="150">
-                    <source v-for="file_id in item.encode_file_id" :src="'/LFM/DownloadFile/ID/'+file_id" type="video/mp4">
+                    <source v-for="file in item.files" :src="'/LFM/DownloadFile/ID/'+file.encode_id" type="video/mp4">
                 </audio>
             </div>
             <div class="showContent">
@@ -41,7 +41,7 @@
         },
         computed: {
             link: function () {
-                return '/LFM/DownloadFile/ID/' + this.item.encode_file_id
+                return '/LFM/DownloadFile/ID/' + this.item.file_id
             },
         },
         methods:{
