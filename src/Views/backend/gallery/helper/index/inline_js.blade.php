@@ -240,10 +240,8 @@
                     $('a[href="#manage_tab"]').click();
                     $('#show_area_medium_default_img').html('');
                     defaultImg_available = 1;
-                    /* if (typeof data.section+'_available' === 'undefined')
-                     {
-
-                     }*/
+                    var form_element = $("#frm_create_gallery");
+                    form_element.find('select').val('').trigger('change');
                 }
             }
         });
@@ -522,6 +520,6 @@
     }
     //--------------------------------------------tag select----------------------------------------------
     init_select2_ajax('#showSelectTag', '{{route('LTS.autoCompleteTag')}}', true,true,true);
-
+    init_select2_data('#FaqSelectLang',{!! $multiLang !!});
 
 </script>

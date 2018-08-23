@@ -21,7 +21,11 @@
     "require": {
         "yajra/laravel-datatables-oracle": "~8.0",
         "hashids/hashids": "^3.0",
-        "artincms/laravel_file_manager": "dev-master"
+        "artincms/laravel_file_manager": "dev-master",
+        "artincms/laravel_comments_system": "dev-master",
+        "artincms/laravel_likeable_system": "dev-master",
+        "artincms/laravel_tagable": "dev-master",
+        "artincms/laravel_visitable": "dev-master"
     },
     "extra": {
         "laravel": {

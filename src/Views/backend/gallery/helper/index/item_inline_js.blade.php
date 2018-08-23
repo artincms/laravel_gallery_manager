@@ -116,13 +116,7 @@
             }
         },
         {
-            width: '10%',
-            data: 'visit',
-            name: 'visit',
-            title: 'تعداد مشاهدات',
-        },
-        {
-            width: '255%',
+            width: '25%',
             data: 'is_active',
             name: 'is_active',
             title: 'وضعیت',
@@ -136,7 +130,7 @@
             }
         },
         {
-            width: '15%',
+            width: '20%',
             searchable: false,
             sortable: false,
             title: 'عملیات',
@@ -487,7 +481,6 @@
             '       <input type="text" class="form-control filter_item_title" name="filter_item_title" value="' + filter_item_title + '" style="width: 100%;">' +
             '   </td>' +
             '    <td style="border: none; border-bottom: 1px lightgray solid;">&nbsp;</td>' +
-            '    <td style="border: none; border-bottom: 1px lightgray solid;">&nbsp;</td>' +
             '    <td style="border: none; border-bottom: 1px lightgray solid;">' +
             '       <select class="form-control filter_item_is_active" name="filter_item_is_active" style="width:150px">' +
             '           <option value="-1">انتخاب وضعیت</option>' +
@@ -526,6 +519,5 @@
         });
         return result;
     }
-
 
 </script>

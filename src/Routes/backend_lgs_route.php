@@ -44,7 +44,19 @@ Route::group(['prefix' => config('laravel_gallery_system.backend_lgs_route_prefi
 
         //-------------------------------------------autoComplete----------------------------------------------------------------------------------
         Route::post('autoCompleteGalleryParrent', ['as' => 'LGS.Slider.autoCompleteGallery', 'uses' => 'SliderController@autoCompleteGallery']);
+    });
 
+    //------------------------------------------portfolio---------------------------------------------------------//
+    Route::group(['prefix' => 'Portfolio'], function () {
+        Route::get('/', ['as' => 'LGS.Portfolio', 'uses' => 'PortfolioController@index']);
+        Route::post('getPortfolio', ['as' => 'LGS.Portfolio.getPortfolio', 'uses' => 'PortfolioController@getPortfolio']);
+        Route::post('savePortfolio', ['as' => 'LGS.Portfolio.savePortfolio', 'uses' => 'PortfolioController@savePortfolio']);
+        Route::post('getEditPortfolioForm', ['as' => 'LGS.Portfolio.getEditPortfolioForm', 'uses' => 'PortfolioController@getEditPortfolioForm']);
+        Route::post('editPortfolio', ['as' => 'LGS.Portfolio.editPortfolio', 'uses' => 'PortfolioController@editPortfolio']);
+        Route::post('trashPortfolio', ['as' => 'LGS.Portfolio.trashPortfolio', 'uses' => 'PortfolioController@trashPortfolio']);
+        Route::post('setPortfolioStatus', ['as' => 'LGS.Portfolio.setPortfolioStatus', 'uses' => 'PortfolioController@setPortfolioStatus']);
+        Route::post('autoCompletePortfolio', ['as' => 'LGS.Portfolio.autoCompletePortfolio', 'uses' => 'PortfolioController@autoCompletePortfolio']);
+        Route::post('saveOrderPortfolioForm', ['as' => 'LGS.Portfolio.saveOrderPortfolioForm', 'uses' => 'PortfolioController@saveOrderPortfolioForm']);
 
     });
 

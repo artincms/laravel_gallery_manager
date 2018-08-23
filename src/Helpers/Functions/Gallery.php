@@ -86,3 +86,41 @@ if (!function_exists('LGS_ConvertNumbersFatoEn'))
         return str_replace($farsi_array, $english_array, $matches);
     }
 }
+if (!function_exists('faq_sampleLang'))
+{
+    function faq_sampleLang()
+    {
+        $lang = [
+            [
+                'id'=>1,
+                'text'=>'Persian'
+            ] ,
+            [
+                'id'=>2,
+                'text'=>'English'
+            ] ,
+            [
+                'id'=>3,
+                'text'=>'Spanish'
+            ] ,
+            [
+                'id'=>4,
+                'text'=>'Italian'
+            ] ,  [
+                'id'=>5,
+                'text'=>'French'
+            ] ,
+            [
+                'id'=>6,
+                'text'=>'Russian'
+            ] ,
+            [
+                'id'=>7,
+                'text'=>'Arabic'
+            ]
+        ];
+
+        return $lang ;
+    }
+}
+

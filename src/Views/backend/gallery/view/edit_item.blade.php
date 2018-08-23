@@ -1,5 +1,19 @@
 <div class="space-20"></div>
 <form id="frm_edit_gallery_item" class="form-horizontal" name="frm_edit_gallery_item">
+    @if($multiLang)
+    <div class="form-group row fg_lang">
+        <label class="col-sm-2 control-label col-form-label label_post" for="lang">
+            <span class="more_info"></span>
+            <span class="label_lang">انتخاب زبان</span>
+        </label>
+        <div class="col-sm-6">
+            <select class="form-control" name="lang_id" id="GallerySelectLangEditItem">
+                <option value="{{$item->lang_id}}" value="-1">{{$active_lang_title}}</option>
+            </select>
+        </div>
+        <div class="col-sm-4 messages"></div>
+    </div>
+    @endif
     <input type="hidden" value="{{$item->gallery_encode_id}}" name="gallery_id">
     <input type="hidden" value="{{$item->encode_id}}" name="item_id">
     <div class="form-group row fg_title">
@@ -192,6 +206,8 @@
         height: 200,
     } );
     init_select2_ajax('#showSelectTagEditItem', '{{route('LTS.autoCompleteTag')}}', true,true,true);
+    init_select2_data('#GallerySelectLangEditItem',{!! $multiLang !!});
+
 
 </script>
 

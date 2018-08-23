@@ -45,8 +45,16 @@ class GalleryController extends Controller
         $option_default_img = ['size_file' => 2000, 'max_file_number' => 1, 'true_file_extension' => ['png', 'jpg']];
         $default_img = LFM_CreateModalFileManager('defaultImg', $option_default_img, 'insert', 'showDefaultImg', false, false, false, 'انتخاب فایل تصویر', 'btn-block', 'fa fa-folder-open font_button mr-2');
         $parrents = Gallery::with('parent')->get();
-
-        return view('laravel_gallery_system::backend.gallery.index', compact('default_img', 'parrents'));
+        $multiLangFunc = config('laravel_gallery_system.multiLang');
+        if ($multiLangFunc)
+        {
+            $multiLang = json_encode($multiLangFunc());
+        }
+        else
+        {
+            $multiLang = false;
+        }
+        return view('laravel_gallery_system::backend.gallery.index', compact('default_img', 'parrents','multiLang'));
     }
 
     public function getGallery(Request $request)
@@ -115,6 +123,11 @@ class GalleryController extends Controller
                 $gallery->created_by = Auth::user()->id;
             }
         }
+        if ($request->lang_id)
+        {
+            $lang_id = $request->lang_id;
+            $gallery->lang_id = $lang_id;
+        }
         $gallery->save();
         $res['tag']=LTS_saveTag($gallery,$request->tag);
         $res['file'] = LFM_SaveSingleFile($gallery, 'default_img', 'defaultImg', 'default_img_options');
@@ -139,7 +152,18 @@ class GalleryController extends Controller
         $parrents = Gallery::all();
         $default_img = LFM_CreateModalFileManager('LoadDefaultImg', $option_default_img, 'insert', 'showDefaultImg', 'gallery_edit_tab', false, false, 'انتخاب فایل تصویر', 'btn-block', 'fa fa-folder-open font_button mr-2');
         $load_default_img = LFM_loadSingleFile($gallery, 'default_img', 'LoadDefaultImg');
-        $gallery_form = view('laravel_gallery_system::backend.gallery.view.edit', compact('gallery','tags', 'parrents', 'default_img', 'load_default_img'))->render();
+        $multiLangFunc = config('laravel_gallery_system.multiLang');
+        if ($multiLangFunc)
+        {
+            $multiLang = json_encode($multiLangFunc());
+            $active_lang_title = $this->searchForId($gallery->lang_id, $multiLangFunc());
+        }
+        else
+        {
+            $multiLang = false;
+            $active_lang_title ='';
+        }
+        $gallery_form = view('laravel_gallery_system::backend.gallery.view.edit', compact('gallery','tags', 'parrents', 'default_img', 'load_default_img','multiLang','active_lang_title'))->render();
         $res =
             [
                 'status'            => "1",
@@ -184,8 +208,13 @@ class GalleryController extends Controller
                 $gallery->created_by = Auth::user()->id;
             }
         }
+        if ($request->lang_id)
+        {
+            $lang_id = $request->lang_id;
+            $gallery->lang_id = $lang_id;
+        }
         $gallery->save();
-        $res['tag']=LTS_saveTag($gallery,$request->tag);
+        $res['tag']=LTS_saveTag($gallery,$request->tag,'tags','tags','sync');
         $res['file'] = LFM_SaveSingleFile($gallery, 'default_img', 'LoadDefaultImg', 'default_img_options');
         $res =
             [
@@ -273,6 +302,16 @@ class GalleryController extends Controller
 
     public function getAddGalleryItemForm(Request $request)
     {
+        //get language
+        $multiLangFunc = config('laravel_gallery_system.multiLang');
+        if ($multiLangFunc)
+        {
+            $multiLang = json_encode($multiLangFunc());
+        }
+        else
+        {
+            $multiLang = false;
+        }
         //image options
         $option_item_file = ['size_file' => 2000, 'max_file_number' => 1, 'true_file_extension' => ['png', 'jpg']];
         //video options
@@ -303,7 +342,7 @@ class GalleryController extends Controller
 
         $gallery_id = $request->item_id;
         $gallery_form = view('laravel_gallery_system::backend.gallery.view.add_item', compact('gallery_id', 'itmeFile', 'itmeVideoMp4File'
-            , 'itmeVideoWebmFile', 'itmeVideoOggFile', 'itmeAudioOggFile', 'itmeAudioMp3File', 'itmeAudioWavFile'))->render();
+            , 'itmeVideoWebmFile', 'itmeVideoOggFile', 'itmeAudioOggFile', 'itmeAudioMp3File', 'itmeAudioWavFile','multiLang'))->render();
         $res =
             [
                 'status'           => "1",
@@ -346,6 +385,11 @@ class GalleryController extends Controller
             {
                 $item->created_by = Auth::user()->id;
             }
+        }
+        if ($request->lang_id)
+        {
+            $lang_id = $request->lang_id;
+            $item->lang_id = $lang_id;
         }
         $item->save();
         $res['tag']=LTS_saveTag($item,$request->tag);
@@ -468,10 +512,20 @@ class GalleryController extends Controller
                 $video_class = 'hidden';
                 break;
         }
-
+        $multiLangFunc = config('laravel_gallery_system.multiLang');
+        if ($multiLangFunc)
+        {
+            $multiLang = json_encode($multiLangFunc());
+            $active_lang_title = $this->searchForId($item->lang_id, $multiLangFunc());
+        }
+        else
+        {
+            $multiLang = false;
+            $active_lang_title ='';
+        }
         $item_form = view('laravel_gallery_system::backend.gallery.view.edit_item', compact('item', 'itmeFile', 'itmeVideoMp4File'
             , 'itmeVideoWebmFile', 'itmeVideoOggFile', 'itmeAudioOggFile', 'itmeAudioMp3File', 'itmeAudioWavFile', 'itmeFileLoad', 'itmeVideoMp4FileLoad', 'itmeVideoWebmFileLoad',
-            'itmeVideoOggFileLoad', 'itmeAudioOggFileLoad', 'itmeAudioMp3FileLoad', 'itmeAudioWavFileLoad', 'pic_class', 'audio_class', 'video_class','tags'))->render();
+            'itmeVideoOggFileLoad', 'itmeAudioOggFileLoad', 'itmeAudioMp3FileLoad', 'itmeAudioWavFileLoad', 'pic_class', 'audio_class', 'video_class','tags','multiLang','active_lang_title'))->render();
         $res =
             [
                 'status'                 => "1",
@@ -535,8 +589,13 @@ class GalleryController extends Controller
                 $section = [];
                 break;
         }
+        if ($request->lang_id)
+        {
+            $lang_id = $request->lang_id;
+            $item->lang_id = $lang_id;
+        }
         $item->save();
-        $res['tag']=LTS_saveTag($item,$request->tag);
+        $res['tag']=LTS_saveTag($item,$request->tag,'tags','tags','sync');
         $res =
             [
                 'status'      => "1",
@@ -691,13 +750,14 @@ class GalleryController extends Controller
     public function getGalleryItemFront(Request $request)
     {
         $gallery_id = LFM_GetDecodeId($request->gallery_id);
-        $galleries = Gallery::withCount('likes', 'disLikes','visits')->where('parent_id', $gallery_id)->get();
+        $lang_id = $request->lang_id;
+        $galleries = Gallery::withCount('likes', 'disLikes','visits')->where('parent_id', $gallery_id)->where('lang_id',$lang_id)->get();
         if ($gallery_id !=0)
         {
             $myGallery = Gallery::withCount('likes', 'disLikes','visits')->find($gallery_id);
             $myGallery->string_description = strip_tags($myGallery->description);
             $result['gallery'] = $myGallery;
-            $images = GalleryItem::withCount('likes', 'disLikes','visits')->with('files')->where('gallery_id', $gallery_id)->get();
+            $images = GalleryItem::withCount('likes', 'disLikes','visits')->with('files')->where('gallery_id', $gallery_id)->where('lang_id',$lang_id)->get();
             $result['images'] = $images;
             $result['showHeader'] = true;
         }
@@ -709,5 +769,17 @@ class GalleryController extends Controller
         $result['galleries'] = $galleries;
 
         return $result;
+    }
+    public function searchForId($id, $array)
+    {
+        foreach ($array as $value)
+        {
+            if ($value['id'] == $id)
+            {
+                return $value['text'];
+            }
+        }
+
+        return null;
     }
 }

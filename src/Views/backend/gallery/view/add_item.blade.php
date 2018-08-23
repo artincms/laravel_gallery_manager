@@ -1,5 +1,19 @@
 <div class="space-20"></div>
 <form id="frm_create_gallery_item" class="form-horizontal" name="frm_create_gallery">
+    @if($multiLang)
+    <div class="form-group row fg_lang">
+        <label class="col-sm-2 control-label col-form-label label_post" for="lang">
+            <span class="more_info"></span>
+            <span class="label_lang">انتخاب زبان</span>
+        </label>
+        <div class="col-sm-6">
+            <select class="form-control" name="lang_id" id="FaqSelectLangItme">
+                <option value="-1">انتخاب زبان</option>
+            </select>
+        </div>
+        <div class="col-sm-4 messages"></div>
+    </div>
+    @endif
     <input type="hidden" value="{{$gallery_id}}" name="gallery_id">
     <div class="form-group row fg_title">
         <label class="col-lg-2 col-sm-12 col-md-3 control-label col-form-label label_post" for="title">
@@ -156,9 +170,14 @@
 
 </form>
 <script>
-    $('#gallery_item_description').summernote({
-        height: 200,
-    } );
-    //--------------------------------------------tag select----------------------------------------------
-    init_select2_ajax('#showSelectTagItem', '{{route('LTS.autoCompleteTag')}}', true,true,true);
+    $(document).ready(function () {
+        $('#gallery_item_description').summernote({
+            height: 200,
+        } );
+        //--------------------------------------------tag select----------------------------------------------
+        init_select2_ajax('#showSelectTagItem', '{{route('LTS.autoCompleteTag')}}', true,true,true);
+        //------------------------------------------select 2 for language-----------------------------------------------------------------------------
+        init_select2_data('#FaqSelectLangItme',{!! $multiLang !!});
+    });
+
 </script>

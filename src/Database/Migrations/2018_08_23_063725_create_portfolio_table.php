@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateGalleriesTable extends Migration
+class CreatePortfolioTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,16 +13,15 @@ class CreateGalleriesTable extends Migration
      */
     public function up()
     {
-        Schema::create('lgs_galleries', function (Blueprint $table) {
+        Schema::create('lgs_portfolio', function (Blueprint $table) {
             $table->increments('id');
             $table->string('title', 255);
             $table->text('description')->nullable()->default(null);
             $table->integer('default_img')->unsigned()->nullable()->default(null);
             $table->text('default_img_options')->nullable()->default(null);
-            $table->integer('parent_id')->unsigned()->default(0);
             $table->integer('lang_id')->unsigned()->default(0);
             $table->integer('order')->default(0);
-            $table->enum('is_active', array('0','1'))->default('0');
+            $table->enum('is_active', array('0','1'))->default('1');
             $table->integer('created_by')->unsigned()->default(0);
             $table->timestamps();
             $table->softDeletes();
@@ -36,6 +35,6 @@ class CreateGalleriesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('galleries');
+        Schema::dropIfExists('lgs_portfolio');
     }
 }

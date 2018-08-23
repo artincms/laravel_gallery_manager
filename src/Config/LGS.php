@@ -13,5 +13,7 @@ return [
     // ======================================================================
     //allow user to upload private file in filemanager
     'userModel'=>'App\User',
-    'guestCanVote'=>true
+    'guestCanVote'=>true,
+    'multiLang'=>'faq_sampleLang'
+
 ];
