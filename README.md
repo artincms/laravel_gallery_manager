@@ -63,3 +63,45 @@ for more learn about laravel file manager setup you can visit <a href="https://g
             LGS_CreateModalSliderManager()
           </pre> 
       </div>
+      
+<h5>use gallery manager as Porfolio</h5>
+you can use gallery manager as porfolio . the portfolio manager
+backend url is : 
+ <div class="highlight highlight-text-html-php">
+ <pre>
+ http://yourDomain/LGS/Portfolio
+  </pre> 
+  </div>
+after you define porfoli for show all portfolio can use this
+helper functions :
+ <div class="highlight highlight-text-html-php">
+ <pre>
+createPortfolio($lang_id,$route_name) ;
+  </pre> 
+  </div>
+ that lang id is the id of language and $route_name is name of 
+ route for show more detail of portfolio
+ and for show more detail of portfolio you can use this helper functions
+ <div class="highlight highlight-text-html-php">
+  <pre>
+ createPortfolioItem($lang_id,$route_name) ;
+   </pre> 
+   </div>
+ the input of this function similar the createPortfolio function
+ example of use two function is : 
+ <div class="highlight highlight-text-html-php">
+   <pre>
+   public function portfolio()
+      {
+          $url_name='portfolioItem';
+          $view =createPortfolio(1,$url_name) ;
+          return view('portfolio',compact('view'));
+      }
+      public function portfolioItem($id)
+      {
+          $url_name='portfolioItem';
+          $item =createPortfolioItem($id,$url_name) ;
+          return view('portfolioItem',compact('item'));
+      }
+</pre>
+</div>
