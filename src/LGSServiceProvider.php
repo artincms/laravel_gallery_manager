@@ -44,6 +44,13 @@ class LGSServiceProvider extends ServiceProvider
         $this->publishes([
             __DIR__ . '/Components' => resource_path('assets/js/components/laravel_gallery_system'),
         ]);
+        // publish language
+        $this->publishes([
+            __DIR__ . '/Lang/En/laravel_gallery_system.php' => resource_path('lang/en/laravel_gallery_system.php'),
+        ]);
+        $this->publishes([
+            __DIR__ . '/Lang/Fa/laravel_gallery_system.php' => resource_path('lang/fa/laravel_gallery_system.php'),
+        ]);
     }
 
     /**

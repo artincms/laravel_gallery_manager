@@ -27,7 +27,10 @@
             width: '20%',
             data: 'description',
             name: 'description',
-            title: 'توضیحات'
+            title: 'توضیحات',
+            mRender: function (data, type, full) {
+                return '<div class="text_over_flow">'+full.description+'</div>'
+            }
         },
         {
             width: '15%',
@@ -140,11 +143,87 @@
                     '   <a class="btn_edit_portfolio pointer gallery_menu-item" data-item_id="' + full.id + '" data-title="' + full.title + '">' +
                     '       <i class="fa fa-edit"></i><span class="ml-2">ویرایش</span>' +
                     '   </a>' +
+                    '    <a class="btn_related_portfolio pointer gallery_menu-item" data-item_id="' + full.id + '" data-title="' + full.title + ' " data-lang_id="' + full.lang_id + '">' +
+                    '       <i class="fa fa-edit"></i><span class="ml-2">نمونه کارهای مرتبط</span>' +
+                    '   </a>' +
                     '    <a class="btn_trash_portfolio pointer gallery_menu-item" data-item_id="' + full.id + '" data-title="' + full.title + ' ">' +
                     '       <i class="fa fa-trash"></i><span class="ml-2">خذف</span>' +
                     '   </a>'
                 '  </div>' +
                 '</div>';
+
+            }
+        }
+    ];
+    window['portfolio_related_grid_columns'] = [
+        {
+            width: '5%',
+            data: 'id',
+            title: 'ردیف',
+            searchable: false,
+            sortable: false,
+            render: function (data, type, row, meta) {
+                return meta.row + meta.settings._iDisplayStart + 1;
+            }
+        },
+        {
+            data: 'id',
+            name: 'id',
+            title: 'آی دی',
+            visible: false
+        },
+        {
+            width: '20%',
+            data: 'title',
+            name: 'title',
+            title: 'عنوان'
+        },
+        {
+            width: '20%',
+            data: 'description',
+            name: 'description',
+            title: 'توضیحات',
+            mRender: function (data, type, full) {
+                return '<div class="text_over_flow">'+full.description+'</div>'
+            }
+        },
+        {
+            width: '15%',
+            data: 'lang_name',
+            name: 'lang_name',
+            title: 'زبان'
+        },
+        {
+            width: '15%',
+            data: 'created_by',
+            name: 'created_by',
+            title: 'ایجاد شده توسط',
+            mRender: function (data, type, full) {
+                if (full.user && full.user.name) {
+                    return '<span>' + full.user.name + '<span>';
+                }
+                else
+                    return '<span><span>';
+            }
+        },
+        {
+            width: '7%',
+            searchable: false,
+            sortable: false,
+            data: 'action', name: 'action', 'title': 'عملیات',
+            mRender: function (data, type, full) {
+                return '' +
+                    '<div class="gallerty_menu float-right pointer" onclick="set_fixed_dropdown_menu(this)" data-toggle="dropdowns">' +
+                    '<span>' +
+                    '   <em class="fas fa-caret-down"></em>' +
+                    '   <i class="fas fa-bars"></i> ' +
+                    '</span>' +
+                    '  <div class="dropdown_gallery hidden">' +
+                    '    <a class="btn_trash_portfolio_related pointer gallery_menu-item" data-item_id="' + full.id + '" data-title="' + full.title + ' ">' +
+                    '       <i class="fa fa-trash"></i><span class="ml-2">خذف</span>' +
+                    '   </a>'
+                    '  </div>' +
+                    '</div>';
 
             }
         }
@@ -212,6 +291,95 @@
         });
     }
 
+    /*-------------------------------------------------related porfolio-------------------------------------------------------------------*/
+    $(document).off("click", ".btn_related_portfolio");
+    $(document).on("click", ".btn_related_portfolio", function () {
+        var item_id = $(this).data('item_id');
+        var title = $(this).data('title');
+        var lang_id = $(this).data('lang_id');
+        $('.span_manage_portfolio_related_item_tab').html('نمونه کارهای مرتبط : ' + title);
+        $('.manage_portfolio_related_item_tab').removeClass('hidden');
+        $('a[href="#manage_tab_related_item"]').click();
+        $('.input_related_portfolio').val(item_id);
+        $('.portfolio_manager_related_parrent_div').html('<table id="PortfolioManagerRelatedGridData" class="table " width="100%"></table>');
+        data ={
+          item_id:item_id
+        };
+        var getPortfolioRelatedRoute = '{{ route('LGS.Portfolio.getPortfolioRelatedItem') }}';
+        dataTablesGrid('#PortfolioManagerRelatedGridData', 'PortfolioManagerRelatedGridData', getPortfolioRelatedRoute,portfolio_related_grid_columns,data);
+
+        init_select2_ajax('#selectPortfolioRelated', '{{route('LGS.Portfolio.autoCompletePortfolio')}}', true,true,false,false,lang_id);
+
+        //-----------------------------------------save related portfolio-------------------------------------------------------//
+
+        var create_portfolio_related_constraints = {
+
+        };
+        var edit_portfolio_form_related_id = document.querySelector("#frm_edit_portfolio_related");
+        init_validatejs(edit_portfolio_form_related_id, create_portfolio_related_constraints, ajax_func_edit_portfolio_related);
+
+        function ajax_func_edit_portfolio_related(formElement) {
+            var formData = new FormData(formElement);
+            $.ajax({
+                type: "POST",
+                url: '{{ route('LGS.Portfolio.addRelatedPortfolio')}}',
+                dataType: "json",
+                data: formData,
+                processData: false,
+                contentType: false,
+                success: function (data) {
+                $('#frm_edit_portfolio_related .total_loader').remove();
+                if (data.success) {
+                    menotify('success', data.title, data.message);
+                    PortfolioManagerRelatedGridData.ajax.reload(null, false);
+                    var form_element = $("#frm_edit_portfolio_related");
+                    form_element.find('select').val('').trigger('change');
+                }
+                else {
+                    showMessages(data.message, 'form_message_box', 'error', formElement);
+                    showErrors(formElement, data.errors);
+                }
+            }
+        });
+        }
+
+        //---------------------------------------------------------------------delete related------------------------------------------
+        $(document).off("click", ".btn_trash_portfolio_related");
+        $(document).on("click", ".btn_trash_portfolio_related", function () {
+            var item_id = $(this).data('item_id');
+            var title = $(this).data('title');
+            desc = 'بله گالری( ' + title + ' ) را حذف کن !';
+            var parameters = {item_id: item_id};
+            yesNoAlert('حذف گالری', 'از حذف گالری مطمئن هستید ؟', 'warning', desc, 'لغو', trash_portfolio_related, parameters);
+        });
+
+        function trash_portfolio_related(params) {
+            $.ajax({
+                type: 'POST',
+                dataType: 'json',
+                url: '{!!  route('LGS.Portfolio.trashPortfolioRelated') !!}',
+                data: params,
+                success: function (data) {
+                if (data.success) {
+                    menotify('success', data.title, data.message);
+                    PortfolioManagerRelatedGridData.ajax.reload(null, false);
+                }
+                else {
+                    showMessages(data.message, 'form_message_box', 'error', formElement);
+                    showErrors(formElement, data.errors);
+                }
+            }
+        });
+        }
+    });
+
+   //------------------------------------------cancel button-----------------------------------------------------//
+    $(document).off("click", ".cancel_manage_portfolio_related_item");
+    $(document).on("click", ".cancel_manage_portfolio_related_item", function () {
+        $('a[href="#manage_tab"]').click();
+        $('.manage_portfolio_related_item_tab').addClass('hidden');
+        $('.portfolio_manager_related_parrent_div').html('');
+    });
     /*___________________________________________________Add Portfolio_____________________________________________________________________*/
     $(document).off("click", ".btn_edit_portfolio");
     $(document).on("click", ".btn_edit_portfolio", function () {
@@ -234,7 +402,7 @@
             success: function (result) {
                 $('#edit_portfolio .total_loader').remove();
                 if (result.success) {
-                    $('#edit_portfolio').append(result.Portfolio_edit_view);
+                    $('#edit_portfolio').append(result.portfolio_edit_view);
                     $('.edit_portfolio_tab').removeClass('hidden');
                     $('a[href="#edit_portfolio"]').click();
 
@@ -426,7 +594,7 @@
             '    <td style="border: none; border-bottom: 1px lightgray solid;">&nbsp;</td>' +
             '</tr>'
         );
-        init_select2_ajax('.filter_lang', '{{route('LGS.Portfolio.autoCompletePortfolio')}}', true);
+        init_select2_ajax('.filter_lang', '{{route('LGS.Portfolio.autoCompletePortfolioLang')}}', true);
     }
 
     /*___________________________________________________init select2_____________________________________________________________________*/

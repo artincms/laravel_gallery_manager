@@ -4,11 +4,8 @@ namespace ArtinCMS\LGS\Controllers;
 
 
 use App\Http\Controllers\Controller;
-use ArtinCMS\LGS\Model\Gallery;
-use ArtinCMS\LGS\Model\GalleryItem;
 use ArtinCMS\LGS\Model\Portfilio;
-use ArtinCMS\LGS\Model\Slider;
-use ArtinCMS\LGS\Model\SliderItem;
+use ArtinCMS\LGS\Model\PortfilioSimilar;
 use DataTables;
 use Illuminate\Http\Exceptions\HttpResponseException;
 use Illuminate\Http\Request;
@@ -172,7 +169,26 @@ class PortfolioController extends Controller
         );
     }
 
-    public function autoCompletePortfolio(Request $request)
+    public function trashPortfolioRelated(Request $request)
+    {
+        $item = PortfilioSimilar::find(LFM_GetDecodeId($request->item_id));
+        $item->delete();
+
+        $res =
+            [
+                'success' => true,
+                'title'   => "حذف آیتم",
+                'message' => 'آیتم با موفقیت حذف شد.'
+            ];
+
+        throw new HttpResponseException(
+            response()
+                ->json($res, 200)
+                ->withHeaders(['Content-Type' => 'text/plain', 'charset' => 'utf-8'])
+        );
+    }
+
+    public function autoCompletePortfolioLang(Request $request)
     {
         $multiLangFunc = config('laravel_gallery_system.multiLang');
         $x = $request->term;
@@ -182,6 +198,24 @@ class PortfolioController extends Controller
             $data = $multiLangFunc()
                 ->where("text", "LIKE", "%" . $x['term'] . "%");
         }
+        $data = ['results' => $data];
+
+        return response()->json($data);
+    }
+
+    public function autoCompletePortfolio(Request $request)
+    {
+        $lang_id = $request->selectable_id;
+        $x = $request->term;
+        $data = Portfilio::select("id", 'title AS text')->where('is_active', '1')->where('lang_id',$lang_id);
+        if ($x['term'] != '...')
+        {
+            $data = Portfilio::select("id", 'title AS text')
+                ->where('is_active', '1')
+                ->where("title", "LIKE", "%" . $x['term'] . "%")
+                ->where('lang_id',$lang_id);
+        }
+        $data = $data->get();
         $data = ['results' => $data];
 
         return response()->json($data);
@@ -236,6 +270,138 @@ class PortfolioController extends Controller
         $result['success'] = true;
 
         return response()->json($result, 200)->withHeaders(['Content-Type' => 'json', 'charset' => 'utf-8']);
+    }
+
+    public function getEditPortfolioForm(Request $request)
+    {
+        $option_default_img = ['size_file' => 2000, 'max_file_number' => 1, 'true_file_extension' => ['png', 'jpg']];
+        $option_port_file = ['size_file' => 2000, 'max_file_number' => 2, 'true_file_extension' => ['png', 'jpg']];
+        $portfolio = Portfilio::find(LFM_GetDecodeId($request->item_id));
+        $portfolio->encode_id = LFM_getEncodeId($portfolio->id);
+        $tags = LTS_showTag($portfolio);
+        $default_img = LFM_CreateModalFileManager('LoadDefaultImg', $option_default_img, 'insert', 'showDefaultEditImg', 'portfolio_edit_tab', false, false, 'انتخاب فایل تصویر', 'btn-block', 'fa fa-folder-open font_button mr-2');
+        $load_default_img = LFM_loadSingleFile($portfolio, 'default_img', 'LoadDefaultImg');
+        $portfolioFile = LFM_CreateModalFileManager('editPortfolioFile', $option_port_file, 'insert', 'showEditportfolioFile', false,
+            false, false, 'انتخاب فایل تصویر', 'btn-block', 'fa fa-folder-open font_button mr-2');
+        $portfolioFileLoad = LFM_LoadMultiFile($portfolio, 'editPortfolioFile', 'image');
+        $multiLangFunc = config('laravel_gallery_system.multiLang');
+        if ($multiLangFunc)
+        {
+            $multiLang = json_encode($multiLangFunc());
+            $active_lang_title = $this->searchForId($portfolio->lang_id, $multiLangFunc());
+        }
+        else
+        {
+            $multiLang = false;
+            $active_lang_title = '';
+        }
+        $portfolio_form = view('laravel_gallery_system::backend.portfolio.view.edit', compact('portfolio', 'tags', 'default_img', 'load_default_img', 'multiLang', 'active_lang_title', 'portfolioFileLoad', 'portfolioFile'))->render();
+        $res =
+            [
+                'success'             => true,
+                'portfolio_edit_view' => $portfolio_form
+            ];
+        throw new HttpResponseException(
+            response()
+                ->json($res, 200)
+                ->withHeaders(['Content-Type' => 'text/plain', 'charset' => 'utf-8'])
+        );
+    }
+
+    public function editPortfolio(Request $request)
+    {
+        $item = Portfilio::find(LFM_GetDecodeId($request->item_id));
+        $item->title = $request->title;
+        $item->description = $request->description;
+        if (Auth::user())
+        {
+            if (isset(Auth::user()->id))
+            {
+                $item->created_by = Auth::user()->id;
+            }
+        }
+
+        if ($request->lang_id)
+        {
+            $lang_id = $request->lang_id;
+            $item->lang_id = $lang_id;
+        }
+        $item->save();
+        $saveDefaultFile = LFM_SaveSingleFile($item, 'default_img', 'LoadDefaultImg', 'default_img_options');
+        $savePortfolioFiles = LFM_SaveMultiFile($item, 'editPortfolioFile', 'image', 'files', 'sync');
+        $res['tag'] = LTS_saveTag($item, $request->tag, 'tags', 'tags', 'sync');
+        $res =
+            [
+                'success'     => true,
+                'default_img' => $saveDefaultFile,
+                'files'       => $savePortfolioFiles,
+                'title'       => "ثبت آیتم",
+            ];
+
+        return $res;
+    }
+
+    public function addRelatedPortfolio(Request $request)
+    {
+        foreach ($request->related_id as $id)
+        {
+            $item  = new PortfilioSimilar;
+            $item->item_id = LFM_GetDecodeId($request->item_id);
+            $item->related_id = $id;
+            if (Auth::user())
+            {
+                if (isset(Auth::user()->id))
+                {
+                    $item->created_by = Auth::user()->id;
+                }
+            }
+            $item->save();
+
+        }
+        $res =
+            [
+                'success' => true,
+                'title'   => "ثبت نمونه کار",
+                'message' => 'نمونه کار با موفقیت ثبت شد.'
+            ];
+
+        return $res;
+    }
+
+    public function getPortfolioRelatedItem(Request $request)
+    {
+        $item_id = LFM_GetDecodeId($request->item_id);
+        $item = PortfilioSimilar::with('portfolio')->where('item_id',$item_id);
+        $multiLangFunc = config('laravel_gallery_system.multiLang');
+        if ($multiLangFunc)
+        {
+            $multiLang = $multiLangFunc();
+        }
+        else
+        {
+            $multiLang = false;
+        }
+        return DataTables::eloquent($item)
+            ->editColumn('id', function ($data) {
+                return LFM_getEncodeId($data->id);
+            })
+            ->addColumn('title', function ($data) {
+                return $data->portfolio->title;
+            })
+            ->addColumn('lang_name', function ($data) use ($multiLang) {
+                if ($multiLang)
+                {
+                    return $this->searchForId($data->portfolio->lang_id, $multiLang);
+                }
+                else
+                {
+                    return '';
+                }
+            })
+            ->addColumn('description', function ($data) {
+                return strip_tags($data->portfolio->description);
+            })
+            ->make(true);
     }
 
     public function searchForId($id, $array)

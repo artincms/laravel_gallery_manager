@@ -9,8 +9,8 @@ use App\Traits\lfmFillable ;
 
 class Portfilio extends Model
 {
-    protected $hidden = ['id','default_img'];
-    protected $appends = ['encode_id','encode_file_id'];
+    protected $hidden = ['default_img'];
+    protected $appends = ['encode_id','encode_file_id','url'];
     protected $table = 'lgs_portfolio';
     use softDeletes;
     use LaraveTagablesSystem;
@@ -35,10 +35,24 @@ class Portfilio extends Model
     {
         return LFM_getEncodeId($this->default_img);
     }
+    public function getUrlAttribute()
+    {
+        return LFM_GenerateDownloadLink('ID',$this->default_img);
+    }
 
     public function user()
     {
         return $this->belongsTo(config('laravel_gallery_system.userModel'), 'created_by');
+    }
+
+    public function portfolioSimilars()
+    {
+        return $this->hasMany('ArtinCMS\LGS\Model\PortfilioSimilar','item_id','id');
+    }
+
+    public function tags()
+    {
+        return $this->morphToMany('ArtinCMS\LTS\Models\Tag' , 'taggable','lts_taggables','taggable_id','tag_id')->withPivot('type')->withTimestamps() ;
     }
 
 }

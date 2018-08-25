@@ -24,11 +24,11 @@ Laravel Gallery Manager
                             </a>
                             <button class="close closeTab cancel_edit_portfolio" type="button">×</button>
                         </li>
-                        <li class="nav-item manage_portfolio_item_tab hidden">
-                            <a href="#manage_tab_item" class="nav-link paddin_left_30" data-toggle="tab">
-                                <span class="span_manage_portfolio_item_tab">مدیریت تصاویر</span>
+                        <li class="nav-item manage_portfolio_related_item_tab hidden">
+                            <a href="#manage_tab_related_item" class="nav-link paddin_left_30" data-toggle="tab">
+                                <span class="span_manage_portfolio_related_item_tab">مدیریت نمونه کارهای مرتبط</span>
                             </a>
-                            <button class="close closeTab cancel_manage_portfolio_item" type="button">×</button>
+                            <button class="close closeTab cancel_manage_portfolio_related_item" type="button">×</button>
                         </li>
                     </ul>
                     <div class="tab-content">
@@ -116,35 +116,33 @@ Laravel Gallery Manager
                             </form>
                         </div>
                         <div class="tab-pane" id="edit_portfolio"></div>
-                        <div class="tab-pane" id="manage_tab_item">
+                        <div class="tab-pane" id="manage_tab_related_item">
                             <div class="space-20"></div>
-                                <div class="tabbable">
-                                    <ul class="nav nav-tabs nav-tabs-bottom" id="portfolio_tab" role="tablist">
-                                        <li class="nav-item">
-                                            <a class="nav-link active" href="#manage_tab_portfolio_item" data-toggle="tab">
-                                                <i class="fas fa-th-list"></i>
-                                                <span class="margin_right_5">مدیریت آیتم ها</span>
-                                            </a>
-                                        </li>
-                                        <li class="nav-item" id="add_portfolio_item_tab">
-                                            <a class="nav-link" href="#add_portfolio_item" data-toggle="tab">
-                                                <i class="far fa-plus-square"></i>
-                                                <span>افزودن آیتم</span>
-                                            </a>
-                                        </li>
-                                        <li class="nav-item edit_portfolio_item_tab hidden">
-                                            <a href="#edit_portfolio_item" class="nav-link paddin_left_30" data-toggle="tab">
-                                                <span class="span_edit_portfolio_item_tab">ویرایش</span>
-                                            </a>
-                                            <button class="close closeTab cancel_edit_portfolio_item_tab" type="button">×</button>
-                                        </li>
-                                    </ul>
-                                    <div class="tab-content">
-                                        <div class="tab-pane active" id="manage_tab_portfolio_item"></div>
-                                        <div class="tab-pane" id="add_portfolio_item"></div>
-                                        <div class="tab-pane" id="edit_portfolio_item"></div>
+                            <form id="frm_edit_portfolio_related" class="form-horizontal" name="frm_edit_portfolio_related">
+                                <input type="hidden" name="item_id" class="input_related_portfolio" value="">
+                                <div class="form-group row fg_title">
+                                    <label class="col-sm-2 control-label col-form-label label_post" for="title">
+                                        <span class="more_info"></span>
+                                        <span class="label_title">انتخاب نمونه کار مرتبط</span>
+                                    </label>
+                                    <div class="col-sm-6">
+                                        <select class="form-control" multiple id="selectPortfolioRelated" name="related_id[]">
+                                        </select>
                                     </div>
+                                    <div class="col-sm-4 messages"></div>
                                 </div>
+                                <div class="clearfixed"></div>
+                                <div class="col-12">
+                                    <button type="submit" class="float-right btn btn-success ml-2"><i class="fa fa-save margin_left_8"></i>افزودن</button>
+                                </div>
+                            </form>
+                            <div class="space-20"></div>
+                            <div>
+                                <div class="space-20"></div>
+                                <div class="col-xs-12 portfolio_manager_related_parrent_div">
+
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>

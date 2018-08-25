@@ -54,9 +54,13 @@ Route::group(['prefix' => config('laravel_gallery_system.backend_lgs_route_prefi
         Route::post('getEditPortfolioForm', ['as' => 'LGS.Portfolio.getEditPortfolioForm', 'uses' => 'PortfolioController@getEditPortfolioForm']);
         Route::post('editPortfolio', ['as' => 'LGS.Portfolio.editPortfolio', 'uses' => 'PortfolioController@editPortfolio']);
         Route::post('trashPortfolio', ['as' => 'LGS.Portfolio.trashPortfolio', 'uses' => 'PortfolioController@trashPortfolio']);
+        Route::post('trashPortfolioRelated', ['as' => 'LGS.Portfolio.trashPortfolioRelated', 'uses' => 'PortfolioController@trashPortfolioRelated']);
         Route::post('setPortfolioStatus', ['as' => 'LGS.Portfolio.setPortfolioStatus', 'uses' => 'PortfolioController@setPortfolioStatus']);
+        Route::post('autoCompletePortfolioLang', ['as' => 'LGS.Portfolio.autoCompletePortfolioLang', 'uses' => 'PortfolioController@autoCompletePortfolioLang']);
         Route::post('autoCompletePortfolio', ['as' => 'LGS.Portfolio.autoCompletePortfolio', 'uses' => 'PortfolioController@autoCompletePortfolio']);
         Route::post('saveOrderPortfolioForm', ['as' => 'LGS.Portfolio.saveOrderPortfolioForm', 'uses' => 'PortfolioController@saveOrderPortfolioForm']);
+        Route::post('addRelatedPortfolio', ['as' => 'LGS.Portfolio.addRelatedPortfolio', 'uses' => 'PortfolioController@addRelatedPortfolio']);
+        Route::post('getPortfolioRelatedItem', ['as' => 'LGS.Portfolio.getPortfolioRelatedItem', 'uses' => 'PortfolioController@getPortfolioRelatedItem']);
 
     });
 

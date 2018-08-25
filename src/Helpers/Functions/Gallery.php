@@ -123,4 +123,38 @@ if (!function_exists('faq_sampleLang'))
         return $lang ;
     }
 }
+if (!function_exists('createPortfolio'))
+{
+    function createPortfolio($lang_id,$route_name)
+    {
+        $items = \ArtinCMS\LGS\Model\Portfilio::with('tags')->where('lang_id',$lang_id)->
+        where('is_active','1')->
+        orderBy('order','asc')->get();
+        $filters = \ArtinCMS\LTS\Models\Tag::with('portfolios')->where('lang_id',$lang_id)->get();
+        $result= view("laravel_gallery_system::frontend.portfolio", compact('items','filters','route_name'))->render();
+        return $result ;
+    }
+}
+
+if (!function_exists('createPortfolioItem'))
+{
+    function createPortfolioItem($item_id,$route_name)
+    {
+        $item = \ArtinCMS\LGS\Model\Portfilio::with('tags','files')->find(LFM_GetDecodeId($item_id));
+        $images=[];
+        if ($item->encode_file_id)
+        {
+            $images[] = LFM_GenerateDownloadLink('ID',LFM_GetDecodeId($item->encode_file_id));
+        }
+        foreach ($item->files as $file)
+        {
+            $images[] = LFM_GenerateDownloadLink('ID',$file->id);
+        }
+        $relatedItems = \ArtinCMS\LGS\Model\PortfilioSimilar::with('portfolio')->where('item_id',LFM_GetDecodeId($item_id))->get();
+        $result= view("laravel_gallery_system::frontend.portfolioItem", compact('item','images','relatedItems','route_name'))->render();
+        return $result ;
+    }
+}
+
+
 
