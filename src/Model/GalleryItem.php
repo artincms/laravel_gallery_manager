@@ -4,20 +4,12 @@ namespace ArtinCMS\LGS\Model;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use ArtinCMS\LFM\Traits\lfmFillable ;
-use App\Traits\LaraveLikeablesSystem ;
-use App\Traits\LaravelVisitablesSystem ;
-use App\Traits\LaraveTagablesSystem ;
 use Illuminate\Support\Facades\Auth;
 
 
 class GalleryItem extends Model
 {
-    use lfmFillable ;
     use softDeletes;
-    use LaraveLikeablesSystem ;
-    use LaravelVisitablesSystem ;
-    use LaraveTagablesSystem ;
     protected $hidden = ['id','gallery_id','file_id'];
     protected $appends = ['auth','encode_id','encode_file_id','encode_gallery_id'];
 
@@ -88,5 +80,29 @@ class GalleryItem extends Model
         }
         return $auth ;
     }
+
+     public function tags()
+    {
+        return $this->morphToMany('ArtinCMS\LTS\Models\Tag' , 'taggable','lts_taggables','taggable_id','tag_id')->withPivot('type')->withTimestamps() ;
+    }
+
+    public function likes()
+    {
+        return $this->morphMany('ArtinCMS\LLS\Models\Like','likeable','target_type','target_id') ;
+    }
+
+    public function disLikes()
+    {
+        return $this->morphMany('ArtinCMS\LLS\Models\Like','likeable','target_type','target_id') ;
+    }
+    public function visits()
+    {
+        return $this->morphMany('ArtinCMS\LVS\Models\Visit','visitable','target_type','target_id') ;
+    }
+    public function files()
+    {
+        return $this->morphToMany('ArtinCMS\LFM\Models\File' , 'fileable','lfm_fileables','fileable_id','file_id')->withPivot('type')->withTimestamps() ;
+    }
+
 
 }

@@ -1,5 +1,5 @@
 <template>
-    <div class="show_item container">
+    <div class="show_item lgs_container ">
         <div>
             <div v-if="item.type ==0" class="img_parent_div">
                 <img class="item_image" :src="link">
@@ -25,9 +25,10 @@
             </div>
             <div class="show_item_content">
                 <div class="showItemTitle">
-                    <h5><span class="smaller-80">عنوان :</span><span class="margin_right_20">{{this.item.title}}</span></h5>
+                    <h5 class="lgs_h5 lgs_float_left"><span class="smaller-80">عنوان :</span></h5>
+                    <p class="margin_right_20">{{this.item.title}}</p>
                     <div class="desc_item">
-                        <h5 class="float-left margin_left_20"><span class="smaller-80">توضیحات :</span></h5>
+                        <h5 class="lgs_float_left margin_left_20 lgs_h5"><span class="smaller-80">توضیحات :</span></h5>
                         <p class="" v-if="item.description">{{this.item.description}}</p>
                         <p class=""  v-else>-----</p>
                     </div>
@@ -35,7 +36,7 @@
                 </div>
             </div>
             <div class="show_comment_system">
-                <laravel_comments_system :target_model_name="'ArtinCMS\\LGS\\Model\\GalleryItem'" :target_id="item.encode_id" target_parent_column_name="encode_parent_id" :user-id="0" :show="true" ></laravel_comments_system>
+                <laravel_comments_system :target_model_name="'ArtinCMS\\LGS\\Model\\GalleryItem'" :target_id="item.encode_id" target_parent_column_name="encode_parent_id" :user-id="0" :show="true" :direction="direction" ></laravel_comments_system>
             </div>
 
         </div>
@@ -47,11 +48,11 @@
     import laravel_comments_system from '../../laravel_comment_system/laravel_comments_system.vue';
     export default {
         name: "show-item",
-        props:['item'],
+        props:['item','direction'],
         computed: {
             link:function () {
                 if (this.item.type == 0) {
-                    return '/LFM/DownloadFile/ID/' + this.item.encode_file_id+'/original/404.png/100/1110/400';
+                    return '/LFM/DownloadFile/ID/' + this.item.encode_file_id+'/original/404.png/100/1400/400';
                 }
                 else {
                     return '/LFM/DownloadFile/ID/' + this.item.files[0].encode_id;

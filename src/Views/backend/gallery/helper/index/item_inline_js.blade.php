@@ -254,7 +254,7 @@
         var id = input.id;
         var item_id = $(input).data('item_id');
         var parameters = {is_active: checked, item_id: item_id};
-        yesNoAlert('تغییر وضعیت کاربر', 'از تغییر وضعیت کاربر مطمئن هستید ؟', 'warning', 'بله، وضعیت کاربر را تغییر بده!', 'لغو', set_item_is_active, parameters, remove_checked_item, parameters);
+        yesNoAlert('تغییر وضعیت گالری', 'از تغییر وضعیت گالری مطمئن هستید ؟', 'warning', 'بله، وضعیت گالری را تغییر بده!', 'لغو', set_item_is_active, parameters, remove_checked_item, parameters);
     }
 
     function set_item_is_active(params) {

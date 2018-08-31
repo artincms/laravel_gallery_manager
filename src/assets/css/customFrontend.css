@@ -1,3 +1,10 @@
+body {
+    margin: 0;
+}
+*, *::before, *::after {
+    box-sizing: border-box;
+}
+
 .stack {
     display:block;
     /*padding:10px 15px;*/
@@ -62,9 +69,7 @@
     width: 290px;
     float: right;
 }
-.text-right{
-    text-align: left;
-}
+
 .text-left{
     text-align: right;
 }
@@ -80,7 +85,6 @@
     padding: 5px;
     text-align: right;
     font-size: 12px;
-    border-top: 1px solid #6666662e;
     width: 100%;
     min-height: 40px;
     color: #818182;
@@ -159,6 +163,7 @@
     position: absolute;
     text-align: right;
     right: 25px;
+    top: 15px;
 }
 .img_header{
     border: 2px solid #002d3c;
@@ -170,17 +175,21 @@
     width: 272px;
     height: 213px;
 }
-.text-left {
-    text-align: right!important;
+h5.title_item_h {
+    font-size: 16px;
+    margin-bottom: 0.5rem;
+    font-weight: bold;
+    line-height: 1.2;
+    margin-top: 0px;
 }
-.float-left {
-    float: right!important;
-}
+
 .pointer {
     cursor: pointer;
 }
 .showTitle {
-    border-top: 1px solid #80808036;
+    border-top: 1px solid #6666662e;
+    border-bottom: 1px solid #6666662e;
+    padding: 4px;
 }
 .title_item_h{
     color: #00394d;
@@ -271,3 +280,95 @@
     }
 }
 
+.rtl {
+    direction: rtl;
+}
+.ltr {
+    direction: ltr;
+}
+
+.lgs_text_left {
+    text-align: right;
+}
+.lgs_text_right{
+    text-align: left;
+}
+.lgs_float_left {
+    float: right;
+}
+.lgs_float_right {
+    float: left;
+}
+.lgs_container_fluid {
+    width: 100%;
+    padding-left: 15px;
+    padding-right: 15px;
+    margin-left: auto;
+    margin-right: auto;
+    line-height: 1.5;
+}
+.lgs_breadOl {
+    display: -ms-flexbox;
+    display: flex;
+    -ms-flex-wrap: wrap;
+    flex-wrap: wrap;
+    padding: 12px 16px;
+    padding: .75rem 1rem;
+    margin-bottom: 16px;
+    margin-bottom: 1rem;
+    list-style: none;
+    background-color: #e9ecef;
+    border-radius: .25rem;
+}
+.text-center {
+    text-align: center !important;
+}
+.img_parent_div img {
+    width: 100%;
+    max-height: 400px;
+}
+
+.ltr .header_gallery_image {
+    text-align: center;
+    flex: 0 0 19%;
+    width: 410px;
+    position: absolute;
+    text-align: left;
+    left: 25px;
+    top: 15px;
+}
+.ltr .gallery_content {
+    margin-left: 420px;
+}
+.ltr .header_gallery_title{
+    text-align: left;
+}
+
+.ltr .lgs_text_left {
+    text-align: left;
+}
+.ltr .lgs_text_right{
+    text-align: right;
+}
+.ltr .lgs_float_left {
+    float: left;
+}
+.ltr .lgs_float_right {
+    float: right;
+}
+.ltr .main_gallery_div {
+    float:left;
+}
+.ltr .galllery_image_div {
+    float:left;
+}
+.ltr .showTags{
+    text-align: left;
+}
+.ltr .showTags i {
+    float: left;
+}
+.ltr .show_visitable{
+    border-left: 1px solid #d9d9d966;
+    padding-left: 4px;
+}

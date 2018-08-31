@@ -354,7 +354,7 @@
         var checked = input.checked;
         var item_id = input.id;
         var parameters = {is_active: checked, item_id: item_id};
-        yesNoAlert('تغییر وضعیت کاربر', 'از تغییر وضعیت کاربر مطمئن هستید ؟', 'warning', 'بله، وضعیت کاربر را تغییر بده!', 'لغو', set_gallery_is_active, parameters, remove_checked, parameters);
+        yesNoAlert('تغییر وضعیت گالری', 'از تغییر وضعیت گالری مطمئن هستید ؟', 'warning', 'بله، وضعیت گالری را تغییر بده!', 'لغو', set_gallery_is_active, parameters, remove_checked, parameters);
     }
 
     function set_gallery_is_active(params) {

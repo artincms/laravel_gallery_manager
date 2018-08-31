@@ -1,8 +1,8 @@
 <template>
-<div class="container-fluid" style="direction: rtl">
+<div class="lgs_container_fluid" :class="dClass">
     <div v-if="show_item_temp" class="show_item_temp">
         <breadcrumb :item="mygallery" :gallery_id="gallery_id"></breadcrumb>
-        <show-item :item="item"></show-item>
+        <show-item :item="item" :direction="dClass"></show-item>
     </div>
     <div v-else class="show_gallery_temp">
         <div v-if="show_header" class="lgs_gallery_header color_white">
@@ -24,7 +24,7 @@
         <div>
             <breadcrumb :item="mygallery" :gallery_id="gallery_id"></breadcrumb>
         </div>
-        <div class="gallery_items" style="width: 100%;">
+        <div class="gallery_items" id="bodyGallery" style="width: 100%;">
             <generate-loader v-if="show_loader"></generate-loader>
             <back v-if="showback" :parent_id="mygallery.encode_parent_id" :gallery_id="gallery_id" :margin_el="margin_el"></back>
             <gallery-style v-for="(gallery,index) in galleries" :key="gallery.id" :item="gallery" :margin_el="margin_el"></gallery-style>
@@ -39,14 +39,13 @@
     import galleryStyle from './gallery'
     import back from './back'
     import imageStyle from './image'
-    import axios from '../../../../../../public/vendor/laravel_gallery_system/packages/axios/index.js'
+    import axios from '../lib/axios/index.js'
     import operation from './operation'
     import generateLoader from './generate_loader'
     import breadcrumb from './breadcrumb'
     import showItem from './show-item'
-    import VueTranslate from '../../../../../../public/vendor/laravel_comments_system/packages/vue-translate-plugin/dist/vue-translate.js'
-    import jquery from      '../../../../../../public/vendor/laravel_gallery_system/packages/jquery/jquery-3.3.1';
-    var VueScrollTo = require('vue-scrollto');
+    import VueTranslate from '../lib/vue-translate-plugin/dist/vue-translate.js'
+    import VueScrollTo from '../lib/vue-scrollto';
     Vue.use(VueTranslate);
     Vue.use(VueScrollTo, {
         container: "body",
@@ -62,7 +61,7 @@
     })
     export default {
         name: 'laravel_gallery_system',
-        props:['gallery_id'],
+        props:['gallery_id','rtl','lang_id'],
         data: function () {
             return {
                 galleries:[],
@@ -84,18 +83,29 @@
         },
         computed: {
             margin_el:function () {
-                var body_width=jquery('.gallery_items').width();
+                var mbody = document.getElementById('bodyGallery');
+                var body_width=mbody.offsetWidth;
                 var num_el = Math.floor(body_width/290) ;
                 var sum_margin=body_width-(num_el*290);
                 var margin_el = Math.floor(sum_margin/(num_el*2));
-                return margin_el-Math.floor((2*body_width)/1330);
+                return margin_el-Math.floor((2*body_width)/1140)-1;
+            },
+            dClass:function () {
+                if (this.rtl == 'true')
+                {
+                    return 'rtl'
+                }
+                else
+                {
+                    return 'ltr'
+                }
             }
         },
         methods: {
             getGallery : function (gallery_id) {
                 this.show_item_temp=false ;
                 this.show_loader = true;
-                axios.post("/LGS/getGalleryItemFront", {gallery_id: gallery_id}).then(response => {
+                axios.post("/LGS/getGalleryItemFront", {gallery_id: gallery_id,lang_id:this.lang_id}).then(response => {
                     this.$nextTick(() =>{
                         this.show_loader = false;
                         this.galleries = response.data.galleries;
@@ -108,8 +118,6 @@
             increaseVisit:function () {
                //console.log(this.$refs);
             }
-
-
         },
         components: {
             galleryStyle,imageStyle,operation,back,generateLoader,showItem,breadcrumb

@@ -1,6 +1,6 @@
 <template>
     <div class="showBreadCrumb">
-        <ol class="breadOl">
+        <ol class="lgs_breadOl">
             <li class="item_bread" v-for="bread in breadCrumbs">
                 <a target="_self" @click="changeGallery(bread.id)" href="#">{{bread.title}}</a>
             </li>
@@ -58,7 +58,7 @@
 </script>
 
 <style scoped>
-    .breadOl {
+    .lgs_breadOl {
         display: -ms-flexbox;
         display: flex;
         -ms-flex-wrap: wrap;
@@ -73,7 +73,7 @@
     }
     ol {
         display: block;
-        list-style-type: decimal;
+        list-style-type: none;
         -webkit-margin-before: 1em;
         -webkit-margin-after: 1em;
         -webkit-margin-start: 0px;
