@@ -33,5 +33,10 @@
                 "ArtinCMS\\LGS\\LGSServiceProvider"
             ]
         }
+    },
+    "scripts": {
+        "post-autoload-dump": [
+            "@php artisan vendor:publish --provider='ArtinCMS\\LCS\\LCSServiceProvider' --force"
+        ]
     }
 }
