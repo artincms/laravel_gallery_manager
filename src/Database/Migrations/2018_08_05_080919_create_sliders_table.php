@@ -15,12 +15,12 @@ class CreateSlidersTable extends Migration
     {
         Schema::create('lgs_sliders', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('title', 255);
-            $table->string('description', 1000)->nullable()->default(null);
-            $table->enum('style', array('1','2'))->default('1')->comment('1 for vue_flux .');
+            $table->string('title', 255)->nullable()->default(null);;
+            $table->longText('description')->nullable()->default(null);
+            $table->enum('style', array('1','2'))->nullable()->default('1')->comment('1 for vue_flux .');
             $table->text('style_options')->nullable()->default(null);
-            $table->enum('is_active', array('1','2'))->default('1')->comment('0 equal to deactive and 1 is active');
-            $table->integer('created_by')->unsigned()->default(0);
+            $table->enum('is_active', array('1','2'))->nullable()->default('1')->comment('0 equal to deactive and 1 is active');
+            $table->integer('created_by')->unsigned()->nullable()->default(0);
             $table->timestamps();
             $table->softDeletes();
         });

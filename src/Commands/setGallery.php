@@ -12,7 +12,7 @@ class setGallery extends Command
      *
      * @var string
      */
-    protected $signature = 'lgs:install {--force}';
+    protected $signature = 'lgs:install {--full}{--force}';
 
     /**
      * The console command description.
@@ -39,6 +39,7 @@ class setGallery extends Command
     public function handle()
     {
         $force = $this->option('force');
+        $full = $this->option('full');
         $exitCode = Artisan::call('vendor:publish', [
             '--provider' => "ArtinCMS\LGS\LGSServiceProvider", '--force' => $force
         ]);
@@ -54,7 +55,13 @@ class setGallery extends Command
         $exitCode = Artisan::call('vendor:publish', [
             '--provider' => "ArtinCMS\LVS\LVSServiceProvider", '--force' => $force
         ]);
-
-
+        if($full)
+        {
+            $exitCode = Artisan::call('migrate');
+            $exitCode = Artisan::call('db:seed', [
+                '--class' => "ArtinCMS\LFM\Database\Seeds\FilemanagerTableSeeder"
+            ]);
+        }
+        return 'LARAVEL GALLERY MANAGER INSTALL SUCCESSFULLY';
     }
 }
