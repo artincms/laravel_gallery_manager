@@ -149,5 +149,5 @@
 
 <style lang="scss" scoped>
     @import  '../../../../../../public/vendor/laravel_gallery_system/css/customFrontend.css';
-    @import  '../../../../../../public/vendor/laravel_gallery_system/fonts/icon/style.css';
+    @import  '../lib/icon/style.css';
 </style>
