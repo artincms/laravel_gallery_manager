@@ -1,13 +1,14 @@
 <template>
-    <div class="text-center row">
+    <div class="text-center" style="padding: 4px;margin: 2px -10px 2px -10px">
         <div class="width_50 lgs_float_left lgs_text_left">
-            <i v-if="type =='gallery' || item.type == 0" class="fas fa-search-plus color_light_orange pointer showFullScreen" :data-caption="item.description" :data-title="item.title" :id="'fullImage'+ item.encode_id" :data-image="link"></i>
-            <a class="lgs-icon fa-lgs-download color_blue_martina" :href="link" target="_blank"></a>
+            <div v-if="type =='gallery' || item.type == 0" class="lgs-icon fa-lgs-search-plus color_light_orange pointer showFullScreen lgs_float_left margin_right_4" :data-caption="item.description" :data-title="item.title" :id="'fullImage'+ item.encode_id" :data-image="link"></div>
+            <div class="lgs-icon fa-lgs-download color_blue_martina lgs_float_left margin_right_4" :href="link" target="_blank"></div>
             <visitable ref="visit" :model="model" :item ="item"></visitable>
         </div>
         <div class="width_50 lgs_float_left lgs_text_right">
           <likeable :model="model" :item ="item" :auth="auth"></likeable>
         </div>
+        <div style="clear: both"></div>
     </div>
 </template>
 

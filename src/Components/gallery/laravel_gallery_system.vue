@@ -7,7 +7,7 @@
     <div v-else class="show_gallery_temp">
         <div v-if="show_header" class="lgs_gallery_header color_white">
             <div>
-                <div class="header_gallery_image">
+                <div class="header_gallery_image thumb_zoom">
                     <img class="img_header" :src="'/LFM/DownloadFile/ID/'+mygallery.encode_file_id+'/small/404.png/100/410/225'">
                     <div class="header_gallery_opeartioin">
                         <operation ref="mainGallery" :item="mygallery" type="gallery" :model="'ArtinCMS\\LGS\\Model\\Gallery'"></operation>
@@ -46,6 +46,7 @@
     import showItem from './show-item'
     import VueTranslate from '../lib/vue-translate-plugin/dist/vue-translate.js'
     import VueScrollTo from '../lib/vue-scrollto';
+    import FullScreenView from  '../lib/FullScreenView.js';
     Vue.use(VueTranslate);
     Vue.use(VueScrollTo, {
         container: "body",
@@ -112,6 +113,14 @@
                         this.mygallery = response.data.gallery;
                         this.images = response.data.images;
                         this.show_header = response.data.showHeader;
+                        if (response.data.lang =='fa')
+                        {
+                            this.$translate.setLang("fa");
+                        }
+                        else
+                        {
+                            this.$translate.setLang("en");
+                        }
                     })
                 })
             },
@@ -121,6 +130,18 @@
         },
         components: {
             galleryStyle,imageStyle,operation,back,generateLoader,showItem,breadcrumb
+        },
+        locales: {
+            en: {
+                'title' : 'Title :',
+                'description' : 'Description :',
+                'tags' : ': tags'
+            },
+            fa: {
+                'title' : 'عنوان :',
+                'description' : ': توضیحات :',
+                'tags' : 'برچسب ها :'
+            }
         }
     }
 </script>

@@ -61,20 +61,20 @@ class Gallery extends Model
         return LFM_getEncodeId($this->parent_id);
     }
 
-    public function getLikesCountAttribute($value)
-    {
-        return (int)LGS_ConvertNumbersEntoFa($value);
-    }
-
-    public function getDisLikesCountAttribute($value)
-    {
-        return (int)LGS_ConvertNumbersEntoFa($value);
-    }
-
-    public function getVisitsCountAttribute($value)
-    {
-        return (int)LGS_ConvertNumbersEntoFa($value);
-    }
+//    public function getLikesCountAttribute($value)
+//    {
+//        return LGS_ConvertNumbersEntoFa($value);
+//    }
+//
+//    public function getDisLikesCountAttribute($value)
+//    {
+//        return (int)LGS_ConvertNumbersEntoFa($value);
+//    }
+//
+//    public function getVisitsCountAttribute($value)
+//    {
+//        return (int)LGS_ConvertNumbersEntoFa($value);
+//    }
 
     public function getAuthAttribute($value)
     {

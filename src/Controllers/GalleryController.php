@@ -751,13 +751,43 @@ class GalleryController extends Controller
     {
         $gallery_id = LFM_GetDecodeId($request->gallery_id);
         $lang_id = $request->lang_id;
-        $galleries = Gallery::withCount('likes', 'disLikes','visits')->where('parent_id', $gallery_id)->where('lang_id',$lang_id)->get();
+        $galleries = Gallery::withCount(
+            [
+                'likes'=>function($e){
+                    $e->where('type','1');
+                },
+                'disLikes'=>function($e){
+                    $e->where('type','-1');
+                },
+                'visits'
+            ]
+        )->where('parent_id', $gallery_id)->where('lang_id',$lang_id)->get();
         if ($gallery_id !=0)
         {
-            $myGallery = Gallery::withCount('likes', 'disLikes','visits')->find($gallery_id);
+            $myGallery = Gallery::withCount(
+                [
+                    'likes'=>function($e){
+                        $e->where('type','1');
+                    },
+                    'disLikes'=>function($e){
+                        $e->where('type','-1');
+                    },
+                    'visits'
+                ]
+            )->find($gallery_id);
             $myGallery->string_description = strip_tags($myGallery->description);
             $result['gallery'] = $myGallery;
-            $images = GalleryItem::withCount('likes', 'disLikes','visits')->with('files')->where('gallery_id', $gallery_id)->where('lang_id',$lang_id)->get();
+            $images = GalleryItem::withCount(
+                [
+                    'likes'=>function($e){
+                        $e->where('type','1');
+                    },
+                    'disLikes'=>function($e){
+                        $e->where('type','-1');
+                    },
+                    'visits'
+                ]
+            )->with('files')->where('gallery_id', $gallery_id)->where('lang_id',$lang_id)->get();
             $result['images'] = $images;
             $result['showHeader'] = true;
         }
@@ -768,6 +798,7 @@ class GalleryController extends Controller
         }
         $result['galleries'] = $galleries;
 
+        $result['lang'] = (string)app()->getLocale();
         return $result;
     }
     public function searchForId($id, $array)

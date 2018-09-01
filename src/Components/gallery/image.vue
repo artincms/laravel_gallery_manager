@@ -1,7 +1,7 @@
 <template>
     <div class="galllery_image_div"  :style="{margin:margin_el+ 'px'}">
         <div class="stack_image text-center">
-            <div v-if="item.type==0" class="showImage height_225">
+            <div v-if="item.type==0" class="showImage height_225 thumb_zoom">
                 <img class="img_galleyr showFullScreen pointer"  :src="'/LFM/DownloadFile/ID/'+item.encode_file_id+'/small/404.png/100/272/208'"
                      :data-caption="item.description" :data-title="item.title" :id="'fullImageitem'+ item.encode_id" :data-image="link">
             </div>
@@ -24,7 +24,7 @@
                 </div>
             </div>
             <div class="showTags"><i class="fas fa-tags">
-            </i><span>برچسب ها:</span>
+            </i><span>{{ t('tags') }}</span>
                 <br>
             </div>
         </div>

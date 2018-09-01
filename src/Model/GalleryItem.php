@@ -52,20 +52,20 @@ class GalleryItem extends Model
     {
         return LFM_getEncodeId($this->gallery_id);
     }
-    public function getLikesCountAttribute($value)
-    {
-        return (int)LGS_ConvertNumbersEntoFa($value);
-    }
-
-    public function getDisLikesCountAttribute($value)
-    {
-        return (int)LGS_ConvertNumbersEntoFa($value);
-    }
-
-    public function getVisitsCountAttribute($value)
-    {
-        return (int)LGS_ConvertNumbersEntoFa($value);
-    }
+//    public function getLikesCountAttribute($value)
+//    {
+//        return (int)LGS_ConvertNumbersEntoFa($value);
+//    }
+//
+//    public function getDisLikesCountAttribute($value)
+//    {
+//        return (int)LGS_ConvertNumbersEntoFa($value);
+//    }
+//
+//    public function getVisitsCountAttribute($value)
+//    {
+//        return (int)LGS_ConvertNumbersEntoFa($value);
+//    }
 
     public function getAuthAttribute($value)
     {

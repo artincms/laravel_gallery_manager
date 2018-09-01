@@ -25,10 +25,10 @@
             </div>
             <div class="show_item_content">
                 <div class="showItemTitle">
-                    <h5 class="lgs_h5 lgs_float_left"><span class="smaller-80">عنوان :</span></h5>
+                    <h5 class="lgs_h5 lgs_float_left"><span class="smaller-80">{{ t('title') }}</span></h5>
                     <p class="margin_right_20">{{this.item.title}}</p>
                     <div class="desc_item">
-                        <h5 class="lgs_float_left margin_left_20 lgs_h5"><span class="smaller-80">توضیحات :</span></h5>
+                        <h5 class="lgs_float_left margin_left_20 lgs_h5"><span class="smaller-80">{{ t('description') }}</span></h5>
                         <p class="" v-if="item.description">{{this.item.description}}</p>
                         <p class=""  v-else>-----</p>
                     </div>
