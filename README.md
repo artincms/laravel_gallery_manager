@@ -20,13 +20,9 @@ Laravel 5.5|5.6
 <div class="highlight highlight-source-shell"><pre>composer require artincms/laravel_gallery_system</pre></div>
 <h6>publish vendor</h6>
  <div class="highlight highlight-text-html-php"><pre>
- $ php artisan vendor:publish --provider=ArtinCMS\LGS\LGSServiceProvider
+ $ php artisan vendor:publish --provider="ArtinCMS\LGS\LGSServiceProvider"
 </pre> </div>
 
-if update package for publish vendor you should run : 
- <div class="highlight highlight-text-html-php"><pre>
- $ php artisan vendor:publish --provider=ArtinCMS\LGS\LGSServiceProvider --force
-</pre> </div>
 this package use laravel file manager for setup this package you must publish file manager too :
 <h6>publish vendor for laravel file manager</h6>
  <div class="highlight highlight-text-html-php"><pre>
@@ -63,7 +59,19 @@ for more learn about laravel file manager setup you can visit <a href="https://g
             LGS_CreateModalSliderManager()
           </pre> 
       </div>
-      
+<h5>use frontend Gallery Manager</h5> 
+in frontend used vue js to create template for use packages template 
+you should set bellow html in your page .
+<div class="highlight highlight-text-html-php"><pre>
+
+```html
+<div id="gallery">
+    <laravel_gallery_system gallery_id="5" lang_id="2" rtl=false></laravel_gallery_system>
+</div>
+ ```
+ that rtl can just two parameter true or false .
+ you should create your vue js file and include in your page . an example of this js file is exist in 
+ assets/js/gallery.js
 <h5>use gallery manager as Porfolio</h5>
 you can use gallery manager as porfolio . the portfolio manager
 backend url is : 
