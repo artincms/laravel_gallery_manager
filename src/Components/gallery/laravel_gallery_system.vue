@@ -89,6 +89,7 @@
                 var num_el = Math.floor(body_width/290) ;
                 var sum_margin=body_width-(num_el*290);
                 var margin_el = Math.floor(sum_margin/(num_el*2));
+                //console.log()
                 return margin_el-Math.floor((2*body_width)/1140)-1;
             },
             dClass:function () {

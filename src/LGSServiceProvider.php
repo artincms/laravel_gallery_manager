@@ -2,6 +2,7 @@
 
 namespace ArtinCMS\LGS;
 
+use ArtinCMS\LGS\Commands\setGallery;
 use Illuminate\Support\ServiceProvider;
 
 class LGSServiceProvider extends ServiceProvider
@@ -51,6 +52,11 @@ class LGSServiceProvider extends ServiceProvider
         $this->publishes([
             __DIR__ . '/Lang/Fa/laravel_gallery_system.php' => resource_path('lang/fa/laravel_gallery_system.php'),
         ]);
+        if ($this->app->runningInConsole()) {
+            $this->commands([
+                setGallery::class,
+            ]);
+        }
     }
 
     /**
