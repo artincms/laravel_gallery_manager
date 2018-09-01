@@ -2,7 +2,7 @@
     <div class="text-center row">
         <div class="width_50 lgs_float_left lgs_text_left">
             <i v-if="type =='gallery' || item.type == 0" class="fas fa-search-plus color_light_orange pointer showFullScreen" :data-caption="item.description" :data-title="item.title" :id="'fullImage'+ item.encode_id" :data-image="link"></i>
-            <a class="fas fa-download color_blue_martina" :href="link" target="_blank"></a>
+            <a class="lgs-icon fa-lgs-download color_blue_martina" :href="link" target="_blank"></a>
             <visitable ref="visit" :model="model" :item ="item"></visitable>
         </div>
         <div class="width_50 lgs_float_left lgs_text_right">

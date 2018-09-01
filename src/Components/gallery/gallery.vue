@@ -3,7 +3,7 @@
         <div class="stack text-center">
             <div @click="changeGallery(item.encode_id)" class="showImage height_225">
                 <img class="img_galleyr pointer" :src="'/LFM/DownloadFile/ID/'+item.encode_file_id+'/small/404.png/100/272/208'">
-                <i class="far fa-2x fa-folder-open folder_show_folder pointer"></i>
+                <i class="lgs-icon fa-lgs-folder-open1 folder_show_folder pointer"></i>
             </div>
             <div class="showContent">
                 <div class="showOperateion">

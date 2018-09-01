@@ -2,7 +2,7 @@
     <div class="main_gallery_div" :style="{margin:margin_el+ 'px'}">
         <div class="stack text-center">
             <div @click="changeGallery(parent_id)" class="height_225">
-                <span class="level_up pointer"><i class="fas fa-level-up-alt thumbnail_back"></i></span>
+                <span class="level_up pointer"><i class="lgs-icon fa-lgs-level-up-alt thumbnail_back"></i></span>
             </div>
             <div class="showContent">
                 <div class="showOperateion">

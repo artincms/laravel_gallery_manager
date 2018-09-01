@@ -127,6 +127,5 @@
 
 <style lang="scss" scoped>
     @import  '../../../../../../public/vendor/laravel_gallery_system/css/customFrontend.css';
-    @import  '../../../../../../public/vendor/laravel_gallery_system/packages/fontawesome/fontawesome_v_5_2/css/all.css';
-
+    @import  '../../../../../../public/vendor/laravel_gallery_system/fonts/icon/style.css';
 </style>
