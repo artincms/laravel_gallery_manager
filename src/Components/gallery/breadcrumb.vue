@@ -14,8 +14,8 @@
         props: ['item','gallery_id'],
         computed:{
             breadCrumbs:function () {
-                console.log(this.item,'bread');
-                if(this.item.encode_id)
+                console.log(this.item.encode_id,'bread');
+                if(this.item.encode_id || this.item.encode_id  ==0)
                 {
                     let id = this.item.encode_id;
                     let title = this.item.title;
@@ -43,13 +43,14 @@
                 }
                 else
                 {
-                    return ['d'] ;
+                    return [] ;
                 }
             }
         },
         methods:{
             changeGallery :function (parent_id) {
-                if(parent_id)
+                console.log(parent_id);
+                if(parent_id || parent_id ==0)
                 {
                     this.$parent.getGallery(parent_id);
                 }

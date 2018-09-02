@@ -6,6 +6,7 @@ namespace ArtinCMS\LGS\Controllers;
 use App\Http\Controllers\Controller;
 use ArtinCMS\LGS\Model\Gallery;
 use ArtinCMS\LGS\Model\GalleryItem;
+use ArtinCMS\LVS\Models\Visit;
 use DataTables;
 use Illuminate\Http\Exceptions\HttpResponseException;
 use Illuminate\Http\Request;
@@ -751,6 +752,8 @@ class GalleryController extends Controller
     {
         $gallery_id = LFM_GetDecodeId($request->gallery_id);
         $lang_id = $request->lang_id;
+        //increase visits
+        $this->setVisit('ArtinCMS\LGS\Model\Gallery',$gallery_id,$request->ip);
         if($lang_id == 0)
         {
             $lang_id =false ;
@@ -799,7 +802,7 @@ class GalleryController extends Controller
         {
             $result['images'] = [];
             $result['showHeader'] = false;
-            $result['gallery'] = ['id'=>0,'encode_id'=>0,'title'=>'home'];
+            $result['gallery'] = ['id'=>0,'encode_id'=>0,'title'=>__('laravel_gallery_system.home')];
         }
         $result['galleries'] = $galleries;
 
@@ -817,5 +820,26 @@ class GalleryController extends Controller
         }
 
         return null;
+    }
+    public function setVisit($model,$id,$ip)
+    {
+
+        $item = new Visit;
+        if (Auth::user())
+        {
+            if (isset(Auth::user()->id))
+            {
+                $item->user_id = Auth::user()->id;
+            }
+
+        }
+        $item->ip = $ip ;
+        $item->target_id = $id;
+        $item->target_type = $model;
+        $item->save();
+        $result = [
+            'success'  => true,
+        ];
+        return $result;
     }
 }

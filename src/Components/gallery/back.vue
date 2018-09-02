@@ -1,8 +1,8 @@
 <template>
     <div class="main_gallery_div" :style="{margin:margin_el+ 'px'}">
         <div class="stack text-center">
-            <div @click="changeGallery(parent_id)" class="height_225">
-                <span class="level_up pointer"><i class="lgs-icon fa-lgs-level-up-alt thumbnail_back"></i></span>
+            <div @click="changeGallery(parent_id)" class="height_225" style="height: 238px">
+                <div class="level_up pointer" style="margin-top: 39px;"><i class="lgs-icon fa-lgs-level-up-alt thumbnail_back" ></i></div>
             </div>
             <div class="showContent">
                 <div class="showOperateion">
@@ -33,10 +33,10 @@
 </script>
 
 <style scoped>
-span.level_up{
-    font-size: 120px;
-    color: #12cbc4;
-}
+span.level_up , div.level_up{
+     font-size: 120px;
+     color: #12cbc4;
+ }
     .showOperateion{
         min-height:23px;
     }

@@ -67,7 +67,7 @@
             return {
                 galleries:[],
                 images:[],
-                mygallery:[],
+                mygallery:false,
                 show_header:false,
                 showback:false,
                 show_loader:false,

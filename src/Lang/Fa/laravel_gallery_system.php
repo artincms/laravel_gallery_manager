@@ -1,7 +1,8 @@
 <?php
 
 return [
-    'all' => "All",
+    'all' => "همه",
+    'home' => "خانه",
     'related_projecets' => "پروژه های مرتبط",
 
 ];
