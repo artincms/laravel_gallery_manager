@@ -1,6 +1,7 @@
 <template>
     <div class="galllery_image_div"  :style="{margin:margin_el+ 'px'}">
         <div class="stack_image text-center">
+            <generate-loader v-if="showLoader"></generate-loader>
             <div v-if="item.type==0" class="showImage height_225 thumb_zoom">
                 <img class="img_galleyr showFullScreen pointer"  :src="'/LFM/DownloadFile/ID/'+item.encode_file_id+'/small/404.png/100/272/208'"
                      :data-caption="item.description" :data-title="item.title" :id="'fullImageitem'+ item.encode_id" :data-image="link">
@@ -33,16 +34,25 @@
 
 <script>
     import operation from './operation'
+    import generateLoader from './generate_loader'
     export default {
         name: "image-style",
         props:['item','margin_el'],
         components:{
-            operation
+            operation,generateLoader
         },
         computed: {
             link: function () {
-                return '/LFM/DownloadFile/ID/' + this.item.file_id
+                return '/LFM/DownloadFile/ID/' + this.item.encode_file_id
             },
+            showLoader:function () {
+                if(this.item.encode_id == this.$parent.click_id)
+                {
+                    return true ;
+                }
+                else
+                    return false ;
+            }
         },
         methods:{
             showItem:function () {

@@ -1,7 +1,7 @@
 <template>
     <div class="showBreadCrumb">
         <ol class="lgs_breadOl">
-            <li class="item_bread" v-for="bread in breadCrumbs">
+            <li :class="{item_bread:slash}" v-for="bread in breadCrumbs">
                 <a target="_self" @click="changeGallery(bread.id)" href="#">{{bread.title}}</a>
             </li>
         </ol>
@@ -14,7 +14,6 @@
         props: ['item','gallery_id'],
         computed:{
             breadCrumbs:function () {
-                console.log(this.item.encode_id,'bread');
                 if(this.item.encode_id || this.item.encode_id  ==0)
                 {
                     let id = this.item.encode_id;
@@ -35,7 +34,7 @@
                         crump.splice(index+1,length);
 
                     }
-                    if(this.item.encode_id == this.gallery_id)
+                    if(this.item.main_id == this.gallery_id)
                     {
                         this.$parent.showback=false ;
                     }
@@ -45,11 +44,20 @@
                 {
                     return [] ;
                 }
+            },
+            slash:function () {
+                if(this.breadCrumbs.length >1)
+                {
+                    return true ;
+                }
+                else
+                {
+                    return false ;
+                }
             }
         },
         methods:{
             changeGallery :function (parent_id) {
-                console.log(parent_id);
                 if(parent_id || parent_id ==0)
                 {
                     this.$parent.getGallery(parent_id);

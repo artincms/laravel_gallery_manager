@@ -22,13 +22,14 @@
         props:['parent_id','gallery_id','margin_el'],
         methods:{
             changeGallery :function (parent_id) {
+                console.log(this.parent_id,this.gallery_id);
                 if(this.parent_id == this.gallery_id)
                 {
                     this.$parent.showback=false ;
                 }
-                this.$parent.getGallery(parent_id);
+                this.$parent.getGallery(parent_id,this.gallery_id);
             }
-        }
+        },
     }
 </script>
 

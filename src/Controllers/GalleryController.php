@@ -768,7 +768,7 @@ class GalleryController extends Controller
                 },
                 'visits'
             ]
-        )->where('parent_id', $gallery_id)->where('lang_id',$lang_id)->get();
+        )->where('parent_id', $gallery_id)->where('lang_id',$lang_id)->where('is_active','1')->get();
         if ($gallery_id !=0)
         {
             $myGallery = Gallery::withCount(
@@ -783,6 +783,7 @@ class GalleryController extends Controller
                 ]
             )->find($gallery_id);
             $myGallery->string_description = strip_tags($myGallery->description);
+            $myGallery->main_id =$gallery_id;
             $result['gallery'] = $myGallery;
             $images = GalleryItem::withCount(
                 [
@@ -794,7 +795,7 @@ class GalleryController extends Controller
                     },
                     'visits'
                 ]
-            )->with('files')->where('gallery_id', $gallery_id)->where('lang_id',$lang_id)->get();
+            )->with('files')->where('gallery_id', $gallery_id)->where('lang_id',$lang_id)->where('is_active','1')->get();
             $result['images'] = $images;
             $result['showHeader'] = true;
         }
@@ -802,11 +803,12 @@ class GalleryController extends Controller
         {
             $result['images'] = [];
             $result['showHeader'] = false;
-            $result['gallery'] = ['id'=>0,'encode_id'=>0,'title'=>__('laravel_gallery_system.home')];
+            $result['gallery'] = ['id'=>0,'encode_id'=>0,'main_id'=>0,'title'=>__('laravel_gallery_system.home')];
         }
         $result['galleries'] = $galleries;
 
         $result['lang'] = (string)app()->getLocale();
+        $result['encode_id'] = LFM_getEncodeId(LFM_GetDecodeId($gallery_id));
         return $result;
     }
     public function searchForId($id, $array)

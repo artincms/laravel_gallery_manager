@@ -25,7 +25,6 @@
             <breadcrumb v-if="mygallery" :item="mygallery" :gallery_id="gallery_id"></breadcrumb>
         </div>
         <div class="gallery_items" id="bodyGallery" style="width: 100%;">
-            <generate-loader v-if="show_loader"></generate-loader>
             <back v-if="showback" :parent_id="mygallery.encode_parent_id" :gallery_id="gallery_id" :margin_el="margin_el"></back>
             <gallery-style v-for="(gallery,index) in galleries" :key="gallery.id" :item="gallery" :margin_el="margin_el"></gallery-style>
             <image-style v-for="(image,index) in images" :key="image.title" :item="image" :margin_el="margin_el" ></image-style>
@@ -72,6 +71,7 @@
                 showback:false,
                 show_loader:false,
                 show_item_temp:false,
+                click_id:false,
                 item:[],
                 crumb:[]
             }
@@ -105,6 +105,7 @@
         },
         methods: {
             getGallery : function (gallery_id) {
+                this.click_id = gallery_id ;
                 this.show_item_temp=false ;
                 this.show_loader = true;
                 if(!this.lang_id)
@@ -117,6 +118,11 @@
                 }
                 axios.post("/LGS/getGalleryItemFront", {gallery_id: gallery_id,lang_id:this.lang_id}).then(response => {
                     this.$nextTick(() =>{
+                        console.log(this.gallery_id,'gallery_id');
+                        if(gallery_id !=0)
+                        {
+                            this.showback=true;
+                        }
                         this.show_loader = false;
                         this.galleries = response.data.galleries;
                         this.mygallery = response.data.gallery;
