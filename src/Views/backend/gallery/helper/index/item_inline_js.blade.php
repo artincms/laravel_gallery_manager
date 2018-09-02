@@ -155,7 +155,7 @@
     ];
     var create_gallery_item_constraints = {
         title: {
-            presence: {message: '^<strong>عنوان فرم ضروریست.</strong>'}
+            presence: {message: '^<strong>عنوان فرم ضروری است.</strong>'}
         },
         order: {
             numericality: {
