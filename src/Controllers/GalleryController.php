@@ -751,6 +751,10 @@ class GalleryController extends Controller
     {
         $gallery_id = LFM_GetDecodeId($request->gallery_id);
         $lang_id = $request->lang_id;
+        if($lang_id == 0)
+        {
+            $lang_id =false ;
+        }
         $galleries = Gallery::withCount(
             [
                 'likes'=>function($e){
@@ -795,6 +799,7 @@ class GalleryController extends Controller
         {
             $result['images'] = [];
             $result['showHeader'] = false;
+            $result['gallery'] = ['id'=>0,'encode_id'=>0,'title'=>'home'];
         }
         $result['galleries'] = $galleries;
 

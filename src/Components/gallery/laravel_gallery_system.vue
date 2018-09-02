@@ -22,7 +22,7 @@
             </div>
         </div>
         <div>
-            <breadcrumb :item="mygallery" :gallery_id="gallery_id"></breadcrumb>
+            <breadcrumb v-if="mygallery" :item="mygallery" :gallery_id="gallery_id"></breadcrumb>
         </div>
         <div class="gallery_items" id="bodyGallery" style="width: 100%;">
             <generate-loader v-if="show_loader"></generate-loader>
@@ -107,6 +107,14 @@
             getGallery : function (gallery_id) {
                 this.show_item_temp=false ;
                 this.show_loader = true;
+                if(!this.lang_id)
+                {
+                    this.lang_id = 0 ;
+                }
+                if(!this.rtl)
+                {
+                    this.rtl = 'false'
+                }
                 axios.post("/LGS/getGalleryItemFront", {gallery_id: gallery_id,lang_id:this.lang_id}).then(response => {
                     this.$nextTick(() =>{
                         this.show_loader = false;
@@ -148,6 +156,6 @@
 </script>
 
 <style lang="scss" scoped>
-    @import  '../../../../../../public/vendor/laravel_gallery_system/css/customFrontend.css';
+    @import  '../assets/css/customFrontend.css';
     @import  '../lib/icon/style.css';
 </style>

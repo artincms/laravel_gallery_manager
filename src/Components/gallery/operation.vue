@@ -2,7 +2,7 @@
     <div class="text-center" style="padding: 4px;margin: 2px -10px 2px -10px">
         <div class="width_50 lgs_float_left lgs_text_left">
             <div v-if="type =='gallery' || item.type == 0" class="lgs-icon fa-lgs-search-plus color_light_orange pointer showFullScreen lgs_float_left margin_right_4" :data-caption="item.description" :data-title="item.title" :id="'fullImage'+ item.encode_id" :data-image="link"></div>
-            <div class="lgs-icon fa-lgs-download color_blue_martina lgs_float_left margin_right_4" :href="link" target="_blank"></div>
+            <a class="lgs-icon fa-lgs-download color_blue_martina lgs_float_left margin_right_4" :href="link" target="_blank"></a>
             <visitable ref="visit" :model="model" :item ="item"></visitable>
         </div>
         <div class="width_50 lgs_float_left lgs_text_right">
@@ -13,7 +13,7 @@
 </template>
 
 <script>
-    import axios from '../../../../../../public/vendor/laravel_gallery_system/packages/axios/index.js'
+    import axios from '../lib/axios/index.js'
     import likeable from '../../laravel_likeable_system/laravel_likeable_system.vue'
     import visitable from '../../laravel_visitable/laravel_visitable_system.vue'
     export default {

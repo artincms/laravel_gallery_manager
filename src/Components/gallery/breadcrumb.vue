@@ -14,6 +14,7 @@
         props: ['item','gallery_id'],
         computed:{
             breadCrumbs:function () {
+                console.log(this.item,'bread');
                 if(this.item.encode_id)
                 {
                     let id = this.item.encode_id;
@@ -42,7 +43,7 @@
                 }
                 else
                 {
-                    return [] ;
+                    return ['d'] ;
                 }
             }
         },
