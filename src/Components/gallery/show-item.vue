@@ -3,6 +3,9 @@
         <div>
             <div v-if="item.type ==0" class="img_parent_div">
                 <img class="item_image" :src="link">
+                <div class="back_to_par" @click="changGallery(item.encode_gallery_id)">
+                    <i class="lgs-icon fa-lgs-level-up-alt" style="opacity: 0.4;"></i>
+                </div>
                 <div class="show_operation_item">
                     <operation :item="item" type="image" :model="'ArtinCMS\\LGS\\Model\\GalleryItem'"></operation>
                 </div>
@@ -60,7 +63,9 @@
             }
         },
         methods:{
-
+            changGallery :function (parent_id) {
+                this.$parent.getGallery(parent_id);
+            }
         },
         components :{
             laravel_comments_system,operation

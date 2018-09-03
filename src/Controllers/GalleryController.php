@@ -452,6 +452,7 @@ class GalleryController extends Controller
         $item = GalleryItem::find(LFM_GetDecodeId($request->item_id));
         $item->encode_id = LFM_getEncodeId($item->id);
         $item->gallery_encode_id = LFM_getEncodeId($item->gallery_id);
+        $item->is_active = 1;
         $tags = LTS_showTag($item);
 
         //image options
@@ -782,7 +783,7 @@ class GalleryController extends Controller
                     },
                     'visits'
                 ]
-            )->find($gallery_id);
+            )->with('parrent')->find($gallery_id);
             $myGallery->string_description = strip_tags($myGallery->description);
             $myGallery->main_id = $gallery_id;
             $result['gallery'] = $myGallery;
@@ -804,10 +805,10 @@ class GalleryController extends Controller
         {
             $result['images'] = [];
             $result['showHeader'] = false;
-            $result['gallery'] = ['id' => 0, 'encode_id' => 0, 'main_id' => 0, 'title' => __('laravel_gallery_system.home')];
+            $result['gallery'] = ['id' => 0, 'encode_id' => 0, 'main_id' => 0,'par', 'title' => __('laravel_gallery_system.home')];
         }
         $result['galleries'] = $galleries;
-        if(config('laravel_gallery_system.showBreadCrumb'))
+        if (config('laravel_gallery_system.showBreadCrumb'))
         {
             $result['showBread'] = true;
 
@@ -818,6 +819,8 @@ class GalleryController extends Controller
         }
         $result['lang'] = (string)app()->getLocale();
         $result['encode_id'] = LFM_getEncodeId(LFM_GetDecodeId($gallery_id));
+        $result['h_b_color'] = config('laravel_gallery_system.header_back_color');
+        $result['h_f_color'] = config('laravel_gallery_system.header_font_color');
 
         return $result;
     }

@@ -1,8 +1,8 @@
 $(document).off("click", ".showFullScreen");
 $(document).on("click", ".showFullScreen", function (e) {
-    item_id = '#'+$(this).attr('id');console.log(item_id);
+    item_id = '#'+$(this).attr('id');
+    console.log(item_id);
     var elements = document.querySelectorAll( item_id );
-    console.log($(item_id));
     Intense( $(item_id));
 
 });
@@ -239,7 +239,6 @@ var Intense = (function() {
         mouse.yCurr = mouse.yDest = window.innerHeight / 2;
         if(document.body.hasChildNodes( container ))
         {
-            console.log(container);
             //document.body.removeChild( container );
         }
         document.body.appendChild( container );
@@ -252,8 +251,6 @@ var Intense = (function() {
 
         unlockBody();
         unbindEvents();
-        console.log(container);
-        // console.log();
         var elements = document.getElementsByTagName("figure"),index;
         var body = document.getElementsByTagName("BODY")[0];
         body.style = "overflow:scroll";
@@ -261,11 +258,6 @@ var Intense = (function() {
         for (index = elements.length - 1; index >= 0; index--) {
             elements[index].parentNode.removeChild(elements[index]);
         }
-        console.log(elements);
-        // if(document.body.hasChildNodes( container ))
-        // {
-        //     document.body.removeChild( container );
-        // }
     }
 
     function setDimensions() {

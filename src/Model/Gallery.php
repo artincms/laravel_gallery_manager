@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\Auth;
 
 class Gallery extends Model
 {
-    protected $hidden = ['id','parent_id','default_img'];
+    protected $hidden = ['id','default_img'];
     protected $appends = ['auth','encode_id','encode_file_id','encode_parent_id'];
     protected static function boot()
     {
@@ -111,6 +111,11 @@ class Gallery extends Model
     public function files()
     {
         return $this->morphToMany('ArtinCMS\LFM\Models\File' , 'fileable','lfm_fileables','fileable_id','file_id')->withPivot('type')->withTimestamps() ;
+    }
+
+    public function parrent()
+    {
+        return $this->belongsTo('ArtinCMS\LGS\Model\Gallery','parent_id','id');
     }
 
 

@@ -5,7 +5,7 @@
         <show-item :item="item" :direction="dClass"></show-item>
     </div>
     <div v-else class="show_gallery_temp">
-        <div v-if="show_header" class="lgs_gallery_header color_white">
+        <div v-if="show_header" class="lgs_gallery_header" :style="{ color: h_f_color, background: h_b_color}">
             <div style="position: relative">
                 <div class="header_gallery_image thumb_zoom">
                     <img class="img_header" :src="'/LFM/DownloadFile/ID/'+mygallery.encode_file_id+'/small/404.png/100/410/225'">
@@ -25,7 +25,7 @@
             <breadcrumb v-if="mygallery && showBread" :item="mygallery" :gallery_id="gallery_id"></breadcrumb>
         </div>
         <div class="gallery_items" id="bodyGallery" style="width: 100%;">
-            <back v-if="showback" :parent_id="mygallery.encode_parent_id" :gallery_id="gallery_id" :margin_el="margin_el"></back>
+            <back v-if="showback" :item="mygallery" :margin_el="margin_el"></back>
             <gallery-style v-for="(gallery,index) in galleries" :key="gallery.id" :item="gallery" :margin_el="margin_el"></gallery-style>
             <image-style v-for="(image,index) in images" :key="image.title" :item="image" :margin_el="margin_el" ></image-style>
         </div>
@@ -74,7 +74,9 @@
                 click_id:false,
                 item:[],
                 showBread:false,
-                crumb:[]
+                crumb:[],
+                h_b_color:'#000000',
+                h_f_color:'#ffffff'
             }
         },
         mounted() {
@@ -105,7 +107,7 @@
             }
         },
         methods: {
-            getGallery : function (gallery_id) {
+            getGallery : function (gallery_id,p_id,g_id) {
                 this.click_id = gallery_id ;
                 this.show_item_temp=false ;
                 this.show_loader = true;
@@ -129,6 +131,8 @@
                         this.images = response.data.images;
                         this.show_header = response.data.showHeader;
                         this.showBread = response.data.showBread;
+                        this.h_f_color = response.data.h_f_color;
+                        this.h_b_color = response.data.h_b_color;
                         if (response.data.lang =='fa')
                         {
                             this.$translate.setLang("fa");
@@ -137,6 +141,11 @@
                         {
                             this.$translate.setLang("en");
                         }
+                        if(parseInt(this.gallery_id) == parseInt(this.mygallery.main_id))
+                        {
+                            this.showback=false ;
+                        }
+
                     })
                 })
             },
@@ -151,12 +160,14 @@
             en: {
                 'title' : 'Title :',
                 'description' : 'Description :',
-                'tags' : ': tags'
+                'tags' : ': tags',
+                'return' : ': Return to'
             },
             fa: {
                 'title' : 'عنوان :',
                 'description' : ' توضیحات :',
-                'tags' : 'برچسب ها :'
+                'tags' : 'برچسب ها :',
+                'return' : 'بازگشت به'
             }
         }
     }
