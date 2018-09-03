@@ -1,12 +1,12 @@
 <template>
 <div class="lgs_container_fluid" :class="dClass">
     <div v-if="show_item_temp" class="show_item_temp">
-        <breadcrumb :item="mygallery" :gallery_id="gallery_id"></breadcrumb>
+        <breadcrumb v-if="showBread" :item="mygallery" :gallery_id="gallery_id"></breadcrumb>
         <show-item :item="item" :direction="dClass"></show-item>
     </div>
     <div v-else class="show_gallery_temp">
         <div v-if="show_header" class="lgs_gallery_header color_white">
-            <div>
+            <div style="position: relative">
                 <div class="header_gallery_image thumb_zoom">
                     <img class="img_header" :src="'/LFM/DownloadFile/ID/'+mygallery.encode_file_id+'/small/404.png/100/410/225'">
                     <div class="header_gallery_opeartioin">
@@ -22,7 +22,7 @@
             </div>
         </div>
         <div>
-            <breadcrumb v-if="mygallery" :item="mygallery" :gallery_id="gallery_id"></breadcrumb>
+            <breadcrumb v-if="mygallery && showBread" :item="mygallery" :gallery_id="gallery_id"></breadcrumb>
         </div>
         <div class="gallery_items" id="bodyGallery" style="width: 100%;">
             <back v-if="showback" :parent_id="mygallery.encode_parent_id" :gallery_id="gallery_id" :margin_el="margin_el"></back>
@@ -73,6 +73,7 @@
                 show_item_temp:false,
                 click_id:false,
                 item:[],
+                showBread:false,
                 crumb:[]
             }
         },
@@ -118,7 +119,6 @@
                 }
                 axios.post("/LGS/getGalleryItemFront", {gallery_id: gallery_id,lang_id:this.lang_id}).then(response => {
                     this.$nextTick(() =>{
-                        console.log(this.gallery_id,'gallery_id');
                         if(gallery_id !=0)
                         {
                             this.showback=true;
@@ -128,6 +128,7 @@
                         this.mygallery = response.data.gallery;
                         this.images = response.data.images;
                         this.show_header = response.data.showHeader;
+                        this.showBread = response.data.showBread;
                         if (response.data.lang =='fa')
                         {
                             this.$translate.setLang("fa");
@@ -154,7 +155,7 @@
             },
             fa: {
                 'title' : 'عنوان :',
-                'description' : ': توضیحات :',
+                'description' : ' توضیحات :',
                 'tags' : 'برچسب ها :'
             }
         }

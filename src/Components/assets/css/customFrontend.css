@@ -133,7 +133,6 @@ body {
 }
 .lgs_gallery_header {
     background-color: #00394d;
-    padding: 10px;
     margin: 5px 0px 10px 0px;
     min-height: 250px;
 }
@@ -163,7 +162,7 @@ body {
     width: 410px;
     position: absolute;
     text-align: right;
-    right: 25px;
+    right: 0px;
     top: 15px;
 }
 .img_header{

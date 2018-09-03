@@ -14,6 +14,7 @@ return [
     //allow user to upload private file in filemanager
     'userModel'=>'App\User',
     'guestCanVote'=>true,
+    'showBreadCrumb' =>true,
     'multiLang'=>'faq_sampleLang'
 
 ];

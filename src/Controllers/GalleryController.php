@@ -55,7 +55,8 @@ class GalleryController extends Controller
         {
             $multiLang = false;
         }
-        return view('laravel_gallery_system::backend.gallery.index', compact('default_img', 'parrents','multiLang'));
+
+        return view('laravel_gallery_system::backend.gallery.index', compact('default_img', 'parrents', 'multiLang'));
     }
 
     public function getGallery(Request $request)
@@ -130,7 +131,7 @@ class GalleryController extends Controller
             $gallery->lang_id = $lang_id;
         }
         $gallery->save();
-        $res['tag']=LTS_saveTag($gallery,$request->tag);
+        $res['tag'] = LTS_saveTag($gallery, $request->tag);
         $res['file'] = LFM_SaveSingleFile($gallery, 'default_img', 'defaultImg', 'default_img_options');
         $res =
             [
@@ -162,9 +163,9 @@ class GalleryController extends Controller
         else
         {
             $multiLang = false;
-            $active_lang_title ='';
+            $active_lang_title = '';
         }
-        $gallery_form = view('laravel_gallery_system::backend.gallery.view.edit', compact('gallery','tags', 'parrents', 'default_img', 'load_default_img','multiLang','active_lang_title'))->render();
+        $gallery_form = view('laravel_gallery_system::backend.gallery.view.edit', compact('gallery', 'tags', 'parrents', 'default_img', 'load_default_img', 'multiLang', 'active_lang_title'))->render();
         $res =
             [
                 'status'            => "1",
@@ -215,7 +216,7 @@ class GalleryController extends Controller
             $gallery->lang_id = $lang_id;
         }
         $gallery->save();
-        $res['tag']=LTS_saveTag($gallery,$request->tag,'tags','tags','sync');
+        $res['tag'] = LTS_saveTag($gallery, $request->tag, 'tags', 'tags', 'sync');
         $res['file'] = LFM_SaveSingleFile($gallery, 'default_img', 'LoadDefaultImg', 'default_img_options');
         $res =
             [
@@ -343,7 +344,7 @@ class GalleryController extends Controller
 
         $gallery_id = $request->item_id;
         $gallery_form = view('laravel_gallery_system::backend.gallery.view.add_item', compact('gallery_id', 'itmeFile', 'itmeVideoMp4File'
-            , 'itmeVideoWebmFile', 'itmeVideoOggFile', 'itmeAudioOggFile', 'itmeAudioMp3File', 'itmeAudioWavFile','multiLang'))->render();
+            , 'itmeVideoWebmFile', 'itmeVideoOggFile', 'itmeAudioOggFile', 'itmeAudioMp3File', 'itmeAudioWavFile', 'multiLang'))->render();
         $res =
             [
                 'status'           => "1",
@@ -393,7 +394,7 @@ class GalleryController extends Controller
             $item->lang_id = $lang_id;
         }
         $item->save();
-        $res['tag']=LTS_saveTag($item,$request->tag);
+        $res['tag'] = LTS_saveTag($item, $request->tag);
         switch ($request->type)
         {
             case 1 :
@@ -522,11 +523,11 @@ class GalleryController extends Controller
         else
         {
             $multiLang = false;
-            $active_lang_title ='';
+            $active_lang_title = '';
         }
         $item_form = view('laravel_gallery_system::backend.gallery.view.edit_item', compact('item', 'itmeFile', 'itmeVideoMp4File'
             , 'itmeVideoWebmFile', 'itmeVideoOggFile', 'itmeAudioOggFile', 'itmeAudioMp3File', 'itmeAudioWavFile', 'itmeFileLoad', 'itmeVideoMp4FileLoad', 'itmeVideoWebmFileLoad',
-            'itmeVideoOggFileLoad', 'itmeAudioOggFileLoad', 'itmeAudioMp3FileLoad', 'itmeAudioWavFileLoad', 'pic_class', 'audio_class', 'video_class','tags','multiLang','active_lang_title'))->render();
+            'itmeVideoOggFileLoad', 'itmeAudioOggFileLoad', 'itmeAudioMp3FileLoad', 'itmeAudioWavFileLoad', 'pic_class', 'audio_class', 'video_class', 'tags', 'multiLang', 'active_lang_title'))->render();
         $res =
             [
                 'status'                 => "1",
@@ -596,7 +597,7 @@ class GalleryController extends Controller
             $item->lang_id = $lang_id;
         }
         $item->save();
-        $res['tag']=LTS_saveTag($item,$request->tag,'tags','tags','sync');
+        $res['tag'] = LTS_saveTag($item, $request->tag, 'tags', 'tags', 'sync');
         $res =
             [
                 'status'      => "1",
@@ -753,49 +754,49 @@ class GalleryController extends Controller
         $gallery_id = LFM_GetDecodeId($request->gallery_id);
         $lang_id = $request->lang_id;
         //increase visits
-        $this->setVisit('ArtinCMS\LGS\Model\Gallery',$gallery_id,$request->ip);
-        if($lang_id == 0)
+        $this->setVisit('ArtinCMS\LGS\Model\Gallery', $gallery_id, $request->ip);
+        if ($lang_id == 0)
         {
-            $lang_id =false ;
+            $lang_id = false;
         }
         $galleries = Gallery::withCount(
             [
-                'likes'=>function($e){
-                    $e->where('type','1');
+                'likes'    => function ($e) {
+                    $e->where('type', '1');
                 },
-                'disLikes'=>function($e){
-                    $e->where('type','-1');
+                'disLikes' => function ($e) {
+                    $e->where('type', '-1');
                 },
                 'visits'
             ]
-        )->where('parent_id', $gallery_id)->where('lang_id',$lang_id)->where('is_active','1')->get();
-        if ($gallery_id !=0)
+        )->where('parent_id', $gallery_id)->where('lang_id', $lang_id)->where('is_active', '1')->get();
+        if ($gallery_id != 0)
         {
             $myGallery = Gallery::withCount(
                 [
-                    'likes'=>function($e){
-                        $e->where('type','1');
+                    'likes'    => function ($e) {
+                        $e->where('type', '1');
                     },
-                    'disLikes'=>function($e){
-                        $e->where('type','-1');
+                    'disLikes' => function ($e) {
+                        $e->where('type', '-1');
                     },
                     'visits'
                 ]
             )->find($gallery_id);
             $myGallery->string_description = strip_tags($myGallery->description);
-            $myGallery->main_id =$gallery_id;
+            $myGallery->main_id = $gallery_id;
             $result['gallery'] = $myGallery;
             $images = GalleryItem::withCount(
                 [
-                    'likes'=>function($e){
-                        $e->where('type','1');
+                    'likes'    => function ($e) {
+                        $e->where('type', '1');
                     },
-                    'disLikes'=>function($e){
-                        $e->where('type','-1');
+                    'disLikes' => function ($e) {
+                        $e->where('type', '-1');
                     },
                     'visits'
                 ]
-            )->with('files')->where('gallery_id', $gallery_id)->where('lang_id',$lang_id)->where('is_active','1')->get();
+            )->with('files')->where('gallery_id', $gallery_id)->where('lang_id', $lang_id)->where('is_active', '1')->get();
             $result['images'] = $images;
             $result['showHeader'] = true;
         }
@@ -803,14 +804,24 @@ class GalleryController extends Controller
         {
             $result['images'] = [];
             $result['showHeader'] = false;
-            $result['gallery'] = ['id'=>0,'encode_id'=>0,'main_id'=>0,'title'=>__('laravel_gallery_system.home')];
+            $result['gallery'] = ['id' => 0, 'encode_id' => 0, 'main_id' => 0, 'title' => __('laravel_gallery_system.home')];
         }
         $result['galleries'] = $galleries;
+        if(config('laravel_gallery_system.showBreadCrumb'))
+        {
+            $result['showBread'] = true;
 
+        }
+        else
+        {
+            $result['showBread'] = false;
+        }
         $result['lang'] = (string)app()->getLocale();
         $result['encode_id'] = LFM_getEncodeId(LFM_GetDecodeId($gallery_id));
+
         return $result;
     }
+
     public function searchForId($id, $array)
     {
         foreach ($array as $value)
@@ -823,7 +834,8 @@ class GalleryController extends Controller
 
         return null;
     }
-    public function setVisit($model,$id,$ip)
+
+    public function setVisit($model, $id, $ip)
     {
 
         $item = new Visit;
@@ -833,15 +845,15 @@ class GalleryController extends Controller
             {
                 $item->user_id = Auth::user()->id;
             }
-
         }
-        $item->ip = $ip ;
+        $item->ip = $ip;
         $item->target_id = $id;
         $item->target_type = $model;
         $item->save();
         $result = [
-            'success'  => true,
+            'success' => true,
         ];
+
         return $result;
     }
 }

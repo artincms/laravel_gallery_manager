@@ -46,12 +46,7 @@
                 return '/LFM/DownloadFile/ID/' + this.item.encode_file_id
             },
             showLoader:function () {
-                if(this.item.encode_id == this.$parent.click_id)
-                {
-                    return true ;
-                }
-                else
-                    return false ;
+                return false ;
             }
         },
         methods:{
