@@ -49,9 +49,9 @@ for show gallery we use Vue js . you can create your page as bellow :
 .
 .
 
-<div id="lgs_gallery">
-    <laravel_gallery_system gallery_id="1" lang_id="1" rtl=false></laravel_gallery_system>
-</div>
+  <div id="lgs_gallery">
+        <laravel_gallery_system :gallery_id='0' :lang_id='1' :rtl=true></laravel_gallery_system>
+    </div>
  ```
  at first you should create js file to load vue and define component div as bellow : 
 ```gallery js
@@ -68,9 +68,9 @@ and use it on your page .
 after you create js file (both you create or use sample js file) you should put component element in 
 page as bellow 
 ```apple js
- <div id="lgs_gallery">
-    <laravel_gallery_system gallery_id="0" lang_id="1" rtl=true></laravel_gallery_system>
-</div>
+   <div id="lgs_gallery">
+         <laravel_gallery_system :gallery_id='0' :lang_id='1' :rtl=true></laravel_gallery_system>
+     </div>
 ```
 <h2><a id="user-content-props" class="anchor" aria-hidden="true" href="#props"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Props</h2>
 <table>
@@ -112,11 +112,7 @@ page as bellow
 </tr>
 </thead>
 <tbody>
-<tr>
-<td><a href="https://vuejs.org/v2/guide/installation.html" rel="nofollow">Vue</a></td>
-<td>The Progressive JavaScript Framework</td>
-<td>npm install vue</td>
-</tr>
+
 <tr>
 <td><a href="https://vuex.vuejs.org/installation.html" rel="nofollow">Vuex</a></td>
 <td>Vuex is a state management pattern + library for Vue.js applications</td>

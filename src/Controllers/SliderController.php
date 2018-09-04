@@ -115,7 +115,6 @@ class SliderController extends Controller
         $slider->title = $request->title;
         $slider->description = $request->description;
         $slider->style = $request->style;
-        $slider->is_active = $request->is_active;
         if (Auth::user())
         {
             if (isset(Auth::user()->id))
@@ -331,7 +330,7 @@ class SliderController extends Controller
                 ->where('is_active', '1')
                 ->where("title", "LIKE", "%" . $x['term'] . "%");
         }
-        $data = $data->get();
+        $data = $data->get()->makeVisible('id');
         $data = ['results' => $data];
 
         return response()->json($data);
@@ -377,11 +376,19 @@ class SliderController extends Controller
     {
         $slider_id = $request->slider_id ;
         $sliders = Slider::find($slider_id);
-        $options = json_decode($sliders->style_options) ;
-        $result =LGS_propearSlider($sliders,'original',100,$request->image_width,$request->image_height);
-        $name = $this->transitions[$sliders->style][$options->transition]->name;
-        $result['transiton'] =$name;
-        $result['transiton_id'] = $options->transition;
+        if(isset($slider))
+        {
+            $options = json_decode($sliders->style_options) ;
+            $result =LGS_propearSlider($slider,'original',100,$request->image_width,$request->image_height);
+            $name = $this->transitions[$slider->style][$options->transition]->name;
+            $result['transiton'] =$name;
+            $result['transiton_id'] = $options->transition;
+        }
+        else
+        {
+            $result = [] ;
+        }
+
         return $result ;
     }
 }

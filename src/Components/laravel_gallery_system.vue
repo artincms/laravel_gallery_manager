@@ -35,13 +35,13 @@
 </template>
 
 <script>
-    import galleryStyle from './gallery'
-    import back from './back'
-    import imageStyle from './image'
-    import operation from './operation'
-    import generateLoader from './generate_loader'
-    import breadcrumb from './breadcrumb'
-    import showItem from './show-item'
+    import galleryStyle from './gallery/gallery'
+    import back from './gallery/back'
+    import imageStyle from './gallery/image'
+    import operation from './gallery/operation'
+    import generateLoader from './gallery/generate_loader'
+    import breadcrumb from './gallery/breadcrumb'
+    import showItem from './gallery/show-item'
     import VueTranslate from 'vue-translate-plugin'
     Vue.use(VueTranslate);
     window.axios = require('axios');
@@ -57,7 +57,7 @@
             lang_id: {
                 type: Number,
                 default() {
-                    return null;
+                    return 0;
                 },
             },
             rtl: {
@@ -101,7 +101,7 @@
                 return margin_el-Math.floor((2*body_width)/1140)-1;
             },
             dClass:function () {
-                if (this.rtl == 'true')
+                if (this.rtl)
                 {
                     return 'rtl'
                 }
@@ -179,6 +179,6 @@
 </script>
 
 <style lang="scss" scoped>
-    @import  '../assets/css/customFrontend.css';
-    @import  '../lib/icon/style.css';
+    @import  './assets/css/customFrontend.css';
+    @import  './lib/icon/style.css';
 </style>

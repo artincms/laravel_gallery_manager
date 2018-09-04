@@ -377,7 +377,7 @@ h5.title_item_h {
     width: 410px;
     position: absolute;
     text-align: left;
-    left: 25px;
+    left: 0px;
     top: 15px;
 }
 .ltr .gallery_content {

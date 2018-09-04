@@ -3,11 +3,9 @@
 namespace ArtinCMS\LGS\Model;
 
 use Illuminate\Database\Eloquent\Model;
-use ArtinCMS\LFM\Traits\lfmFillable ;
 
 class SliderItem extends Model
 {
-    use lfmFillable ;
     protected $table = 'lgs_slider_items';
     public function user()
     {
@@ -17,5 +15,9 @@ class SliderItem extends Model
     public function item()
     {
         return $this->hasOne('ArtinCMS\LGS\Model\GalleryItem','id','item_id');
+    }
+    public function files()
+    {
+        return $this->morphToMany('ArtinCMS\LFM\Models\File' , 'fileable','lfm_fileables','fileable_id','file_id')->withPivot('type')->withTimestamps() ;
     }
 }

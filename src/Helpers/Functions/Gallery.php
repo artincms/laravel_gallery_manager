@@ -46,12 +46,12 @@ if (!function_exists('LGS_CreateModalSliderManager'))
 
 if (!function_exists('LGS_getImagesLink'))
 {
-    function LGS_propearSlider($sliders,$type='original',$quality=100,$width=100,$height=100)
+    function LGS_propearSlider($slider,$type='original',$quality=100,$width=100,$height=100)
     {
         $src=[];
         $title=[];
-        $options = json_decode($sliders->style_options) ;
-        foreach ( $sliders->slider_items as $item)
+        $options = json_decode($slider->style_options) ;
+        foreach ( $slider->slider_items as $item)
         {
             $itemFind = \ArtinCMS\LGS\Model\GalleryItem::find($item->item_id);
             if($itemFind)

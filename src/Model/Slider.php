@@ -4,11 +4,9 @@ namespace ArtinCMS\LGS\Model;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use ArtinCMS\LFM\Traits\lfmFillable ;
 
 class Slider extends Model
 {
-    use lfmFillable ;
     use softDeletes;
     protected $table = 'lgs_sliders';
     public function user()
@@ -19,6 +17,10 @@ class Slider extends Model
     public function slider_items()
     {
         return $this->hasMany('ArtinCMS\LGS\Model\SliderItem', 'slider_id');
+    }
+    public function files()
+    {
+        return $this->morphToMany('ArtinCMS\LFM\Models\File' , 'fileable','lfm_fileables','fileable_id','file_id')->withPivot('type')->withTimestamps() ;
     }
 
 }
