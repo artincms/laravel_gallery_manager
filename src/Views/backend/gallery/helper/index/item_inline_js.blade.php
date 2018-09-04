@@ -146,7 +146,7 @@
                         '       <i class="fa fa-edit"></i><span class="ml-2">ویرایش</span>' +
                         '   </a>' +
                         '    <a class="btn_trash_gallery_item pointer gallery_menu-item" data-item_id="' + full.id + '" data-title="' + full.title + ' ">' +
-                        '       <i class="fa fa-trash"></i><span class="ml-2">خذف</span>' +
+                        '       <i class="fa fa-trash"></i><span class="ml-2">حذف</span>' +
                         '   </a>'
                     '  </div>' +
                     '</div>';

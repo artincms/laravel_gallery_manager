@@ -162,11 +162,14 @@
                     '   <i class="fas fa-bars"></i> ' +
                     '</span>' +
                     '  <div class="dropdown_gallery hidden">' +
+                    '   <a class="show_gallery_item pointer gallery_menu-item" data-item_id="' + full.id + '" data-title="' + full.title + '">' +
+                    '       <i class="fa fa-eye"></i><span class="ml-2">مشاهده آیتم ها</span>' +
+                    '   </a>' +
                     '   <a class="btn_edit_gallery pointer gallery_menu-item" data-item_id="' + full.id + '" data-title="' + full.title + '">' +
                     '       <i class="fa fa-edit"></i><span class="ml-2">ویرایش</span>' +
                     '   </a>' +
                     '    <a class="btn_trash_gallery pointer gallery_menu-item" data-item_id="' + full.id + '" data-title="' + full.title + ' ">' +
-                    '       <i class="fa fa-trash"></i><span class="ml-2">خذف</span>' +
+                    '       <i class="fa fa-trash"></i><span class="ml-2">حذف</span>' +
                     '   </a>'
                 '  </div>' +
                 '</div>';
