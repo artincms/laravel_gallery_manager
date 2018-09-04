@@ -25,10 +25,10 @@
             mRender: function (data, type, full) {
                 var img = full.default_img;
                 if (typeof img === 'undefined' || img === null || img === '') {
-                    var img_item = '<img class="span_image_container" id="LGS_showThumbImage" src="{{ route('LFM.DownloadFile',['ID',''])}}/' + 0 + '/small/404.png/100/30/30?0"  data-image="{{ route('LFM.DownloadFile',['ID',''])}}/' + 0 + '/original/404.png?0"  class="img-rounded img-preview">';
+                    var img_item = '<img class="span_image_container" id="" src="{{ route('LFM.DownloadFile',['ID',''])}}/' + 0 + '/small/404.png/100/30/30?0"  data-image="{{ route('LFM.DownloadFile',['ID',''])}}/' + 0 + '/original/404.png?0"  class="img-rounded img-preview">';
                 }
                 else {
-                    var img_item = '<img class="span_image_container" id="LGS_showThumbImage" src="{{ route('LFM.DownloadFile',['ID',''])}}/' + img + '/small/404.png/100/30/30?0" data-image="{{ route('LFM.DownloadFile',['ID',''])}}/' + img + '/original/404.png?0"  class="img-rounded img-preview">';
+                    var img_item = '<img class="span_image_container" id="" src="{{ route('LFM.DownloadFile',['ID',''])}}/' + img + '/small/404.png/100/30/30?0" data-image="{{ route('LFM.DownloadFile',['ID',''])}}/' + img + '/original/404.png?0"  class="img-rounded img-preview">';
                 }
                 return '<div><div class="">' + img_item + '</div><a class="show_gallery_item pointer" data-title="' + full.title + '"  data-item_id="' + full.id + '">' + full.title + '</a></div>';
             }
@@ -390,14 +390,14 @@
         html: true
     });
     /*___________________________________________________Tooltip_____________________________________________________________________*/
-    $(document).on('mouseenter', '#LGS_showThumbImage', function () {
-        var image_name = $(this).data('image');
-        var imageTag = '<div style="position:fixed;">' + '<img src="' + image_name + '" alt="image" height="100" />' + '</div>';
-        $(this).parent('div').append(imageTag);
-    });
-    $(document).on('mouseleave', '#LGS_showThumbImage', function () {
-        $(this).parent('div').children('div').remove();
-    });
+    // $(document).on('mouseenter', '#LGS_showThumbImage', function () {
+    //     var image_name = $(this).data('image');
+    //     var imageTag = '<div style="position:fixed;">' + '<img src="' + image_name + '" alt="image" height="100" />' + '</div>';
+    //     $(this).parent('div').append(imageTag);
+    // });
+    // $(document).on('mouseleave', '#LGS_showThumbImage', function () {
+    //     $(this).parent('div').children('div').remove();
+    // });
 
     /*___________________________________________________FixedColumn_____________________________________________________________________*/
     function set_fixed_dropdown_menu(e) {

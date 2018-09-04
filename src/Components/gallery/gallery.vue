@@ -1,6 +1,6 @@
 <template>
     <div class="main_gallery_div" :style="{margin:margin_el+ 'px'}">
-        <div class="stack text-center">
+        <div class="stack text-center" style="height: 100%;">
             <generate-loader v-if="showLoader"></generate-loader>
             <div @click="changeGallery(item.encode_id)" class="showImage height_225 thumb_zoom">
                 <img class="img_galleyr pointer" :src="'/LFM/DownloadFile/ID/'+item.encode_file_id+'/small/404.png/100/272/208'">

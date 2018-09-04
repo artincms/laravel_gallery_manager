@@ -1,6 +1,6 @@
 <template>
     <div class="main_gallery_div" :style="{margin:margin_el+ 'px'}">
-        <div class="stack text-center">
+        <div class="stack text-center" style="height: 100%;">
             <div @click="changeGallery(item.encode_parent_id)" class="height_225 pointer" style="height: 238px;position: relative;background-repeat: no-repeat;background-size: auto;height: 232px;
     background-position: center center" :class="{homeBack:!have_parent}">
                 <div v-if="have_parent" class="thumb_zoom">
