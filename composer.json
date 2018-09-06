@@ -25,7 +25,8 @@
         "artincms/laravel_comments_system": "dev-master",
         "artincms/laravel_likeable_system": "dev-master",
         "artincms/laravel_tagable": "dev-master",
-        "artincms/laravel_visitable": "dev-master"
+        "artincms/laravel_visitable": "dev-master",
+        "artincms/laravel_morphable_manager": "dev-master"
     },
     "extra": {
         "laravel": {

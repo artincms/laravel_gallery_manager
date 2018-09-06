@@ -55,11 +55,17 @@ class setGallery extends Command
         $exitCode = Artisan::call('vendor:publish', [
             '--provider' => "ArtinCMS\LVS\LVSServiceProvider", '--force' => $force
         ]);
+        $exitCode = Artisan::call('vendor:publish', [
+            '--provider' => "ArtinCMS\LMM\LMMServiceProvider", '--force' => $force
+        ]);
         if($full)
         {
             $exitCode = Artisan::call('migrate');
             $exitCode = Artisan::call('db:seed', [
                 '--class' => "ArtinCMS\LFM\Database\Seeds\FilemanagerTableSeeder"
+            ]);
+            $exitCode = Artisan::call('db:seed', [
+                '--class' => "ArtinCMS\LGS\Database\Seeds\LmmMorphableTableSeeder"
             ]);
         }
         return 'LARAVEL GALLERY MANAGER INSTALL SUCCESSFULLY';
