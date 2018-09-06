@@ -2,6 +2,7 @@
 
 namespace ArtinCMS\LGS\Model;
 
+use ArtinCMS\LLS\Models\Like;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\Auth;
@@ -11,7 +12,7 @@ class GalleryItem extends Model
 {
     use softDeletes;
     protected $hidden = ['id','gallery_id','file_id'];
-    protected $appends = ['auth','encode_id','encode_file_id','encode_gallery_id'];
+    protected $appends = ['auth','encode_id','encode_file_id','encode_gallery_id','voted'];
 
     protected $table = 'lgs_items';
 
@@ -104,5 +105,38 @@ class GalleryItem extends Model
         return $this->morphToMany('ArtinCMS\LFM\Models\File' , 'fileable','lfm_fileables','fileable_id','file_id')->withPivot('type')->withTimestamps() ;
     }
 
+    public function getVotedAttribute()
+    {
+        if(!config('laravel_gallery_system.guestCanVote'))
+        {
+            if (auth()->check())
+            {
+                $user_id = auth()->id();
+            }
+            else
+            {
+                $user_id = 0;
+
+            }
+            $vote = Like::where([
+                ['target_type','ArtinCMS\LGS\Model\GalleryItem'],
+                ['target_id',$this->id],
+                ['user_id',$user_id]
+            ])->get();
+            if (count($vote) > 0)
+            {
+                $res = $vote->first() ;
+            }
+            else
+            {
+                $res = false ;
+            }
+        }
+        else
+        {
+            $res = false ;
+        }
+        return $res ;
+    }
 
 }

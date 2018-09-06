@@ -216,7 +216,7 @@ class GalleryController extends Controller
             $gallery->lang_id = $lang_id;
         }
         $gallery->save();
-        $res['tag'] = LTS_saveTag($gallery, $request->tag, 'tags', 'tags', 'sync');
+        $res['tag'] = LTS_saveTag($gallery, $request->tag, 'tag', 'tags', 'sync');
         $res['file'] = LFM_SaveSingleFile($gallery, 'default_img', 'LoadDefaultImg', 'default_img_options');
         $res =
             [
@@ -768,9 +768,9 @@ class GalleryController extends Controller
                 'disLikes' => function ($e) {
                     $e->where('type', '-1');
                 },
-                'visits'
+                'visits',
             ]
-        )->where('parent_id', $gallery_id)->where('lang_id', $lang_id)->where('is_active', '1')->get();
+        )->with('tags')->where('parent_id', $gallery_id)->where('lang_id', $lang_id)->where('is_active', '1')->get();
         if ($gallery_id != 0)
         {
             $myGallery = Gallery::withCount(
@@ -805,7 +805,7 @@ class GalleryController extends Controller
         {
             $result['images'] = [];
             $result['showHeader'] = false;
-            $result['gallery'] = ['id' => 0, 'encode_id' => 0, 'main_id' => 0,'par', 'title' => __('laravel_gallery_system.home')];
+            $result['gallery'] = ['id' => 0, 'encode_id' => 0, 'main_id' => 0, 'par', 'title' => __('laravel_gallery_system.home')];
         }
         $result['galleries'] = $galleries;
         if (config('laravel_gallery_system.showBreadCrumb'))

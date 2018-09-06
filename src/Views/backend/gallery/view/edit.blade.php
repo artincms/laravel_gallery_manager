@@ -99,7 +99,7 @@
     $('#gallery_eidt_description').summernote({
         height: 150,
     } );
-    init_select2_ajax('#showSelectTagEdit', '{{route('LTS.autoCompleteTag')}}', true,true,true);
+    init_select2_ajax('#showSelectTagEdit', '{{route('LTS.autoCompleteTag')}}', true,true);
     init_select2_data('#FaqSelectLangEdit',{!! $multiLang !!});
 
 </script>

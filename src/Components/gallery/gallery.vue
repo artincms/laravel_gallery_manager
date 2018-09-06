@@ -8,13 +8,15 @@
             </div>
             <div class="showContent">
                 <div class="showOperateion">
-                    <operation :item="item" type="gallery" :model="'ArtinCMS\\LGS\\Model\\Gallery'"></operation>
+                    <operation :item="item" type="gallery" model="gallery_model" pack="lgs" ></operation>
                 </div>
                 <div class="showTitle">
                     <a class="pointer" @click="changeGallery(item.encode_id)"><h5 class="title_item_h">{{item.title}}</h5></a>
                 </div>
             </div>
-            <div class="showTags"><i class="fas fa-tags"></i><span>{{ t('tags') }}</span></div>
+            <div class="showTags"><i class="fas fa-tags"></i><span>{{ t('tags') }}</span>
+            <span v-if="tags" v-for="tag in tags" :key="tag.id">{{tag.title}},</span>
+            </div>
         </div>
     </div>
 </template>
@@ -40,7 +42,10 @@
                 }
                 else
                     return false ;
-            }
+            },
+            tags:function () {
+                return this.item.tags
+            },
         },
         methods:{
             changeGallery :function (gallery_id) {

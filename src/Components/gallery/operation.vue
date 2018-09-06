@@ -7,7 +7,7 @@
             <visitable ref="visit" :model="model" :item ="item"></visitable>
         </div>
         <div class="width_50 lgs_float_left lgs_text_right">
-          <likeable :model="model" :item ="item" :auth="auth"></likeable>
+          <likeable :model="model" :item ="item" :auth="auth" :pack="pack" :voted='item.voted' :type="type" :likes_count="item.likes_count" :dis_likes_count="item.dis_likes_count" ></likeable>
         </div>
         <div style="clear: both"></div>
     </div>
@@ -20,7 +20,7 @@
     import modal from './modal'
     export default {
         name: "operation",
-        props: ['item','type','model'],
+        props: ['item','type','model','pack'],
         components :{
             likeable,visitable,modal
         },

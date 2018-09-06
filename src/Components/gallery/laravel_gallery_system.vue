@@ -15,7 +15,7 @@
                 </div>
                 <div class="gallery_content">
                     <h1 class="header_gallery_title">{{mygallery.title}}</h1>
-                    <div class="header_galler_description" v-html="mygallery.description"></div>
+                    <p class="header_galler_description">{{mygallery.string_description}}</p>
                     <div class="clearfix">
                     </div>
                 </div>
@@ -26,7 +26,7 @@
         </div>
         <div class="gallery_items" id="bodyGallery" style="width: 100%;display: flex;flex-wrap: wrap;">
             <back v-if="showback" :item="mygallery" :margin_el="margin_el"></back>
-            <gallery-style v-for="(gallery,index) in galleries" :key="index" :item="gallery" :margin_el="margin_el"></gallery-style>
+            <gallery-style v-for="(gallery,index) in galleries" :key="gallery.id" :item="gallery" :margin_el="margin_el"></gallery-style>
             <image-style v-for="(image,index) in images" :key="image.title" :item="image" :margin_el="margin_el" ></image-style>
         </div>
     </div>
@@ -35,13 +35,13 @@
 </template>
 
 <script>
-    import galleryStyle from './gallery/gallery'
-    import back from './gallery/back'
-    import imageStyle from './gallery/image'
-    import operation from './gallery/operation'
-    import generateLoader from './gallery/generate_loader'
-    import breadcrumb from './gallery/breadcrumb'
-    import showItem from './gallery/show-item'
+    import galleryStyle from './gallery'
+    import back from './back'
+    import imageStyle from './image'
+    import operation from './operation'
+    import generateLoader from './generate_loader'
+    import breadcrumb from './breadcrumb'
+    import showItem from './show-item'
     import VueTranslate from 'vue-translate-plugin'
     Vue.use(VueTranslate);
     window.axios = require('axios');
@@ -57,7 +57,7 @@
             lang_id: {
                 type: Number,
                 default() {
-                    return 0;
+                    return null;
                 },
             },
             rtl: {
@@ -101,7 +101,7 @@
                 return margin_el-Math.floor((2*body_width)/1140)-1;
             },
             dClass:function () {
-                if (this.rtl)
+                if (this.rtl == 'true')
                 {
                     return 'rtl'
                 }
@@ -122,7 +122,7 @@
                 }
                 if(!this.rtl)
                 {
-                    this.rtl = 'false'
+                    this.rtl = false
                 }
                 axios.post("/LGS/getGalleryItemFront", {gallery_id: gallery_id,lang_id:this.lang_id}).then(response => {
                     this.$nextTick(() =>{
@@ -179,6 +179,6 @@
 </script>
 
 <style lang="scss" scoped>
-    @import  './assets/css/customFrontend.css';
-    @import  './lib/icon/style.css';
+    @import  '../assets/css/customFrontend.css';
+    @import  '../lib/icon/style.css';
 </style>

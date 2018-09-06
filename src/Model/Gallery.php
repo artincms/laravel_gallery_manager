@@ -2,6 +2,7 @@
 
 namespace ArtinCMS\LGS\Model;
 
+use ArtinCMS\LLS\Models\Like;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\Auth;
@@ -9,7 +10,7 @@ use Illuminate\Support\Facades\Auth;
 class Gallery extends Model
 {
     protected $hidden = ['id','default_img'];
-    protected $appends = ['auth','encode_id','encode_file_id','encode_parent_id'];
+    protected $appends = ['auth','encode_id','encode_file_id','encode_parent_id','voted'];
     protected static function boot()
     {
         parent::boot();
@@ -75,7 +76,39 @@ class Gallery extends Model
 //    {
 //        return (int)LGS_ConvertNumbersEntoFa($value);
 //    }
+    public function getVotedAttribute()
+    {
+        if(!config('laravel_gallery_system.guestCanVote'))
+        {
+            if (auth()->check())
+            {
+                $user_id = auth()->id();
+            }
+            else
+            {
+                $user_id = 0;
 
+            }
+            $vote = Like::where([
+                ['target_type','ArtinCMS\LGS\Model\Gallery'],
+                ['target_id',$this->id],
+                ['user_id',$user_id]
+            ])->get();
+            if (count($vote) > 0)
+            {
+                $res = $vote->first() ;
+            }
+            else
+            {
+                $res = false ;
+            }
+        }
+        else
+        {
+            $res = false ;
+        }
+        return $res ;
+    }
     public function getAuthAttribute($value)
     {
         if(!config('laravel_gallery_system.guestCanVote'))

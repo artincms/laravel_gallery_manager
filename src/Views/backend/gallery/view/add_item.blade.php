@@ -175,7 +175,7 @@
             height: 200,
         } );
         //--------------------------------------------tag select----------------------------------------------
-        init_select2_ajax('#showSelectTagItem', '{{route('LTS.autoCompleteTag')}}', true,true,true);
+        init_select2_ajax('#showSelectTagItem', '{{route('LTS.autoCompleteTag')}}', true,true);
         //------------------------------------------select 2 for language-----------------------------------------------------------------------------
         init_select2_data('#FaqSelectLangItme',{!! $multiLang !!});
     });
