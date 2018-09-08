@@ -548,23 +548,6 @@ class GalleryController extends Controller
         $item->title = $request->title;
         $item->description = $request->description;
         $item->type = $request->type;
-        if ($request->order)
-        {
-            $item->order = $request->order;
-        }
-        else
-        {
-            $item->order = 0;
-        }
-        if ($request->is_active == -1)
-        {
-            $item->is_active = '0';
-        }
-        else
-        {
-            $item->is_active = $request->is_active;
-
-        }
         if (Auth::user())
         {
             if (isset(Auth::user()->id))
