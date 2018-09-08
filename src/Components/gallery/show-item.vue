@@ -32,7 +32,7 @@
                     <p class="margin_right_20">{{this.item.title}}</p>
                     <div class="desc_item">
                         <h5 class="lgs_float_left margin_left_20 lgs_h5"><span class="smaller-80">{{ t('description') }}</span></h5>
-                        <p class="" v-if="item.description">{{this.item.description}}</p>
+                        <p class="" v-if="item.description" v-html="item.description"></p>
                         <p class=""  v-else>-----</p>
                     </div>
                     <div class="clearfix"></div>

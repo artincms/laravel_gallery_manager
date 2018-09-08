@@ -26,8 +26,8 @@
         </div>
         <div class="gallery_items" id="bodyGallery" style="width: 100%;display: flex;flex-wrap: wrap;">
             <back v-if="showback" :item="mygallery" :margin_el="margin_el"></back>
-            <gallery-style v-for="(gallery,index) in galleries" :key="index" :item="gallery" :margin_el="margin_el"></gallery-style>
-            <image-style v-for="(image,index) in images" :key="image.title" :item="image" :margin_el="margin_el" ></image-style>
+            <gallery-style v-for="(gallery,index) in galleries" :key="gallery.encode_id" :item="gallery" :margin_el="margin_el"></gallery-style>
+            <image-style v-for="(image,index) in images" :key="image.encode_id" :item="image" :margin_el="margin_el" ></image-style>
         </div>
     </div>
 

@@ -18,7 +18,7 @@
             </div>
             <div class="showContent">
                 <div class="showOperateion">
-                    <operation :item="item" type="image" model="gallery_item" pack="lgs"></operation>
+                    <operation :item="item" type="image" model="item_model" pack="lgs"></operation>
                 </div>
                 <div class="showTitle">
                     <a class="pointer" @click="showItem"><h5 class="title_item_h">{{item.title}}</h5></a>

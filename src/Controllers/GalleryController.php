@@ -737,8 +737,6 @@ class GalleryController extends Controller
     {
         $gallery_id = LFM_GetDecodeId($request->gallery_id);
         $lang_id = $request->lang_id;
-        //increase visits
-        $this->setVisit('ArtinCMS\LGS\Model\Gallery', $gallery_id, $request->ip);
         if ($lang_id == 0)
         {
             $lang_id = false;
@@ -756,6 +754,8 @@ class GalleryController extends Controller
         )->with('tags')->where('parent_id', $gallery_id)->where('lang_id', $lang_id)->where('is_active', '1')->get();
         if ($gallery_id != 0)
         {
+            //increase visits
+            $this->setVisit('ArtinCMS\LGS\Model\Gallery', $gallery_id, $request->ip);
             $myGallery = Gallery::withCount(
                 [
                     'likes'    => function ($e) {
@@ -823,7 +823,6 @@ class GalleryController extends Controller
 
     public function setVisit($model, $id, $ip)
     {
-
         $item = new Visit;
         if (Auth::user())
         {

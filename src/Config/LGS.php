@@ -15,7 +15,7 @@ return [
     'userModel'                 => 'App\User',
     'guestCanVote'              => false,
     'showBreadCrumb'            => false,
-    'multiLang'                 => 'faq_sampleLang',
+    'multiLang'=> env('LPM_MULTILANG', 'faq_sampleLang'),
     'header_back_color'         => '#00394d',
     'header_font_color'         => '#ffffff'
 
