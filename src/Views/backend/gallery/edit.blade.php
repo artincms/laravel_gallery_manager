@@ -28,16 +28,6 @@
         </div>
     </div>
     <div class="form-group row">
-        <label class="col-lg-2 col-sm-12 col-md-3 control-label col-form-label label_post" for="description">وضعیت</label>
-        <div class="col-6">
-            <select id="gallery_is_active" name="is_active" class="form-control">
-                <option value="-1">وضعیت را انتخاب نمایید</option>
-                <option value="0" @if($gallery->is_active ==0) selected @endif>غیر فعال</option>
-                <option value="1"  @if($gallery->is_active ==1) selected @endif>فعال</option>
-            </select>
-        </div>
-    </div>
-    <div class="form-group row">
         <label class="col-lg-2 col-sm-12 col-md-3 control-label col-form-label label_post" for="description">گالری پدر</label>
         <div class="col-6">
             <select name="parent_id" id="gallery_parrent" class="form-control">

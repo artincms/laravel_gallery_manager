@@ -95,21 +95,6 @@
                                         </select>
                                     </div>
                                 </div>
-                                <div class="form-group row ">
-                                    <label class="col-lg-2 col-sm-12 col-md-3 control-label col-form-label label_post" for="description">وضعیت</label>
-                                    <div class="col-6">
-                                        <div class="form-check-inline">
-                                            <label class="form-check-label" for="radio2">
-                                                <input type="radio" class="form-check-input" id="gallery_is_active1" name="is_active" checked value="1">فعال
-                                            </label>
-                                        </div>
-                                        <div class="form-check-inline">
-                                            <label class="form-check-label" for="radio2">
-                                                <input type="radio" class="form-check-input" id="gallery_is_active2" name="is_active" value="0">غیر فعال
-                                            </label>
-                                        </div>
-                                    </div>
-                                </div>
                                 <div class="form-group row">
                                     <label class="col-lg-2 col-sm-12 col-md-3 control-label col-form-label label_post" for="description">انتخاب تصویر پیش فرض</label>
                                         <div class="col-lg-6 col-sm-12 col-md-5">

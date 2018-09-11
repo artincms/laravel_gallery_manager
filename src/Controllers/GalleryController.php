@@ -100,23 +100,6 @@ class GalleryController extends Controller
         $gallery = new Gallery;
         $gallery->title = $request->title;
         $gallery->description = $request->description;
-        if ($request->order)
-        {
-            $gallery->order = $request->order;
-        }
-        else
-        {
-            $gallery->order = 0;
-        }
-        if ($request->is_active == -1)
-        {
-            $gallery->is_active = '0';
-        }
-        else
-        {
-            $gallery->is_active = $request->is_active;
-
-        }
         $gallery->parent_id = $request->parent_id;
         if (Auth::user())
         {
@@ -185,23 +168,6 @@ class GalleryController extends Controller
         $gallery = Gallery::find(LFM_GetDecodeId($request->item_id));
         $gallery->title = $request->title;
         $gallery->description = $request->description;
-        if ($request->order)
-        {
-            $gallery->order = $request->order;
-        }
-        else
-        {
-            $gallery->order = 0;
-        }
-        if ($request->is_active == -1)
-        {
-            $gallery->is_active = '0';
-        }
-        else
-        {
-            $gallery->is_active = $request->is_active;
-
-        }
         $gallery->parent_id = $request->parent_id;
         if (Auth::user())
         {
