@@ -590,9 +590,8 @@ class GalleryController extends Controller
                 ->where('is_active', '1')
                 ->where("title", "LIKE", "%" . $x['term'] . "%");
         }
-        $data = $data->get();
+        $data = $data->get()->makeVisible('id');
         $data = ['results' => $data];
-
         return response()->json($data);
     }
 
