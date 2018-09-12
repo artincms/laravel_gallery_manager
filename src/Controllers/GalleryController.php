@@ -45,7 +45,7 @@ class GalleryController extends Controller
     {
         $option_default_img = ['size_file' => 2000, 'max_file_number' => 1, 'true_file_extension' => ['png', 'jpg']];
         $default_img = LFM_CreateModalFileManager('defaultImg', $option_default_img, 'insert', 'showDefaultImg', false, false, false, 'انتخاب فایل تصویر', 'btn-block', 'fa fa-folder-open font_button mr-2');
-        $parrents = Gallery::with('parent')->get();
+        $parrents = Gallery::with('parent')->select("id", 'title AS text')->get()->makeVisible('id');
         $multiLangFunc = config('laravel_gallery_system.multiLang');
         if ($multiLangFunc)
         {
@@ -101,17 +101,21 @@ class GalleryController extends Controller
         $gallery->title = $request->title;
         $gallery->description = $request->description;
         $gallery->parent_id = $request->parent_id;
-        if (Auth::user())
+        $gallery->lang_id = $request->lang_id;
+        if (auth()->check())
         {
-            if (isset(Auth::user()->id))
-            {
-                $gallery->created_by = Auth::user()->id;
-            }
+            $auth = auth()->id();
         }
-        if ($request->lang_id)
+        else
         {
-            $lang_id = $request->lang_id;
-            $gallery->lang_id = $lang_id;
+            $auth = 0;
+
+        }
+        $gallery->created_by = $auth ;
+        if ($gallery->parent_id)
+        {
+            $parent = Gallery::find($gallery->parent_id);
+            $gallery->lang_id = $parent->lang_id;
         }
         $gallery->save();
         $res['tag'] = LTS_saveTag($gallery, $request->tag);
@@ -134,7 +138,7 @@ class GalleryController extends Controller
         $gallery = Gallery::find(LFM_GetDecodeId($request->item_id));
         $gallery->encode_id = LFM_getEncodeId($gallery->id);
         $tags = LTS_showTag($gallery);
-        $parrents = Gallery::all();
+        $parrents_edit =Gallery::with('parrent')->select("id", 'title AS text')->get()->makeVisible('id');
         $default_img = LFM_CreateModalFileManager('LoadDefaultImg', $option_default_img, 'insert', 'showDefaultImg', 'gallery_edit_tab', false, false, 'انتخاب فایل تصویر', 'btn-block', 'fa fa-folder-open font_button mr-2');
         $load_default_img = LFM_loadSingleFile($gallery, 'default_img', 'LoadDefaultImg');
         $multiLangFunc = config('laravel_gallery_system.multiLang');
@@ -148,7 +152,7 @@ class GalleryController extends Controller
             $multiLang = false;
             $active_lang_title = '';
         }
-        $gallery_form = view('laravel_gallery_system::backend.gallery.view.edit', compact('gallery', 'tags', 'parrents', 'default_img', 'load_default_img', 'multiLang', 'active_lang_title'))->render();
+        $gallery_form = view('laravel_gallery_system::backend.gallery.view.edit', compact('gallery', 'tags', 'parrents_edit', 'default_img', 'load_default_img', 'multiLang', 'active_lang_title'))->render();
         $res =
             [
                 'status'            => "1",
@@ -169,17 +173,21 @@ class GalleryController extends Controller
         $gallery->title = $request->title;
         $gallery->description = $request->description;
         $gallery->parent_id = $request->parent_id;
-        if (Auth::user())
+        $gallery->lang_id = $request->lang_id;
+        if (auth()->check())
         {
-            if (isset(Auth::user()->id))
-            {
-                $gallery->created_by = Auth::user()->id;
-            }
+            $auth = auth()->id();
         }
-        if ($request->lang_id)
+        else
         {
-            $lang_id = $request->lang_id;
-            $gallery->lang_id = $lang_id;
+            $auth = 0;
+
+        }
+        $gallery->created_by = $auth ;
+        if ($gallery->parent_id)
+        {
+            $parent = Gallery::find($gallery->parent_id);
+            $gallery->lang_id = $parent->lang_id;
         }
         $gallery->save();
         $res['tag'] = LTS_saveTag($gallery, $request->tag, 'tag', 'tags', 'sync');
@@ -327,37 +335,25 @@ class GalleryController extends Controller
     public function createGalleryItem(Request $request)
     {
         $item = new GalleryItem;
-        $item->gallery_id = LFM_GetDecodeId($request->gallery_id);
+        $gallery_id  =LFM_GetDecodeId($request->gallery_id) ;
+        $item->gallery_id = $gallery_id;
         $item->title = $request->title;
         $item->description = $request->description;
         $item->type = $request->type;
-        if ($request->order)
+        if (auth()->check())
         {
-            $item->order = $request->order;
+            $auth = auth()->id();
         }
         else
         {
-            $item->order = 0;
+            $auth = 0;
+
         }
-        if ($request->is_active)
+        $item->created_by = $auth ;
+        if($gallery_id)
         {
-            $item->is_active = $request->is_active;
-        }
-        else
-        {
-            $item->is_active = '0';
-        }
-        if (Auth::user())
-        {
-            if (isset(Auth::user()->id))
-            {
-                $item->created_by = Auth::user()->id;
-            }
-        }
-        if ($request->lang_id)
-        {
-            $lang_id = $request->lang_id;
-            $item->lang_id = $lang_id;
+            $gallery = Gallery::find($gallery_id);
+            $item->lang_id = $gallery->lang_id;
         }
         $item->save();
         $res['tag'] = LTS_saveTag($item, $request->tag);
@@ -514,13 +510,16 @@ class GalleryController extends Controller
         $item->title = $request->title;
         $item->description = $request->description;
         $item->type = $request->type;
-        if (Auth::user())
+        if (auth()->check())
         {
-            if (isset(Auth::user()->id))
-            {
-                $item->created_by = Auth::user()->id;
-            }
+            $auth = auth()->id();
         }
+        else
+        {
+            $auth = 0;
+
+        }
+        $item->created_by = $auth ;
 
         switch ($request->type)
         {
@@ -540,11 +539,6 @@ class GalleryController extends Controller
                 $itemFile = LFM_SaveSingleFile($item, 'file_id', 'editItemFile', 'options');
                 $section = [];
                 break;
-        }
-        if ($request->lang_id)
-        {
-            $lang_id = $request->lang_id;
-            $item->lang_id = $lang_id;
         }
         $item->save();
         $res['tag'] = LTS_saveTag($item, $request->tag, 'tags', 'tags', 'sync');

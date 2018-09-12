@@ -193,6 +193,20 @@
             $('#GalleryManagerGridData').empty();
             datatable_load_fun(filter_parrent_id, filter_title,filter_is_active);
         }
+
+        $('#gallery_parrent').off("select2:select");
+        $('#gallery_parrent').on("select2:select", change_lang_field);
+        function change_lang_field() {
+            var parent_id = $('#gallery_parrent').val();
+            if(parent_id !=0)
+            {
+                $('#showLangCategory').hide();
+            }
+            else
+            {
+                $('#showLangCategory').show();
+            }
+        }
     });
 
     /*________________________________________________________________________________________________________________________*/

@@ -1,19 +1,5 @@
 <div class="space-20"></div>
 <form id="frm_edit_gallery" class="form-horizontal" name="frm_create_gallery">
-    @if($multiLang)
-    <div class="form-group row fg_lang">
-        <label class="col-sm-2 control-label col-form-label label_post" for="lang">
-            <span class="more_info"></span>
-            <span class="label_lang">انتخاب زبان</span>
-        </label>
-        <div class="col-sm-6">
-            <select class="form-control" name="lang_id" id="FaqSelectLangEdit">
-                <option value="{{$gallery->lang_id}}" value="-1">{{$active_lang_title}}</option>
-            </select>
-        </div>
-        <div class="col-sm-4 messages"></div>
-    </div>
-    @endif
     <input type="hidden" name="item_id" value="{{$gallery->encode_id}}">
     <div class="form-group row fg_title">
         <label class="col-sm-2 control-label col-form-label label_post" for="title">
@@ -52,12 +38,26 @@
         <div class="col-6">
             <select name="parent_id" id="gallery_parrent_edit" class="form-control">
                 <option value="0">بدون والد</option>
-                @foreach($parrents as $parrent)
-                    <option value="{{$parrent->id}}" @if($gallery->parent_id ==$parrent->id) selected @endif>{{$parrent->title}}</option>
+                @foreach($parrents_edit as $parrent)
+                    <option value="{{$parrent->id}}" @if($gallery->parent_id ==$parrent->id) selected @endif>{{$parrent->text}}</option>
                 @endforeach
             </select>
         </div>
     </div>
+    @if($multiLang)
+    <div class="form-group row fg_lang" id="showLangCategoryEdit">
+        <label class="col-sm-2 control-label col-form-label label_post" for="lang">
+            <span class="more_info"></span>
+            <span class="label_lang">انتخاب زبان</span>
+        </label>
+        <div class="col-sm-6">
+            <select class="form-control" name="lang_id" id="FaqSelectLangEdit">
+                <option value="{{$gallery->lang_id}}" value="-1">{{$active_lang_title}}</option>
+            </select>
+        </div>
+        <div class="col-sm-4 messages"></div>
+    </div>
+    @endif
     <div class="form-group row">
         <label class="col-lg-2 col-sm-12 col-md-3 control-label col-form-label label_post" for="description">وضعیت</label>
         <div class="col-6">
@@ -92,15 +92,30 @@
     </div>
 </form>
 <script>
+    change_lang_field();
     function showDefaultImg(res) {
         $('#show_area_medium_load_default_img').html(res.LoadDefaultImg.view.medium) ;
     }
-    init_select2_data('#gallery_parrent_edit',{!! $parrents !!});
+    init_select2_data('#gallery_parrent_edit',{!! $parrents_edit !!});
     $('#gallery_eidt_description').summernote({
         height: 150,
     } );
     init_select2_ajax('#showSelectTagEdit', '{{route('LTS.autoCompleteTag')}}', true,true);
     init_select2_data('#FaqSelectLangEdit',{!! $multiLang !!});
+
+    $('#gallery_parrent_edit').off("select2:select");
+    $('#gallery_parrent_edit').on("select2:select", change_lang_field);
+    function change_lang_field() {
+        var parent_id = $('#gallery_parrent_edit').val();
+        if(parent_id !=0)
+        {
+            $('#showLangCategoryEdit').hide();
+        }
+        else
+        {
+            $('#showLangCategoryEdit').show();
+        }
+    }
 
 </script>
 

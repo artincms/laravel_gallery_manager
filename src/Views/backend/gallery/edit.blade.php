@@ -30,11 +30,8 @@
     <div class="form-group row">
         <label class="col-lg-2 col-sm-12 col-md-3 control-label col-form-label label_post" for="description">گالری پدر</label>
         <div class="col-6">
-            <select name="parent_id" id="gallery_parrent" class="form-control">
+            <select name="parent_id" id="gallery_parrent_edit" class="form-control">
                 <option value="0">بدون والد</option>
-                @foreach($parrents as $parrent)
-                    <option value="{{$parrent->id}}" @if($gallery->parent_id ==$parrent->id) selected @endif>{{$parrent->title}}</option>
-                @endforeach
             </select>
         </div>
     </div>
@@ -56,5 +53,6 @@
     function showDefaultImg(res) {
         $('#show_area_medium_default_img').html(res.defaultImg.view.medium) ;
     }
+    init_select2_data('#gallery_parrent_edit',{!! $parrents_edit !!});
 </script>
 

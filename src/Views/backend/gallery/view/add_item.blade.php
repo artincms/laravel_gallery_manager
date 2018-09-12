@@ -1,19 +1,5 @@
 <div class="space-20"></div>
 <form id="frm_create_gallery_item" class="form-horizontal" name="frm_create_gallery">
-    @if($multiLang)
-    <div class="form-group row fg_lang">
-        <label class="col-sm-2 control-label col-form-label label_post" for="lang">
-            <span class="more_info"></span>
-            <span class="label_lang">انتخاب زبان</span>
-        </label>
-        <div class="col-sm-6">
-            <select class="form-control" name="lang_id" id="FaqSelectLangItme">
-                <option value="-1">انتخاب زبان</option>
-            </select>
-        </div>
-        <div class="col-sm-4 messages"></div>
-    </div>
-    @endif
     <input type="hidden" value="{{$gallery_id}}" name="gallery_id">
     <div class="form-group row fg_title">
         <label class="col-lg-2 col-sm-12 col-md-3 control-label col-form-label label_post" for="title">
@@ -40,21 +26,6 @@
         <label class="col-lg-2 col-sm-12 col-md-3 control-label col-form-label label_post" for="description">توضیحات</label>
         <div class="col-lg-6 col-md-9 col-sm-12">
             <textarea class="form-control" name="description" id="gallery_item_description" rows="3"></textarea>
-        </div>
-    </div>
-    <div class="form-group row ">
-        <label class="col-lg-2 col-sm-12 col-md-3 control-label col-form-label label_post" for="description">وضعیت</label>
-        <div class="col-lg-6 col-md-9 col-sm-12">
-            <div class="form-check-inline">
-                <label class="form-check-label" for="radio2">
-                    <input type="radio" class="form-check-input" id="gallery_is_active1" name="is_active" value="1" checked>فعال
-                </label>
-            </div>
-            <div class="form-check-inline">
-                <label class="form-check-label" for="radio2">
-                    <input type="radio" class="form-check-input" id="gallery_is_active2" name="is_active" value="0">غیر فعال
-                </label>
-            </div>
         </div>
     </div>
     <div class="form-group row">
