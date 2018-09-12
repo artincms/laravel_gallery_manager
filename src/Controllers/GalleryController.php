@@ -353,7 +353,12 @@ class GalleryController extends Controller
         if($gallery_id)
         {
             $gallery = Gallery::find($gallery_id);
-            $item->lang_id = $gallery->lang_id;
+            $item->lang_id = $gallery;
+        }
+        if ($request->lang_id)
+        {
+            $lang_id = $request->lang_id;
+            $item->lang_id = $lang_id;
         }
         $item->save();
         $res['tag'] = LTS_saveTag($item, $request->tag);
@@ -510,16 +515,13 @@ class GalleryController extends Controller
         $item->title = $request->title;
         $item->description = $request->description;
         $item->type = $request->type;
-        if (auth()->check())
+        if (Auth::user())
         {
-            $auth = auth()->id();
+            if (isset(Auth::user()->id))
+            {
+                $item->created_by = Auth::user()->id;
+            }
         }
-        else
-        {
-            $auth = 0;
-
-        }
-        $item->created_by = $auth ;
 
         switch ($request->type)
         {
@@ -539,6 +541,11 @@ class GalleryController extends Controller
                 $itemFile = LFM_SaveSingleFile($item, 'file_id', 'editItemFile', 'options');
                 $section = [];
                 break;
+        }
+        if ($request->lang_id)
+        {
+            $lang_id = $request->lang_id;
+            $item->lang_id = $lang_id;
         }
         $item->save();
         $res['tag'] = LTS_saveTag($item, $request->tag, 'tags', 'tags', 'sync');

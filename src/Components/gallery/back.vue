@@ -1,6 +1,7 @@
 <template>
     <div class="main_gallery_div" :style="{margin:margin_el+ 'px'}">
         <div class="stack text-center" style="height: 100%;">
+            <generate-loader v-if="showLoader"></generate-loader>
             <div @click="changeGallery(item.encode_parent_id)" class="height_225 pointer" style="height: 238px;position: relative;background-repeat: no-repeat;background-size: auto;height: 232px;
     background-position: center center" :class="{homeBack:!have_parent}">
                 <div v-if="have_parent" class="thumb_zoom">
@@ -24,9 +25,14 @@
 </template>
 
 <script>
+    import generateLoader from './generate_loader'
     export default {
         name: "gallery_back",
         props:['item','margin_el'],
+        data: function () {
+            return {
+            }
+        },
         computed: {
             have_parent:function () {
                 if(this.item.parrent)
@@ -47,12 +53,24 @@
                 {
                     return '/LFM/DownloadFile/ID/0/small/back.png/100/272/208'
                 }
-            }
+            },
+            showLoader:function () {
+                console.log(this.$parent.click_id,this.item.encode_id,this.item);
+                if(this.item.encode_parent_id == this.$parent.click_id)
+                {
+                    return true ;
+                }
+                else
+                    return false ;
+            },
         },
         methods:{
             changeGallery :function (parent_id) {
                 this.$parent.getGallery(parent_id);
             }
+        },
+        components:{
+            generateLoader
         },
     }
 </script>
