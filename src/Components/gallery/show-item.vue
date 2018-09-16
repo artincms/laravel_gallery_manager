@@ -39,7 +39,7 @@
                 </div>
             </div>
             <div class="show_comment_system">
-                <laravel_comments_system :target_model_name="'ArtinCMS\\LGS\\Model\\GalleryItem'" :target_id="item.encode_id" target_parent_column_name="encode_parent_id" :user-id="0" :show="true" :direction="direction" ></laravel_comments_system>
+                <laravel_comments_system target_model_name="item_model"  :target_id="item.encode_id" target_parent_column_name="encode_parent_id" :user-id="0" :show="true" :direction="direction" ></laravel_comments_system>
             </div>
 
         </div>
@@ -59,6 +59,16 @@
                 }
                 else {
                     return '/LFM/DownloadFile/ID/' + this.item.files[0].encode_id;
+                }
+            },
+            rtl :function () {
+                if(direction == 'rtl')
+                {
+                    return true ;
+                }
+                else
+                {
+                    return false ;
                 }
             }
         },

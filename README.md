@@ -25,6 +25,23 @@ Laravel 5.5|5.6
 this command install all require package if you want install full requirement
 you should type '--full' for rewrite your vendor you should type 
 '--force' 
+for install manually this package you should bellow structure . at first publish 
+bellow packages : 
+
+```apple js
+php artisan vendor:publish --provider="ArtinCMS\LGS\LGSServiceProvider" --force
+php artisan vendor:publish --provider="ArtinCMS\LFM\LFMServiceProvider" --force
+php artisan vendor:publish --provider="ArtinCMS\LCS\LCSServiceProvider" --force
+php artisan vendor:publish --provider="ArtinCMS\LLS\LLSServiceProvider" --force
+php artisan vendor:publish --provider="ArtinCMS\LVS\LVSServiceProvider" --force
+php artisan vendor:publish --provider="ArtinCMS\LMM\LMMServiceProvider" --force
+```
+and sure bellow seed run in your project
+
+```apple js
+ php artisan db:seed --class="ArtinCMS\LFM\Database\Seeds\FilemanagerTableSeeder"
+ php artisan db:seed --class="ArtinCMS\LGS\Database\Seeds\LmmMorphableTableSeeder"
+```
    <h1>usage</h1> 
     for use this package you should use bellow helper function anywhere in your project such as in your controller . 
     this helper function is :
