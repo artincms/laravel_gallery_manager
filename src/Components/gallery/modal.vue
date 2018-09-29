@@ -3,9 +3,8 @@
         <div class="modal-mask">
             <div class="modal-wrapper">
                 <div class="modal-container">
-                    <button style="position: absolute;right: 5px;top: 5px;" @click="$emit('close')">
-                        <i>X</i>
-                    </button>
+                    <i class="lgs-icon fa-lgs-window-close1" style="    z-index: 10000;    color: #0c2620;position: absolute;right: 5px;top: 5px;font-size: 15px;cursor: pointer;" @click="$emit('close')">
+                    </i>
                     <div class="modal-body">
                         <slot name="body">
                             <img id="imageModalPort" :src="src">
@@ -60,7 +59,7 @@
     }
 
     .modal-body {
-        margin: 20px 0;
+        margin: 6px 0;
     }
 
     .modal-default-button {

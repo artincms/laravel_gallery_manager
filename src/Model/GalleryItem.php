@@ -70,7 +70,7 @@ class GalleryItem extends Model
 
     public function getAuthAttribute($value)
     {
-        if(!config('laravel_gallery_system.guestCanVote'))
+        if(!config('laravel_gallery_system.guest_can_vote'))
         {
             $auth = Auth::check() ;
 
@@ -107,7 +107,7 @@ class GalleryItem extends Model
 
     public function getVotedAttribute()
     {
-        if(!config('laravel_gallery_system.guestCanVote'))
+        if(!config('laravel_gallery_system.guest_can_vote'))
         {
             if (auth()->check())
             {

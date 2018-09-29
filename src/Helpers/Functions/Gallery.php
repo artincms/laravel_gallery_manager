@@ -86,9 +86,9 @@ if (!function_exists('LGS_ConvertNumbersFatoEn'))
         return str_replace($farsi_array, $english_array, $matches);
     }
 }
-if (!function_exists('faq_sampleLang'))
+if (!function_exists('lGS_SampleLang'))
 {
-    function faq_sampleLang()
+    function lGS_SampleLang()
     {
         $lang = [
             [

@@ -8,7 +8,7 @@
         <div v-if="show_header" class="lgs_gallery_header" :style="{ color: h_f_color, background: h_b_color}">
             <div style="position: relative">
                 <div class="header_gallery_image thumb_zoom">
-                    <img class="img_header" :src="'/LFM/DownloadFile/ID/'+mygallery.encode_file_id+'/small/404.png/100/410/225'">
+                    <img class="img_header" :src="'/LFM/DownloadFile/ID/'+mygallery.encode_file_id+'/small/404.png/100/410/248'">
                     <div class="header_gallery_opeartioin">
                         <operation ref="mainGallery" :item="mygallery" type="gallery" model="gallery_model" pack="lgs"></operation>
                     </div>

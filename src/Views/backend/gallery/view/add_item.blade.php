@@ -148,7 +148,7 @@
         //--------------------------------------------tag select----------------------------------------------
         init_select2_ajax('#showSelectTagItem', '{{route('LTS.autoCompleteTag')}}', true,true);
         //------------------------------------------select 2 for language-----------------------------------------------------------------------------
-        init_select2_data('#FaqSelectLangItme',{!! $multiLang !!});
+        init_select2_data('#FaqSelectLangItme',{!! $multi_lang !!});
     });
 
 </script>

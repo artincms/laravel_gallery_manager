@@ -1,10 +1,10 @@
 @font-face {
   font-family: 'h_lgs';
-  src:  url('fonts/h_lgs.eot?x7oxsb');
-  src:  url('fonts/h_lgs.eot?x7oxsb#iefix') format('embedded-opentype'),
-    url('fonts/h_lgs.ttf?x7oxsb') format('truetype'),
-    url('fonts/h_lgs.woff?x7oxsb') format('woff'),
-    url('fonts/h_lgs.svg?x7oxsb#h_lgs') format('svg');
+  src:  url('fonts/h_lgs.eot?ai7pkw');
+  src:  url('fonts/h_lgs.eot?ai7pkw#iefix') format('embedded-opentype'),
+    url('fonts/h_lgs.ttf?ai7pkw') format('truetype'),
+    url('fonts/h_lgs.woff?ai7pkw') format('woff'),
+    url('fonts/h_lgs.svg?ai7pkw#h_lgs') format('svg');
   font-weight: normal;
   font-style: normal;
 }
@@ -42,9 +42,15 @@
 .fa-lgs-search-plus:before {
   content: "\f00e";
 }
+.fa-lgs-window-close:before {
+  content: "\f410";
+}
 .fa-lgs-folder-open1:before {
   content: "\f07d";
 }
 .fa-lgs-folder1:before {
   content: "\f07e";
+}
+.fa-lgs-window-close1:before {
+  content: "\f411";
 }

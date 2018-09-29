@@ -78,7 +78,7 @@
                                         </select>
                                     </div>
                                 </div>
-                                @if($multiLang)
+                                @if($multi_lang)
                                 <div class="form-group row fg_lang" id="showLangCategory">
                                     <label class="col-sm-2 control-label col-form-label label_post" for="lang">
                                         <span class="more_info"></span>

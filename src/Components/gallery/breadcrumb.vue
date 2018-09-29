@@ -1,5 +1,5 @@
 <template>
-    <div class="showBreadCrumb">
+    <div class="show_bread_crumb">
         <ol class="lgs_breadOl">
             <li :class="{item_bread:slash}" v-for="bread in breadCrumbs">
                 <a target="_self" @click="changeGallery(bread.id)" href="#">{{bread.title}}</a>

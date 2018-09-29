@@ -38,7 +38,7 @@ class Gallery extends Model
 
     public function user()
     {
-        return $this->belongsTo(config('laravel_gallery_system.userModel'), 'created_by');
+        return $this->belongsTo(config('laravel_gallery_system.user_model'), 'created_by');
     }
 
     public function items()
@@ -78,7 +78,7 @@ class Gallery extends Model
 //    }
     public function getVotedAttribute()
     {
-        if(!config('laravel_gallery_system.guestCanVote'))
+        if(!config('laravel_gallery_system.guest_can_vote'))
         {
             if (auth()->check())
             {
@@ -111,7 +111,7 @@ class Gallery extends Model
     }
     public function getAuthAttribute($value)
     {
-        if(!config('laravel_gallery_system.guestCanVote'))
+        if(!config('laravel_gallery_system.guest_can_vote'))
         {
             $auth = Auth::check() ;
 

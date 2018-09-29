@@ -11,7 +11,7 @@ class Slider extends Model
     protected $table = 'lgs_sliders';
     public function user()
     {
-        return $this->belongsTo(config('laravel_gallery_system.userModel'), 'created_by');
+        return $this->belongsTo(config('laravel_gallery_system.user_model'), 'created_by');
     }
 
     public function slider_items()
