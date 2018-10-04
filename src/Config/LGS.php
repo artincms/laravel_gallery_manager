@@ -3,11 +3,11 @@
 return [
 
     /* Important Settings */
-    'backend_lgs_middlewares'   => explode(',', env('BACKEND_LGS_MIDDLEWARES', 'web')),
-    'frontend_lgs_middlewares'  => explode(',', env('FRONTEND_LGS_MIDDLEWARES', 'web')),
+    'backend_lgs_middlewares'   => explode(',', env('LGS_BACKEND_MIDDLEWARES', 'web')),
+    'frontend_lgs_middlewares'  => explode(',', env('LGS_FRONTEND_MIDDLEWARES', 'web')),
     // you can change default route from sms-admin to anything you want
-    'backend_lgs_route_prefix'  => env('BACKEND_LGS_ROUTE_PERFIX', 'LGS'),
-    'frontend_lgs_route_prefix' => env('FRONTEND_LGS_ROUTE_PERFIX', 'LGS'),
+    'backend_lgs_route_prefix'  => env('LGS_BACKEND_ROUTE_PERFIX', 'LGS'),
+    'frontend_lgs_route_prefix' => env('LGS_FRONTEND_ROUTE_PERFIX', 'LGS'),
     // ======================================================================
     //allow user to upload private file in filemanager
     'user_model'                => env('LGS_USER_MODEL', 'App\User'),
