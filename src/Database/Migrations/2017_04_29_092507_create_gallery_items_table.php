@@ -21,7 +21,7 @@ class CreateGalleryItemsTable extends Migration
             $table->longText('description')->nullable()->default(null);
             $table->enum('type', ['0','1','2'])->nullable()->default('0')->comment('0 is picture 1 is Audio and 2 is video');
             $table->integer('lang_id')->unsigned()->nullable()->default(0);
-            $table->enum('is_active',['0','1'])->nullable()->default('0');
+            $table->enum('is_active',['0','1'])->nullable()->default('1');
             $table->text('options')->nullable()->nullable()->default(null);
             $table->integer('order')->nullable()->default(0);
             $table->integer('created_by')->unsigned()->nullable()->default(0);
