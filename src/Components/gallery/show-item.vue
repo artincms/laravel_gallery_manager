@@ -39,7 +39,7 @@
                 </div>
             </div>
             <div class="show_comment_system">
-                <laravel_comments_system target_model_name="item_model"  :target_id="item.encode_id" target_parent_column_name="encode_parent_id" :user-id="0" :show="true" :direction="direction" ></laravel_comments_system>
+                <laravel_comments_system target_model_name="item_model"  :target_id="item.encode_id" target_parent_column_name="encode_parent_id"  :rtl=rtl :jalali_data=jalali_data ></laravel_comments_system>
             </div>
 
         </div>
@@ -51,7 +51,7 @@
     import laravel_comments_system from '../../laravel_comment_system/laravel_comments_system.vue';
     export default {
         name: "show-item",
-        props:['item','direction'],
+        props:['item','direction','jalali_data'],
         computed: {
             link:function () {
                 if (this.item.type == 0) {
@@ -62,7 +62,7 @@
                 }
             },
             rtl :function () {
-                if(direction == 'rtl')
+                if(this.direction == 'rtl')
                 {
                     return true ;
                 }

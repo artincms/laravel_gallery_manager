@@ -67,7 +67,7 @@ for show gallery we use Vue js . you can create your page as bellow :
 .
 
   <div id="lgs_gallery">
-        <laravel_gallery_system :gallery_id='0' :lang_id='1' :rtl=true></laravel_gallery_system>
+        <laravel_gallery_system :gallery_id='0' :lang_id='1' :rtl=true :jalali_data=true></laravel_gallery_system>
     </div>
  ```
  at first you should create js file to load vue and define component div as bellow : 

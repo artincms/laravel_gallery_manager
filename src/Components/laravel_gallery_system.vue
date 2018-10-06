@@ -2,7 +2,7 @@
 <div class="lgs_container_fluid" :class="dClass">
     <div v-if="show_item_temp" class="show_item_temp">
         <breadcrumb v-if="showBread" :item="mygallery" :gallery_id="gallery_id"></breadcrumb>
-        <show-item :item="item" :direction="dClass"></show-item>
+        <show-item :item="item" :direction="dClass" :jalali_data="jalali_data"></show-item>
     </div>
     <div v-else class="show_gallery_temp">
         <div v-if="show_header" class="lgs_gallery_header" :style="{ color: h_f_color, background: h_b_color}">
@@ -61,6 +61,12 @@
                 },
             },
             rtl: {
+                type: Boolean,
+                default() {
+                    return true;
+                },
+            },
+            jalali_data: {
                 type: Boolean,
                 default() {
                     return true;
