@@ -44,7 +44,7 @@
             </select>
         </div>
     </div>
-    @if($multiLang)
+    @if($multi_lang)
     <div class="form-group row fg_lang" id="showLangCategoryEdit">
         <label class="col-sm-2 control-label col-form-label label_post" for="lang">
             <span class="more_info"></span>
@@ -101,7 +101,7 @@
         height: 150,
     } );
     init_select2_ajax('#showSelectTagEdit', '{{route('LTS.autoCompleteTag')}}', true,true);
-    init_select2_data('#FaqSelectLangEdit',{!! $multiLang !!});
+    init_select2_data('#FaqSelectLangEdit',{!! $multi_lang !!});
 
     $('#gallery_parrent_edit').off("select2:select");
     $('#gallery_parrent_edit').on("select2:select", change_lang_field);

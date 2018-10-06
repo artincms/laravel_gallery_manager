@@ -192,7 +192,7 @@
         height: 200,
     } );
     init_select2_ajax('#showSelectTagEditItem', '{{route('LTS.autoCompleteTag')}}', true,true);
-    init_select2_data('#GallerySelectLangEditItem',{!! $multiLang !!});
+    init_select2_data('#GallerySelectLangEditItem',{!! $multi_lang !!});
 
 
 </script>

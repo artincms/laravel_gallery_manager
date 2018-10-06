@@ -3,14 +3,14 @@
 namespace ArtinCMS\LGS\Controllers;
 
 
-use App\Http\Controllers\Controller;
+use DataTables;
+use ArtinCMS\LVS\Models\Visit;
 use ArtinCMS\LGS\Model\Gallery;
 use ArtinCMS\LGS\Model\GalleryItem;
-use ArtinCMS\LVS\Models\Visit;
-use DataTables;
-use Illuminate\Http\Exceptions\HttpResponseException;
+use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Http\Exceptions\HttpResponseException;
 
 
 class GalleryController extends Controller
@@ -41,22 +41,24 @@ class GalleryController extends Controller
         return $i;
     }
 
+
+    //-------------------------------------------------- Gallery methods -------------------------------------------------------
     public function index()
     {
         $option_default_img = ['size_file' => 2000, 'max_file_number' => 1, 'true_file_extension' => ['png', 'jpg']];
         $default_img = LFM_CreateModalFileManager('defaultImg', $option_default_img, 'insert', 'showDefaultImg', false, false, false, 'انتخاب فایل تصویر', 'btn-block', 'fa fa-folder-open font_button mr-2');
         $parrents = Gallery::with('parent')->select("id", 'title AS text')->get()->makeVisible('id');
-        $multiLangFunc = config('laravel_gallery_system.multiLang');
-        if ($multiLangFunc)
+        $multi_langFunc = config('laravel_gallery_system.multi_lang');
+        if ($multi_langFunc)
         {
-            $multiLang = json_encode($multiLangFunc());
+            $multi_lang = json_encode($multi_langFunc());
         }
         else
         {
-            $multiLang = false;
+            $multi_lang = false;
         }
 
-        return view('laravel_gallery_system::backend.gallery.index', compact('default_img', 'parrents', 'multiLang'));
+        return view('laravel_gallery_system::backend.gallery.index', compact('default_img', 'parrents', 'multi_lang'));
     }
 
     public function getGallery(Request $request)
@@ -100,8 +102,15 @@ class GalleryController extends Controller
         $gallery = new Gallery;
         $gallery->title = $request->title;
         $gallery->description = $request->description;
-        $gallery->parent_id = $request->parent_id;
-        $gallery->lang_id = $request->lang_id;
+        if ($request->parent_id)
+        {
+            $gallery->parent_id = $request->parent_id;
+        }
+
+        if ($request->lang_id)
+        {
+            $gallery->lang_id = $request->lang_id;
+        }
         if (auth()->check())
         {
             $auth = auth()->id();
@@ -109,9 +118,8 @@ class GalleryController extends Controller
         else
         {
             $auth = 0;
-
         }
-        $gallery->created_by = $auth ;
+        $gallery->created_by = $auth;
         if ($gallery->parent_id)
         {
             $parent = Gallery::find($gallery->parent_id);
@@ -138,21 +146,21 @@ class GalleryController extends Controller
         $gallery = Gallery::find(LFM_GetDecodeId($request->item_id));
         $gallery->encode_id = LFM_getEncodeId($gallery->id);
         $tags = LTS_showTag($gallery);
-        $parrents_edit =Gallery::with('parrent')->select("id", 'title AS text')->get()->makeVisible('id');
+        $parrents_edit = Gallery::with('parrent')->select("id", 'title AS text')->get()->makeVisible('id');
         $default_img = LFM_CreateModalFileManager('LoadDefaultImg', $option_default_img, 'insert', 'showDefaultImg', 'gallery_edit_tab', false, false, 'انتخاب فایل تصویر', 'btn-block', 'fa fa-folder-open font_button mr-2');
         $load_default_img = LFM_loadSingleFile($gallery, 'default_img', 'LoadDefaultImg');
-        $multiLangFunc = config('laravel_gallery_system.multiLang');
-        if ($multiLangFunc)
+        $multi_langFunc = config('laravel_gallery_system.multi_lang');
+        if ($multi_langFunc)
         {
-            $multiLang = json_encode($multiLangFunc());
-            $active_lang_title = $this->searchForId($gallery->lang_id, $multiLangFunc());
+            $multi_lang = json_encode($multi_langFunc());
+            $active_lang_title = $this->searchForId($gallery->lang_id, $multi_langFunc());
         }
         else
         {
-            $multiLang = false;
+            $multi_lang = false;
             $active_lang_title = '';
         }
-        $gallery_form = view('laravel_gallery_system::backend.gallery.view.edit', compact('gallery', 'tags', 'parrents_edit', 'default_img', 'load_default_img', 'multiLang', 'active_lang_title'))->render();
+        $gallery_form = view('laravel_gallery_system::backend.gallery.view.edit', compact('gallery', 'tags', 'parrents_edit', 'default_img', 'load_default_img', 'multi_lang', 'active_lang_title'))->render();
         $res =
             [
                 'status'            => "1",
@@ -181,9 +189,8 @@ class GalleryController extends Controller
         else
         {
             $auth = 0;
-
         }
-        $gallery->created_by = $auth ;
+        $gallery->created_by = $auth;
         if ($gallery->parent_id)
         {
             $parent = Gallery::find($gallery->parent_id);
@@ -208,7 +215,6 @@ class GalleryController extends Controller
     {
         $gallery = Gallery::find(LFM_GetDecodeId($request->item_id));
         $gallery->delete();
-
         $res =
             [
                 'status'  => "1",
@@ -243,7 +249,8 @@ class GalleryController extends Controller
         return $res;
     }
 
-    //--------------------------------------------------ITem function --------------------------------
+
+    //-------------------------------------------------- ITem function -------------------------------------------------------
     public function getGalleryItem(Request $request)
     {
         $item = GalleryItem::with('gallery')->where('gallery_id', LFM_GetDecodeId($request->item_id));
@@ -279,14 +286,14 @@ class GalleryController extends Controller
     public function getAddGalleryItemForm(Request $request)
     {
         //get language
-        $multiLangFunc = config('laravel_gallery_system.multiLang');
-        if ($multiLangFunc)
+        $multi_langFunc = config('laravel_gallery_system.multi_lang');
+        if ($multi_langFunc)
         {
-            $multiLang = json_encode($multiLangFunc());
+            $multi_lang = json_encode($multi_langFunc());
         }
         else
         {
-            $multiLang = false;
+            $multi_lang = false;
         }
         //image options
         $option_item_file = ['size_file' => 2000, 'max_file_number' => 1, 'true_file_extension' => ['png', 'jpg']];
@@ -299,26 +306,16 @@ class GalleryController extends Controller
         $option_audio_mp3_file = ['size_file' => 2000, 'max_file_number' => 1, 'true_file_extension' => ['mpga', 'mp3']];
         $option_audio_wav_file = ['size_file' => 2000, 'max_file_number' => 1, 'true_file_extension' => ['wav']];
 
-        $itmeFile = LFM_CreateModalFileManager('itemFile', $option_item_file, 'insert', 'showitemFile', false, false, false,
-            'انتخاب فایل تصویر', 'btn-block', 'fa fa-folder-open font_button mr-2');
-
-        $itmeVideoMp4File = LFM_CreateModalFileManager('videoMp4itemFile', $option_video_mp4_file, 'insert', 'showVideoMp4File', false,
-            false, false, 'انتخاب  فایل ویدئو(mp4)', 'btn-block', 'fa fa-folder-open font_button mr-2');
-        $itmeVideoWebmFile = LFM_CreateModalFileManager('videoWebmFile', $option_video_webm_file, 'insert', 'showVideoWebmFile', false,
-            false, false, 'انتخاب فایل ویدئو(webm)', 'btn-block', 'fa fa-folder-open font_button mr-2');
-        $itmeVideoOggFile = LFM_CreateModalFileManager('videoOggFile', $option_video_ogg_file, 'insert', 'showVideoOggFile', false,
-            false, false, 'انتخاب فایل ویدئو(ogg)', 'btn-block', 'fa fa-folder-open font_button mr-2');
-
-        $itmeAudioOggFile = LFM_CreateModalFileManager('audioOggFile', $option_audio_ogg_file, 'insert', 'showAudioOggFile', false,
-            false, false, 'انتخاب فایل صوت(ogg)', 'btn-block', 'fa fa-folder-open font_button mr-2');
-        $itmeAudioMp3File = LFM_CreateModalFileManager('audioMp3File', $option_audio_mp3_file, 'insert', 'showAudioMp3File', false,
-            false, false, 'انتخاب فایل صوت(mp3)', 'btn-block', 'fa fa-folder-open font_button mr-2');
-        $itmeAudioWavFile = LFM_CreateModalFileManager('audioWavFile', $option_audio_wav_file, 'insert', 'showAudioWavFile', false,
-            false, false, 'انتخاب فایل(wav)', 'btn-block', 'fa fa-folder-open font_button mr-2');
+        $itmeFile = LFM_CreateModalFileManager('itemFile', $option_item_file, 'insert', 'showitemFile', false, false, false, 'انتخاب فایل تصویر', 'btn-block', 'fa fa-folder-open font_button mr-2');
+        $itmeVideoMp4File = LFM_CreateModalFileManager('videoMp4itemFile', $option_video_mp4_file, 'insert', 'showVideoMp4File', false, false, false, 'انتخاب  فایل ویدئو(mp4)', 'btn-block', 'fa fa-folder-open font_button mr-2');
+        $itmeVideoWebmFile = LFM_CreateModalFileManager('videoWebmFile', $option_video_webm_file, 'insert', 'showVideoWebmFile', false, false, false, 'انتخاب فایل ویدئو(webm)', 'btn-block', 'fa fa-folder-open font_button mr-2');
+        $itmeVideoOggFile = LFM_CreateModalFileManager('videoOggFile', $option_video_ogg_file, 'insert', 'showVideoOggFile', false, false, false, 'انتخاب فایل ویدئو(ogg)', 'btn-block', 'fa fa-folder-open font_button mr-2');
+        $itmeAudioOggFile = LFM_CreateModalFileManager('audioOggFile', $option_audio_ogg_file, 'insert', 'showAudioOggFile', false, false, false, 'انتخاب فایل صوت(ogg)', 'btn-block', 'fa fa-folder-open font_button mr-2');
+        $itmeAudioMp3File = LFM_CreateModalFileManager('audioMp3File', $option_audio_mp3_file, 'insert', 'showAudioMp3File', false, false, false, 'انتخاب فایل صوت(mp3)', 'btn-block', 'fa fa-folder-open font_button mr-2');
+        $itmeAudioWavFile = LFM_CreateModalFileManager('audioWavFile', $option_audio_wav_file, 'insert', 'showAudioWavFile', false, false, false, 'انتخاب فایل(wav)', 'btn-block', 'fa fa-folder-open font_button mr-2');
 
         $gallery_id = $request->item_id;
-        $gallery_form = view('laravel_gallery_system::backend.gallery.view.add_item', compact('gallery_id', 'itmeFile', 'itmeVideoMp4File'
-            , 'itmeVideoWebmFile', 'itmeVideoOggFile', 'itmeAudioOggFile', 'itmeAudioMp3File', 'itmeAudioWavFile', 'multiLang'))->render();
+        $gallery_form = view('laravel_gallery_system::backend.gallery.view.add_item', compact('gallery_id', 'itmeFile', 'itmeVideoMp4File', 'itmeVideoWebmFile', 'itmeVideoOggFile', 'itmeAudioOggFile', 'itmeAudioMp3File', 'itmeAudioWavFile', 'multi_lang'))->render();
         $res =
             [
                 'status'           => "1",
@@ -335,7 +332,7 @@ class GalleryController extends Controller
     public function createGalleryItem(Request $request)
     {
         $item = new GalleryItem;
-        $gallery_id  =LFM_GetDecodeId($request->gallery_id) ;
+        $gallery_id = LFM_GetDecodeId($request->gallery_id);
         $item->gallery_id = $gallery_id;
         $item->title = $request->title;
         $item->description = $request->description;
@@ -347,13 +344,12 @@ class GalleryController extends Controller
         else
         {
             $auth = 0;
-
         }
-        $item->created_by = $auth ;
-        if($gallery_id)
+        $item->created_by = $auth;
+        if ($gallery_id)
         {
             $gallery = Gallery::find($gallery_id);
-            $item->lang_id = $gallery;
+            $item->lang_id = $gallery ? $gallery->lang_id : 0;
         }
         if ($request->lang_id)
         {
@@ -419,7 +415,6 @@ class GalleryController extends Controller
         $item = GalleryItem::find(LFM_GetDecodeId($request->item_id));
         $item->encode_id = LFM_getEncodeId($item->id);
         $item->gallery_encode_id = LFM_getEncodeId($item->gallery_id);
-        $item->is_active = 1;
         $tags = LTS_showTag($item);
 
         //image options
@@ -437,30 +432,19 @@ class GalleryController extends Controller
         $option_audio_mp3_file = ['size_file' => 2000, 'max_file_number' => 1, 'true_file_extension' => ['mpga', 'mp3']];
         $option_audio_wav_file = ['size_file' => 2000, 'max_file_number' => 1, 'true_file_extension' => ['wav']];
 
-        $itmeFile = LFM_CreateModalFileManager('editItemFile', $option_item_file, 'insert', 'showEdititemFile', false,
-            false, false, 'انتخاب فایل تصویر', 'btn-block', 'fa fa-folder-open font_button mr-2');
-
-        $itmeVideoMp4File = LFM_CreateModalFileManager('editVideoMp4itemFile', $option_video_mp4_file, 'insert', 'showEditVideoMp4File', false,
-            false, false, 'انتخاب فایل ویدئویی (mp4)', 'btn-block', 'fa fa-folder-open font_button mr-2');
-        $itmeVideoWebmFile = LFM_CreateModalFileManager('editVideoWebmFile', $option_video_webm_file, 'insert', 'showEditVideoWebmFile', false,
-            false, false, 'انتخاب فایل ویدئویی(webm)', 'btn-block', 'fa fa-folder-open font_button mr-2');
-        $itmeVideoOggFile = LFM_CreateModalFileManager('editVideoOggFile', $option_video_ogg_file, 'insert', 'showEditVideoOggFile', false,
-            false, false, 'انتخاب فایل ویدئویی(ogg)', 'btn-block', 'fa fa-folder-open font_button mr-2');
-
-        $itmeAudioOggFile = LFM_CreateModalFileManager('editAudioOggFile', $option_audio_ogg_file, 'insert', 'showEditAudioOggFile', false,
-            false, false, 'انتخاب فایل صوتی(ogg)', 'btn-block', 'fa fa-folder-open font_button mr-2');
-        $itmeAudioMp3File = LFM_CreateModalFileManager('editAudioMp3File', $option_audio_mp3_file, 'insert', 'showEditAudioMp3File', false,
-            false, false, 'انتخاب فایل صوتی(mp3)', 'btn-block', 'fa fa-folder-open font_button mr-2');
-        $itmeAudioWavFile = LFM_CreateModalFileManager('editAudioWavFile', $option_audio_wav_file, 'insert', 'showEditAudioWavFile', false,
-            false, false, 'انتخاب فایل صوتی(wav)', 'btn-block', 'fa fa-folder-open font_button mr-2');
+        $itmeFile = LFM_CreateModalFileManager('editItemFile', $option_item_file, 'insert', 'showEdititemFile', false, false, false, 'انتخاب فایل تصویر', 'btn-block', 'fa fa-folder-open font_button mr-2');
+        $itmeVideoMp4File = LFM_CreateModalFileManager('editVideoMp4itemFile', $option_video_mp4_file, 'insert', 'showEditVideoMp4File', false, false, false, 'انتخاب فایل ویدئویی (mp4)', 'btn-block', 'fa fa-folder-open font_button mr-2');
+        $itmeVideoWebmFile = LFM_CreateModalFileManager('editVideoWebmFile', $option_video_webm_file, 'insert', 'showEditVideoWebmFile', false, false, false, 'انتخاب فایل ویدئویی(webm)', 'btn-block', 'fa fa-folder-open font_button mr-2');
+        $itmeVideoOggFile = LFM_CreateModalFileManager('editVideoOggFile', $option_video_ogg_file, 'insert', 'showEditVideoOggFile', false, false, false, 'انتخاب فایل ویدئویی(ogg)', 'btn-block', 'fa fa-folder-open font_button mr-2');
+        $itmeAudioOggFile = LFM_CreateModalFileManager('editAudioOggFile', $option_audio_ogg_file, 'insert', 'showEditAudioOggFile', false, false, false, 'انتخاب فایل صوتی(ogg)', 'btn-block', 'fa fa-folder-open font_button mr-2');
+        $itmeAudioMp3File = LFM_CreateModalFileManager('editAudioMp3File', $option_audio_mp3_file, 'insert', 'showEditAudioMp3File', false, false, false, 'انتخاب فایل صوتی(mp3)', 'btn-block', 'fa fa-folder-open font_button mr-2');
+        $itmeAudioWavFile = LFM_CreateModalFileManager('editAudioWavFile', $option_audio_wav_file, 'insert', 'showEditAudioWavFile', false, false, false, 'انتخاب فایل صوتی(wav)', 'btn-block', 'fa fa-folder-open font_button mr-2');
 
         //load files
         $itmeFileLoad = LFM_loadSingleFile($item, 'file_id', 'editItemFile');
-
         $itmeVideoMp4FileLoad = LFM_LoadMultiFile($item, 'editVideoMp4itemFile', 'video/mp4');
         $itmeVideoWebmFileLoad = LFM_LoadMultiFile($item, 'editVideoWebmFile', 'video/webm');
         $itmeVideoOggFileLoad = LFM_LoadMultiFile($item, 'editVideoOggFile', 'video/ogg');
-
         $itmeAudioOggFileLoad = LFM_LoadMultiFile($item, 'editAudioOggFile', 'audio/ogg');
         $itmeAudioMp3FileLoad = LFM_LoadMultiFile($item, 'editAudioMp3File', 'audio/mpeg');
         $itmeAudioWavFileLoad = LFM_LoadMultiFile($item, 'editAudioWavFile', 'audio/x-wav');
@@ -482,20 +466,20 @@ class GalleryController extends Controller
                 $video_class = 'hidden';
                 break;
         }
-        $multiLangFunc = config('laravel_gallery_system.multiLang');
-        if ($multiLangFunc)
+        $multi_langFunc = config('laravel_gallery_system.multi_lang');
+        if ($multi_langFunc)
         {
-            $multiLang = json_encode($multiLangFunc());
-            $active_lang_title = $this->searchForId($item->lang_id, $multiLangFunc());
+            $multi_lang = json_encode($multi_langFunc());
+            $active_lang_title = $this->searchForId($item->lang_id, $multi_langFunc());
         }
         else
         {
-            $multiLang = false;
+            $multi_lang = false;
             $active_lang_title = '';
         }
         $item_form = view('laravel_gallery_system::backend.gallery.view.edit_item', compact('item', 'itmeFile', 'itmeVideoMp4File'
             , 'itmeVideoWebmFile', 'itmeVideoOggFile', 'itmeAudioOggFile', 'itmeAudioMp3File', 'itmeAudioWavFile', 'itmeFileLoad', 'itmeVideoMp4FileLoad', 'itmeVideoWebmFileLoad',
-            'itmeVideoOggFileLoad', 'itmeAudioOggFileLoad', 'itmeAudioMp3FileLoad', 'itmeAudioWavFileLoad', 'pic_class', 'audio_class', 'video_class', 'tags', 'multiLang', 'active_lang_title'))->render();
+            'itmeVideoOggFileLoad', 'itmeAudioOggFileLoad', 'itmeAudioMp3FileLoad', 'itmeAudioWavFileLoad', 'pic_class', 'audio_class', 'video_class', 'tags', 'multi_lang', 'active_lang_title'))->render();
         $res =
             [
                 'status'                 => "1",
@@ -565,14 +549,12 @@ class GalleryController extends Controller
     {
         $item = GalleryItem::find(LFM_GetDecodeId($request->item_id));
         $item->delete();
-
         $res =
             [
                 'status'  => "1",
                 'title'   => "حذف آیتم",
                 'message' => 'آیتم با موفقیت حذف شد.'
             ];
-
         throw new HttpResponseException(
             response()
                 ->json($res, 200)
@@ -580,7 +562,8 @@ class GalleryController extends Controller
         );
     }
 
-    //--------------------------------------------------Auto Complete function --------------------------------
+
+    //-------------------------------------------------- Auto Complete function -----------------------------------------------
     public function autoCompleteGalleryParrent(Request $request)
     {
         $x = $request->term;
@@ -593,6 +576,7 @@ class GalleryController extends Controller
         }
         $data = $data->get()->makeVisible('id');
         $data = ['results' => $data];
+
         return response()->json($data);
     }
 
@@ -671,7 +655,6 @@ class GalleryController extends Controller
         }
         elseif ($request->order_type == 'decrease')
         {
-
             $previousItem = GalleryItem::where([
                 ['gallery_id', $gallery_id],
                 ['order', $order - 1]
@@ -698,7 +681,8 @@ class GalleryController extends Controller
         return response()->json($result, 200)->withHeaders(['Content-Type' => 'json', 'charset' => 'utf-8']);
     }
 
-    //--------------------------------------------------front controllers-------------------------------------
+
+    //-------------------------------------------------- ّ Front Controllers--------------- -------------------------------------
     public function getGalleryItemFront(Request $request)
     {
         $gallery_id = LFM_GetDecodeId($request->gallery_id);
@@ -757,7 +741,7 @@ class GalleryController extends Controller
             $result['gallery'] = ['id' => 0, 'encode_id' => 0, 'main_id' => 0, 'par', 'title' => __('laravel_gallery_system.home')];
         }
         $result['galleries'] = $galleries;
-        if (config('laravel_gallery_system.showBreadCrumb'))
+        if (config('laravel_gallery_system.show_bread_crumb'))
         {
             $result['showBread'] = true;
 
