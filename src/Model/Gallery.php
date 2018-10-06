@@ -38,7 +38,7 @@ class Gallery extends Model
 
     public function user()
     {
-        return $this->belongsTo(config('laravel_gallery_system.userModel'), 'created_by');
+        return $this->belongsTo(config('laravel_gallery_system.user_model'), 'created_by');
     }
 
     public function items()
