@@ -36,7 +36,7 @@ class LmmMorphableTableSeeder extends Seeder
                 'id' => 2,
                 'pck_name' => 'lgs',
                 'dev_name' => 'item_model',
-                'name' => 'گالری',
+                'name' => 'گالری آیتم',
                 'model_name' => 'ArtinCMS\\LGS\\Model\\GalleryItem',
                 'target_column_name' => 'title',
                 'target_column_alias' => 'عنوان',
