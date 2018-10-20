@@ -254,7 +254,7 @@
         var id = input.id;
         var item_id = $(input).data('item_id');
         var parameters = {is_active: checked, item_id: item_id};
-        yesNoAlert('تغییر وضعیت گالری', 'از تغییر وضعیت گالری مطمئن هستید ؟', 'warning', 'بله، وضعیت گالری را تغییر بده!', 'لغو', set_item_is_active, parameters, remove_checked_item, parameters);
+        yesNoAlert('تغییر وضعیت آیتم', 'از تغییر وضعیت آیتم مطمئن هستید ؟', 'warning', 'بله، وضعیت آیتم را تغییر بده!', 'لغو', set_item_is_active, parameters, remove_checked_item, parameters);
     }
 
     function set_item_is_active(params) {
@@ -396,9 +396,9 @@
     $(document).on("click", ".btn_trash_gallery_item", function () {
         var item_id = $(this).data('item_id');
         var title = $(this).data('title');
-        desc = 'بله گالری( ' + title + ' ) را حذف کن !';
+        desc = 'بله آیتم( ' + title + ' ) را حذف کن !';
         var parameters = {item_id: item_id};
-        yesNoAlert('حذف گالری', 'از حذف گالری مطمئن هستید ؟', 'warning', desc, 'لغو', trash_gallery_item, parameters);
+        yesNoAlert('حذف آیتم', 'از حذف آیتم مطمئن هستید ؟', 'warning', desc, 'لغو', trash_gallery_item, parameters);
     });
 
     function trash_gallery_item(params) {
