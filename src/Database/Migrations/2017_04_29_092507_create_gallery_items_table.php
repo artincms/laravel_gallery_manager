@@ -37,6 +37,6 @@ class CreateGalleryItemsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('gallery_items');
+        Schema::dropIfExists('lgs_items');
     }
 }

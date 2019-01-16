@@ -30,6 +30,6 @@ class CreateSliderItemsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('slider_items');
+        Schema::dropIfExists('lgs_slider_items');
     }
 }
