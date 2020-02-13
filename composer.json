@@ -20,7 +20,7 @@
     },
     "require": {
         "yajra/laravel-datatables-oracle": ">=9.0",
-        "hashids/hashids": "^3.0",
+        "hashids/hashids": ">=3.0",
         "artincms/laravel_file_manager": "dev-master",
         "artincms/laravel_comments_system": "dev-master",
         "artincms/laravel_likeable_system": "dev-master",
